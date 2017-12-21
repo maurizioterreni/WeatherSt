@@ -1,13 +1,19 @@
-package it.unifi.sam.terreni.weatherSt.model;
+package it.unifi.sam.terreni.weatherSt.model.sensor;
+
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 
 @Entity
 @Table(name="pressure")
 public class Pressure extends BaseEntity {
 	private Long value;
-	private Long timestamp;
+	private Timestamp timestamp;
 	
 	Pressure(){
 		super();
@@ -25,11 +31,11 @@ public class Pressure extends BaseEntity {
 		this.value = value;
 	}
 
-	public Long getTimestamp() {
+	public Timestamp getTimestamp() {
 		return timestamp;
 	}
-
-	public void setTimestamp(Long timestamp) {
+	@Temporal(TemporalType.TIMESTAMP)
+	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
 	

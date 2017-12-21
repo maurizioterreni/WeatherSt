@@ -4,12 +4,12 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	    <persistence-unit name="production">
 		<jta-data-source>java:/mysql</jta-data-source>
-		<class>it.unifi.sam.terreni.weatherSt.model.Temperature</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.Humidity</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.Pressure</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.Lux</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.UV</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.Wind</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Temperature</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Humidity</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Pressure</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Lux</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.UV</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Wind</class>
 		
         <properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
