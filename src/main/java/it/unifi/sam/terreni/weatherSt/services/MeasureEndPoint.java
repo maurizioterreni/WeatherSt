@@ -11,8 +11,10 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
+import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
+import it.unifi.sam.terreni.weatherSt.model.sensor.units.UnitMeasure;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 
@@ -28,7 +30,8 @@ public class MeasureEndPoint {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId) {
+	public Response add(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId,@HeaderParam("value") Float value, 
+			@HeaderParam("units") UnitMeasure unitMeasure) {
 		if (StringUtils.isEmpty(token) || sensorId == null) {
 			return Response.status(500).build();
 		}
@@ -38,7 +41,11 @@ public class MeasureEndPoint {
 			return Response.status(404).build();
 		}
 		
-		Measure measure = null;
+		Measure measure = ModelFactory.measure();
+		measure.setSensor(sensor);
+		measure.setTimestamp(System.currentTimeMillis());
+		measure.setUnit(unitMeasure);
+		measure.setValue(value);
 
 		sensor.addMeasuer(measure);
 		
