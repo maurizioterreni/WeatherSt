@@ -12,8 +12,8 @@ public final class ModelFactory {
 	public static Measure measure() {
 		return new Measure(UUID.randomUUID().toString());
 	}
-	
-	public static Sensor temperature() {
+
+	public static Sensor sensor() {
 		return new Sensor(UUID.randomUUID().toString());
 	}
 	
