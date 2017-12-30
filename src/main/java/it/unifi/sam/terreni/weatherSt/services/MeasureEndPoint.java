@@ -28,16 +28,15 @@ import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 @Path("/measure")
 public class MeasureEndPoint {
-	
+
 	@Inject
 	private SensorDao sensorDao;
 	@Inject
 	private MeasureDao measureDao;
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-
 	public Response add(@HeaderParam("weatherId") Long weatherId, @HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") UnitMeasure unitMeasure) {
 		if (weatherId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
@@ -47,7 +46,7 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - value").build();
 		if (unitMeasure == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasure").build();
-		
+
 		Sensor sensor = sensorDao.findById(sensorId);
 		if (sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
@@ -55,8 +54,8 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECTS_NOT_COMPATIBLE.getMessage() + " - unitMeasure").build();
 		if(sensor.getWeatherStation().getId() != weatherId)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
-		
-		
+
+
 		Measure measure = ModelFactory.measure();
 		measure.setSensor(sensor);
 		measure.setTimestamp(System.currentTimeMillis());
@@ -66,8 +65,10 @@ public class MeasureEndPoint {
 		sensor.addMeasuer(measure);
 		measureDao.save(measure);
 		return Response.status(200).entity(measure).build();
+		
+
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
@@ -76,15 +77,23 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		
+
 		if(!CheckClass.checkToken(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+
+		Sensor sensor = sensorDao.findById(sensorId);
+
+		if(sensor == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 		
-		Measure measure = measureDao.getLastMeasue(sensorId);
+		Measure measure = measureDao.getLastMeasue(sensor);
+
+		if(measure == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 		
 		return Response.status(200).entity(measure).build();
 	}
-	
+
 	@GET
 	@Path("/betweenDate")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -98,15 +107,24 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
 		if (toDate == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-		
+
 		if(!CheckClass.checkToken(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+
+		Sensor sensor = sensorDao.findById(sensorId);
+
+		if(sensor == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 		
-		List<Measure> measures = measureDao.getMeasureBetweenDate(sensorId, fromDate, toDate);
 		
+		List<Measure> measures = measureDao.getMeasureBetweenDate(sensor, fromDate, toDate);
+		
+		if(measures == null || measures.size() == 0)
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
+
 		return Response.status(200).entity(measures).build();
 	}
-	
+
 	@GET
 	@Path("/max")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -120,15 +138,23 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
 		if (toDate == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-		
+
 		if(!CheckClass.checkToken(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+
+		Sensor sensor = sensorDao.findById(sensorId);
+
+		if(sensor == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 		
-		Measure measure = measureDao.getMax(sensorId, fromDate, toDate);
+		Measure measure = measureDao.getMax(sensor, fromDate, toDate);
 		
+		if(measure == null)
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
+
 		return Response.status(200).entity(measure).build();
 	}
-	
+
 	@GET
 	@Path("/min")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -142,17 +168,26 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
 		if (toDate == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-		
+
 		if(!CheckClass.checkToken(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
 		
-		Measure measure = measureDao.getMin(sensorId, fromDate, toDate);
+		Sensor sensor = sensorDao.findById(sensorId);
+
+		if(sensor == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+		
+
+		Measure measure = measureDao.getMin(sensor, fromDate, toDate);
+
+		if(measure == null)
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 		
 		return Response.status(200).entity(measure).build();
 	}
-	
-	
-	
+
+
+
 	/*
 	 public static String ALGORITHM = "AES";
 	private static String AES_CBS_PADDING = "AES/CBC/PKCS5Padding";
@@ -172,7 +207,7 @@ public class MeasureEndPoint {
 		cipher.init(mode, keySpec, ivSpec);
 		return cipher.doFinal(message);
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
 		keyGenerator.init(AES_128);
@@ -183,10 +218,10 @@ public class MeasureEndPoint {
 
 		String randomString = "username#" + System.currentTimeMillis();
 		System.out.println("1. Message to Encrypt: " + randomString);
-		
+
 		byte[] cipherText = encrypt(key.getEncoded(), IV.getEncoded(), randomString.getBytes());
 		System.out.println("2. Encrypted Text: " + Base64.getEncoder().encodeToString(cipherText));
-		
+
 		byte[] decryptedString = decrypt(key.getEncoded(), IV.getEncoded(), cipherText);
 		System.out.println("3. Decrypted Message : " + new String(decryptedString));
 	} 

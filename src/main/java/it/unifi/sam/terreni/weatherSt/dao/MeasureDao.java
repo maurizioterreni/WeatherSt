@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
+import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 
 public class MeasureDao {
 	@PersistenceContext
@@ -34,44 +35,44 @@ public class MeasureDao {
 		entityManager.flush();
 	}
 
-	public List<Measure> getMeasureBetweenDate(Long sensorId, Date fromDate, Date toDate){
+	public List<Measure> getMeasureBetweenDate(Sensor sensor, Date fromDate, Date toDate){
 		return entityManager
 				.createQuery("from Measure m where "
 						+ "m.sensor_id = :sensor AND m.timestamp BETWEEN :fromDate AND :toDate ", Measure.class)
-				.setParameter("sensor", sensorId)
+				.setParameter("sensor", sensor)
 				.setParameter("fromDate", fromDate.getTime())
 				.setParameter("toDate", toDate.getTime())
 				.getResultList();
 	}
 
 
-	public Measure getMax(Long sensorId, Date fromDate, Date toDate){
+	public Measure getMax(Sensor sensor, Date fromDate, Date toDate){
 		return entityManager
 				.createQuery("from Measure m where "
 						+ "m.sensor_id = :sensor AND m.timestamp BETWEEN :fromDate AND :toDate order by m.value desc", Measure.class)
-				.setParameter("sensor", sensorId)
+				.setParameter("sensor", sensor)
 				.setParameter("fromDate", fromDate.getTime())
 				.setParameter("toDate", toDate.getTime())
 				.setMaxResults(1)
 				.getSingleResult();
 	}
 
-	public Measure getMin(Long sensorId, Date fromDate, Date toDate){
+	public Measure getMin(Sensor sensor, Date fromDate, Date toDate){
 		return entityManager
 				.createQuery("from Measure m where "
 						+ "m.sensor_id = :sensor AND m.timestamp BETWEEN :fromDate AND :toDate order by m.value asc", Measure.class)
-				.setParameter("sensor", sensorId)
+				.setParameter("sensor", sensor)
 				.setParameter("fromDate", fromDate.getTime())
 				.setParameter("toDate", toDate.getTime())
 				.setMaxResults(1)
 				.getSingleResult();
 	}
 
-	public Measure getLastMeasue(Long sensorId) {
+	public Measure getLastMeasue(Sensor sensor) {
 		return entityManager
 				.createQuery("from Measure m where "
-						+ "m.sensor_id = :sensor order by m.timestamp desc", Measure.class)
-				.setParameter("sensor", sensorId)
+						+ "m.sensor = :sensor order by m.timestamp desc", Measure.class)
+				.setParameter("sensor", sensor)
 				.setMaxResults(1)
 				.getSingleResult();
 	}

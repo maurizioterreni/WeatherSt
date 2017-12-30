@@ -12,18 +12,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
+import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
+import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 
 @Entity
 @Table(name="sensors")
-public class Sensor extends BaseEntity {
+public class Sensor extends BaseEntity implements Usage{
 	private static final long serialVersionUID = -89078019304365613L;
 
 	private SensorType sensorType;
 	private String description;
 	@ManyToOne
-	@JoinColumn(name = "weatherStation_id")
+	@JoinColumn(name = "weatherStation")
 	private WeatherStation weatherStation;
 
 	@OneToMany(mappedBy = "sensor", cascade = CascadeType.REMOVE)
@@ -47,7 +51,7 @@ public class Sensor extends BaseEntity {
 	public void setSensorType(SensorType sensorType) {
 		this.sensorType = sensorType;
 	}
-
+	@JsonIgnore
 	public Set<Measure> getMeasures() {
 		return measures;
 	}
@@ -67,13 +71,18 @@ public class Sensor extends BaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	@JsonIgnore
 	public WeatherStation getWeatherStation() {
 		return weatherStation;
 	}
 
 	public void setWeatherStation(WeatherStation weatherStation) {
 		this.weatherStation = weatherStation;
+	}
+
+	@Override
+	public void accept(UsageVisitor visitor) {
+		visitor.visitSensor(this);
 	}
 	
 	

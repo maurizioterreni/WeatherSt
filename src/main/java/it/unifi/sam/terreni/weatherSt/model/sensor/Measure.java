@@ -10,14 +10,16 @@ import javax.persistence.Table;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.sensor.units.UnitMeasure;
+import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
+import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 
 @Entity
 @Table(name="measures")
-public class Measure extends BaseEntity {
+public class Measure extends BaseEntity implements Usage{
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
-	@JoinColumn(name = "sensor_id")
+	@JoinColumn(name = "sensor")
 	private Sensor sensor;
 	private Float value;
 	private Long timestamp;
@@ -63,6 +65,11 @@ public class Measure extends BaseEntity {
 
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
+	}
+
+	@Override
+	public void accept(UsageVisitor visitor) {
+		visitor.visitMeasure(this);
 	}
 
 
