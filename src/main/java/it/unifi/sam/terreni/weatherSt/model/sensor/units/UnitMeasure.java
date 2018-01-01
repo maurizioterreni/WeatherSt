@@ -3,6 +3,7 @@ package it.unifi.sam.terreni.weatherSt.model.sensor.units;
 public enum UnitMeasure {
 	PASCAL("Pascal", "Pa"),
 	BAR("Bar","bar"),
+	HECTOPASCAL("Hectopascal","hPa"),
 	POUNDS_PER_SQUARE("Pounds per square inch","psi"),
 	ATMOSPHERE("atmosphere","atm"),
 	M_S("m/s","m/s"),
@@ -12,7 +13,11 @@ public enum UnitMeasure {
 	FT_S("ft/s","ft/s"),
 	CELSIUS("Celsius", "°C"),
 	FAHRENHEIT("Fahrenheit","°F"),
-	KELVIN("Kelvin","K");
+	KELVIN("Kelvin","K"),
+	PERCENTAGE("Percentage","%"),
+	UV("Uv",""),
+	DEGREE("Degree","°"),
+	MILLIMETRE("Millimetre","mm");
 	
 	private String name;
 	private String unit;

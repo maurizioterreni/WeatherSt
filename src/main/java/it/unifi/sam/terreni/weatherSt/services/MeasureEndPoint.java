@@ -37,9 +37,7 @@ public class MeasureEndPoint {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("weatherId") Long weatherId, @HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") UnitMeasure unitMeasure) {
-		if (weatherId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
+	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") UnitMeasure unitMeasure) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
 		if (value == null)
@@ -52,9 +50,7 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 		if(!CheckClass.checkUnit(sensor.getSensorType(),unitMeasure))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECTS_NOT_COMPATIBLE.getMessage() + " - unitMeasure").build();
-		if(sensor.getWeatherStation().getId() != weatherId)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
-
+		
 
 		Measure measure = ModelFactory.measure();
 		measure.setSensor(sensor);
