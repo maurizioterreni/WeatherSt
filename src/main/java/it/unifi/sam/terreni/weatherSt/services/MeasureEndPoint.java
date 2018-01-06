@@ -18,8 +18,6 @@ import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
 import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
-import it.unifi.sam.terreni.weatherSt.model.sensor.units.UnitMeasure;
-
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
@@ -37,31 +35,27 @@ public class MeasureEndPoint {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") UnitMeasure unitMeasure) {
+	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("value_type") String valueType) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
 		if (value == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - value").build();
-		if (unitMeasure == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasure").build();
+		if (StringUtils.isEmpty(valueType))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - valueType").build();
 
 		Sensor sensor = sensorDao.findById(sensorId);
 		if (sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		if(!CheckClass.checkUnit(sensor.getSensorType(),unitMeasure))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECTS_NOT_COMPATIBLE.getMessage() + " - unitMeasure").build();
-		
 
-		Measure measure = ModelFactory.measure();
+
+		Measure measure = ModelFactory.measure(sensor.getSensorType(),valueType);
 		measure.setSensor(sensor);
 		measure.setTimestamp(System.currentTimeMillis());
-		measure.setUnit(unitMeasure);
 		measure.setValue(value);
 
 		sensor.addMeasuer(measure);
 		measureDao.save(measure);
 		return Response.status(200).entity(measure).build();
-		
 
 	}
 
@@ -81,12 +75,12 @@ public class MeasureEndPoint {
 
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
+
 		Measure measure = measureDao.getLastMeasue(sensor);
 
 		if(measure == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
-		
+
 		return Response.status(200).entity(measure).build();
 	}
 
@@ -111,10 +105,10 @@ public class MeasureEndPoint {
 
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		
+
+
 		List<Measure> measures = measureDao.getMeasureBetweenDate(sensor, fromDate, toDate);
-		
+
 		if(measures == null || measures.size() == 0)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 
@@ -142,9 +136,9 @@ public class MeasureEndPoint {
 
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
+
 		Measure measure = measureDao.getMax(sensor, fromDate, toDate);
-		
+
 		if(measure == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 
@@ -167,18 +161,18 @@ public class MeasureEndPoint {
 
 		if(!CheckClass.checkToken(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
-		
+
 		Sensor sensor = sensorDao.findById(sensorId);
 
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
+
 
 		Measure measure = measureDao.getMin(sensor, fromDate, toDate);
 
 		if(measure == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
-		
+
 		return Response.status(200).entity(measure).build();
 	}
 

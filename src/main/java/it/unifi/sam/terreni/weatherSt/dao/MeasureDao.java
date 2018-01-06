@@ -26,7 +26,6 @@ public class MeasureDao {
 		Measure persisted = findById(measure.getId());
 		persisted.setTimestamp(measure.getTimestamp());
 		persisted.setValue(measure.getValue());
-		persisted.setUnit(measure.getUnit());
 		entityManager.flush();
 	}
 
