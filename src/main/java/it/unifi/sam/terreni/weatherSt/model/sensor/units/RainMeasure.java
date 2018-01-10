@@ -19,6 +19,11 @@ public class RainMeasure extends Measure{
 		super();
 	}
 	
+	public RainMeasure(String uuid, String unit) {
+		super(uuid);
+		this.unit = RainUnits.getFromString(unit);
+	}
+	
 	public RainMeasure(String uuid) {
 		super(uuid);
 	}

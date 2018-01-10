@@ -18,4 +18,12 @@ public enum UVUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static UVUnits getFromString(String unit) {
+		if(unit.equals(UV.name)) {
+			return UV;
+		}else {
+			return null;
+		}
+	}
 }

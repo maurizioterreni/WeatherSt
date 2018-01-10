@@ -18,4 +18,12 @@ public enum WindDirectionUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static WindDirectionUnits getFromString(String unit) {
+		if(unit.equals(DEGREE.name)) {
+			return DEGREE;
+		}else {
+			return null;
+		}
+	}
 }

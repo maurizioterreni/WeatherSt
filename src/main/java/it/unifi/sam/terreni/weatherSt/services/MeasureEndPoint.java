@@ -35,12 +35,12 @@ public class MeasureEndPoint {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("value_type") String valueType) {
+	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") String unit, @HeaderParam("temp") Long timstamp) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
 		if (value == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - value").build();
-		if (StringUtils.isEmpty(valueType))
+		if (StringUtils.isEmpty(unit))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - valueType").build();
 
 		Sensor sensor = sensorDao.findById(sensorId);
@@ -48,9 +48,10 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
 
-		Measure measure = ModelFactory.measure(sensor.getSensorType(),valueType);
+		Measure measure = ModelFactory.measure(sensor.getSensorType(),unit);
 		measure.setSensor(sensor);
-		measure.setTimestamp(System.currentTimeMillis());
+		//measure.setTimestamp(System.currentTimeMillis());
+		measure.setTimestamp(timstamp);
 		measure.setValue(value);
 
 		sensor.addMeasuer(measure);

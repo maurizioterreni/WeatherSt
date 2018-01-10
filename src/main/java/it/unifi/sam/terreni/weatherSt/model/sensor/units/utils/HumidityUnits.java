@@ -18,4 +18,12 @@ public enum HumidityUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static HumidityUnits getFromString(String unit) {
+		if(unit.equals(PERCENTAGE.name)) {
+			return PERCENTAGE;
+		}else {
+			return null;
+		}
+	}
 }

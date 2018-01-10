@@ -19,6 +19,11 @@ public class UVMeasure extends Measure{
 		super();
 	}
 	
+	public UVMeasure(String uuid, String unit) {
+		super(uuid);
+		this.unit = UVUnits.getFromString(unit);
+	}
+	
 	public UVMeasure(String uuid) {
 		super(uuid);
 	}

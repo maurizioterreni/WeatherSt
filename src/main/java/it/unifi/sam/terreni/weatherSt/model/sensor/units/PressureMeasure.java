@@ -19,6 +19,11 @@ public class PressureMeasure extends Measure{
 		super();
 	}
 	
+	public PressureMeasure(String uuid, String unit) {
+		super(uuid);
+		this.unit = PressureUnits.getFromString(unit);
+	}
+	
 	public PressureMeasure(String uuid) {
 		super(uuid);
 	}

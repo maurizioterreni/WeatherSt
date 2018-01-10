@@ -22,6 +22,10 @@ public class WindSpeedMeasure extends Measure{
 	public WindSpeedMeasure(String uuid) {
 		super(uuid);
 	}
+	public WindSpeedMeasure(String uuid,String unit) {
+		super(uuid);
+		this.unit = WindSpeedUnits.getFromString(unit);
+	}
 
 	@Enumerated(EnumType.STRING)
 	public WindSpeedUnits getUnit() {

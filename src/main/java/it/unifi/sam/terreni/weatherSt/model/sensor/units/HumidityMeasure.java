@@ -19,6 +19,11 @@ public class HumidityMeasure extends Measure{
 		super();
 	}
 	
+	public HumidityMeasure(String uuid,String unit) {
+		super(uuid);
+		this.unit = HumidityUnits.getFromString(unit);
+	}
+	
 	public HumidityMeasure(String uuid) {
 		super(uuid);
 	}

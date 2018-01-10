@@ -18,4 +18,12 @@ public enum RainUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static RainUnits getFromString(String unit) {
+		if(unit.equals(MILLIMETRE.name)) {
+			return MILLIMETRE;
+		}else {
+			return null;
+		}
+	}
 }

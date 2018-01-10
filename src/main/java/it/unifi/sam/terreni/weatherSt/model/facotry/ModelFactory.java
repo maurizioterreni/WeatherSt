@@ -29,15 +29,15 @@ public final class ModelFactory {
 	public static Measure measure(SensorType sensorType,String valueType) {
 		Measure measure = null;
 		if(sensorType.equals(TEMPERATURE)) {
-			measure = new TemperatureMeasure(UUID.randomUUID().toString());
+			measure = new TemperatureMeasure(UUID.randomUUID().toString(), valueType);
 		}else if(sensorType.equals(HUMIDITY)) {
-			measure = new HumidityMeasure(UUID.randomUUID().toString());
+			measure = new HumidityMeasure(UUID.randomUUID().toString(), valueType);
 		}else if (sensorType.equals(PRESSURE)) {
-			measure = new PressureMeasure(UUID.randomUUID().toString());
+			measure = new PressureMeasure(UUID.randomUUID().toString(), valueType);
 		}else if (sensorType.equals(RAIN)) {
-			measure = new RainMeasure(UUID.randomUUID().toString());
+			measure = new RainMeasure(UUID.randomUUID().toString(), valueType);
 		}else if (sensorType.equals(UV)) {
-			measure = new UVMeasure(UUID.randomUUID().toString());
+			measure = new UVMeasure(UUID.randomUUID().toString(), valueType);
 		}else if (sensorType.equals(WIND_DIRECTION)) {
 			measure = new WindDirectionMeasure(UUID.randomUUID().toString());
 		}else if (sensorType.equals(WIND_SPEED)) {

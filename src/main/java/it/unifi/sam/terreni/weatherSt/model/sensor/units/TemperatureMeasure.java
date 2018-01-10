@@ -18,6 +18,11 @@ public class TemperatureMeasure extends Measure{
 	TemperatureMeasure() {
 		super();
 	}
+	public TemperatureMeasure(String uuid, String unit){
+		super(uuid);
+		this.unit = TemperatureUnits.getFromString(unit);
+	}
+	
 	public TemperatureMeasure(String uuid){
 		super(uuid);
 	}

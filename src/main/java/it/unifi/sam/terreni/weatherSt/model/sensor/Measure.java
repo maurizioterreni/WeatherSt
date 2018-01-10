@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
 import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
@@ -43,7 +45,7 @@ public abstract class Measure extends BaseEntity implements Usage{
 	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
-
+	@JsonIgnore
 	public Sensor getSensor() {
 		return sensor;
 	}

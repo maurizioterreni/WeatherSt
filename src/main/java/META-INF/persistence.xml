@@ -12,6 +12,8 @@
 		<class>it.unifi.sam.terreni.weatherSt.model.sensor.units.UVMeasure</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.sensor.units.WindDirectionMeasure</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.sensor.units.WindSpeedMeasure</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.WeatherStation</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Measure</class>
 		
         <properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />

@@ -22,4 +22,20 @@ public enum WindSpeedUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static WindSpeedUnits getFromString(String unit) {
+		if(unit.equals(M_S.name)) {
+			return M_S;
+		}if(unit.equals(KM_H.name)) {
+			return KM_H;
+		}if(unit.equals(MPH.name)) {
+			return MPH;
+		}if(unit.equals(KNOT.name)) {
+			return KNOT;
+		}if(unit.equals(FT_S.name)) {
+			return FT_S;
+		}else {
+			return null;
+		}
+	}
 }

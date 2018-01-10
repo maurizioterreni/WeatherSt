@@ -20,4 +20,16 @@ public enum TemperatureUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static TemperatureUnits getFromString(String unit) {
+		if(unit.equals(CELSIUS.name)) {
+			return CELSIUS;
+		}else if(unit.equals(FAHRENHEIT.name)) {
+			return FAHRENHEIT;
+		}else if(unit.equals(KELVIN.name)) {
+			return KELVIN;
+		}else {
+			return null;
+		}
+	}
 }

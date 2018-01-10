@@ -22,4 +22,20 @@ public enum PressureUnits {
 	public String getUnit() {
 		return unit;
 	}
+	
+	public static PressureUnits getFromString(String unit) {
+		if(unit.equals(PASCAL.name)) {
+			return PASCAL;
+		}else if(unit.equals(BAR.name)) {
+			return BAR;
+		}else if(unit.equals(HECTOPASCAL.name)) {
+			return HECTOPASCAL;
+		}else if(unit.equals(POUNDS_PER_SQUARE.name)) {
+			return POUNDS_PER_SQUARE;
+		}else if(unit.equals(ATMOSPHERE.name)) {
+			return ATMOSPHERE;
+		}else {
+			return null;
+		}
+	}
 }

@@ -22,6 +22,11 @@ public class WindDirectionMeasure extends Measure{
 	public WindDirectionMeasure(String uuid) {
 		super(uuid);
 	}
+	
+	public WindDirectionMeasure(String uuid, String unit) {
+		super(uuid);
+		this.unit = WindDirectionUnits.getFromString(unit);
+	}
 
 	@Enumerated(EnumType.STRING)
 	public WindDirectionUnits getUnit() {
