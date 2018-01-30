@@ -13,7 +13,7 @@ public class MeasureDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public void save(Measure measure) {
+	public void save(Measure measure) { 
 		entityManager.persist(measure);
 	}
 
