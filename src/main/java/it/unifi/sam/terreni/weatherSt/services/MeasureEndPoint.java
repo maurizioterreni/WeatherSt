@@ -1,7 +1,9 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -15,6 +17,8 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
+import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
@@ -31,6 +35,8 @@ public class MeasureEndPoint {
 	private SensorDao sensorDao;
 	@Inject
 	private MeasureDao measureDao;
+	@Inject
+	private WeatherStationDao weatherStationDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -63,7 +69,7 @@ public class MeasureEndPoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response getMin(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId) {
+	public Response get(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId) {
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
 		if (sensorId == null)
@@ -83,6 +89,36 @@ public class MeasureEndPoint {
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 
 		return Response.status(200).entity(measure).build();
+	}
+	
+	@GET
+	@Path("/lastMeasure")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getLastOfWeather(@HeaderParam("token") String token, @HeaderParam("weatherId") Long weatherId) {
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		if (weatherId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+
+		if(!CheckClass.checkToken(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+
+		WeatherStation weatherStation = weatherStationDao.fetchById(weatherId);
+
+		if(weatherStation == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
+		
+		if(weatherStation.getSensors() == null || weatherStation.getSensors().size() == 0)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+
+		Set<Measure> measures = new HashSet<>();
+		
+		for (Sensor sensor : weatherStation.getSensors()) {
+			measures.add(measureDao.getLastMeasue(sensor));
+		}
+
+		return Response.status(200).entity(measures).build();
 	}
 
 	@GET
