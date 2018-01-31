@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 public class BaseEntityTest {
 
@@ -22,10 +23,10 @@ public class BaseEntityTest {
 		e3 = new FakeBaseEntity(uuid1);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void testNullUUID() {
-		new FakeBaseEntity(null);
-	}
+//	@Test(expected = IllegalArgumentException.class)
+//	public void testNullUUID() {
+//		new FakeBaseEntity(null);
+//	}
 	
 	@Test
 	public void testEquals() {

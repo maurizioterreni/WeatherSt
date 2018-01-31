@@ -1,6 +1,6 @@
 package it.unifi.sam.terreni.weatherSt.utils;
 
-import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorType;
 
 public class CheckClass {

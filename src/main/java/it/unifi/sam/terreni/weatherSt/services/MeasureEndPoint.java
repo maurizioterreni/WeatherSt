@@ -17,10 +17,12 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
+import it.unifi.sam.terreni.weatherSt.dao.UnitMeasureFamilyDao;
+import it.unifi.sam.terreni.weatherSt.dao.ValueDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
-import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
-import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.Value;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
@@ -37,34 +39,44 @@ public class MeasureEndPoint {
 	private MeasureDao measureDao;
 	@Inject
 	private WeatherStationDao weatherStationDao;
+	@Inject
+	private ValueDao valueDao;
+	@Inject
+	private UnitMeasureFamilyDao unitMeasureFamilyDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") String unit, @HeaderParam("temp") Long timstamp) {
+	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") String unit) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
 		if (value == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - value").build();
 		if (StringUtils.isEmpty(unit))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - valueType").build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unit").build();
 
+		
 		Sensor sensor = sensorDao.findById(sensorId);
 		if (sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
+		
+		Measure measure = Measure.buider()
+				.sensor(sensor)
+				.value(Value.builder()
+						.unitMeasureFamily(null)
+						.value(value)
+						.build())
+				.timestamp(System.currentTimeMillis())
+				.build();
 
-		Measure measure = ModelFactory.measure(sensor.getSensorType(),unit);
-		measure.setSensor(sensor);
-		//measure.setTimestamp(System.currentTimeMillis());
-		measure.setTimestamp(timstamp);
-		measure.setValue(value);
-
-		sensor.addMeasuer(measure);
+		unitMeasureFamilyDao.save(measure.getValue().getUnitMeasureFamily());
+		valueDao.save(measure.getValue());
 		measureDao.save(measure);
 		return Response.status(200).entity(measure).build();
 
 	}
+	
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

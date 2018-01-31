@@ -16,6 +16,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
+import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
 import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 

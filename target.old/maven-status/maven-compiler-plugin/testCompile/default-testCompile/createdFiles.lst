@@ -1,0 +1,7 @@
+it/unifi/sam/terreni/weatherSt/model/BaseEntityTest$FakeBaseEntity.class
+it/unifi/sam/terreni/weatherSt/persistence/JpaUnitTest.class
+it/unifi/sam/terreni/weatherSt/model/BaseEntityTest.class
+it/unifi/sam/terreni/weatherSt/exception/TestInitializationException.class
+it/unifi/sam/terreni/weatherSt/exception/TestPropertyInitializationException.class
+it/unifi/sam/terreni/weatherSt/persistence/JpaTest.class
+it/unifi/sam/terreni/weatherSt/persistence/JpaIT.class

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 
 public class MeasureDao {

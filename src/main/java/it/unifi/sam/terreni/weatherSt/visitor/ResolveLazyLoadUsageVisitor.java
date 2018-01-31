@@ -1,6 +1,6 @@
 package it.unifi.sam.terreni.weatherSt.visitor;
 
-import it.unifi.sam.terreni.weatherSt.model.sensor.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 
