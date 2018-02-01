@@ -1,12 +1,12 @@
 package it.unifi.sam.terreni.weatherSt.model.measure.units.utils;
 
-public enum UVUnits {
+public enum UvUnits {
 	UV("Uv","");
 	
 	private String name;
 	private String unit;
 	
-	private UVUnits(String name, String unit) {
+	private UvUnits(String name, String unit) {
 		this.name = name;
 		this.unit = unit;
 	}
@@ -19,7 +19,7 @@ public enum UVUnits {
 		return unit;
 	}
 	
-	public static UVUnits getFromString(String unit) {
+	public static UvUnits getFromString(String unit) {
 		if(unit.equals(UV.name)) {
 			return UV;
 		}else {

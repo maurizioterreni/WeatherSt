@@ -6,14 +6,14 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureFamily;
-import it.unifi.sam.terreni.weatherSt.model.measure.units.utils.UVUnits;
+import it.unifi.sam.terreni.weatherSt.model.measure.units.utils.UvUnits;
 
 @Entity
 @DiscriminatorValue("uv_unit")
 public class UvUnit extends UnitMeasureFamily {
 	private static final long serialVersionUID = 6560577452095710150L;
 
-	private UVUnits units;
+	private UvUnits units;
 
 	UvUnit(){
 		super();
@@ -22,17 +22,17 @@ public class UvUnit extends UnitMeasureFamily {
 	public UvUnit(String uuid) {
 		super(uuid);
 	}
-	public UvUnit(String uuid, UVUnits units) {
+	public UvUnit(String uuid, UvUnits units) {
 		super(uuid);
 		this.units = units;
 	}
 
-	public UVUnits getUnits() {
+	public UvUnits getUnits() {
 		return units;
 	}
 
 	@Enumerated(EnumType.STRING)
-	public void setUnits(UVUnits units) {
+	public void setUnits(UvUnits units) {
 		this.units = units;
 	}
 	

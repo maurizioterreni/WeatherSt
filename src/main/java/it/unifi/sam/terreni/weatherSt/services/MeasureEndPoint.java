@@ -21,6 +21,7 @@ import it.unifi.sam.terreni.weatherSt.dao.UnitMeasureFamilyDao;
 import it.unifi.sam.terreni.weatherSt.dao.ValueDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
+import it.unifi.sam.terreni.weatherSt.model.facotry.UnitMeasureFamilyFacotry;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.measure.Value;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
@@ -64,7 +65,7 @@ public class MeasureEndPoint {
 		Measure measure = Measure.buider()
 				.sensor(sensor)
 				.value(Value.builder()
-						.unitMeasureFamily(null)
+						.unitMeasureFamily(UnitMeasureFamilyFacotry.createUnit(unit))
 						.value(value)
 						.build())
 				.timestamp(System.currentTimeMillis())

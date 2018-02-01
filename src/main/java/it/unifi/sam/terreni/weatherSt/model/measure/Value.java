@@ -34,8 +34,6 @@ public class Value extends BaseEntity implements Usage{
 
 	@Override
 	public void accept(UsageVisitor visitor) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public UnitMeasureFamily getUnitMeasureFamily() {
@@ -66,6 +64,8 @@ public class Value extends BaseEntity implements Usage{
 		}
 		
 		public ValueBuilder unitMeasureFamily(UnitMeasureFamily unitMeasureFamily) {
+			if(unitMeasureFamily == null)
+				throw new NullPointerException("unit Measure can't not be null");
 			this.unitMeasureFamily = unitMeasureFamily;
 			return this;
 		}
