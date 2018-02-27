@@ -1,8 +1,7 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -17,13 +16,9 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
-import it.unifi.sam.terreni.weatherSt.dao.UnitMeasureFamilyDao;
-import it.unifi.sam.terreni.weatherSt.dao.ValueDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
-import it.unifi.sam.terreni.weatherSt.model.facotry.UnitMeasureFamilyFacotry;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
-import it.unifi.sam.terreni.weatherSt.model.measure.Value;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
@@ -40,40 +35,30 @@ public class MeasureEndPoint {
 	private MeasureDao measureDao;
 	@Inject
 	private WeatherStationDao weatherStationDao;
-	@Inject
-	private ValueDao valueDao;
-	@Inject
-	private UnitMeasureFamilyDao unitMeasureFamilyDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("value") Float value, @HeaderParam("unit") String unit) {
+	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("quantity") Float quantity) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		if (value == null)
+		if (quantity == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - value").build();
-		if (StringUtils.isEmpty(unit))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unit").build();
-
+		
 		
 		Sensor sensor = sensorDao.findById(sensorId);
 		if (sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
-		
-		Measure measure = Measure.buider()
+		Measure measure = Measure
+				.buider()
+				.localDateTime(LocalDateTime.now())
+				.quantity(quantity)
 				.sensor(sensor)
-				.value(Value.builder()
-						.unitMeasureFamily(UnitMeasureFamilyFacotry.createUnit(unit))
-						.value(value)
-						.build())
-				.timestamp(System.currentTimeMillis())
 				.build();
-
-		unitMeasureFamilyDao.save(measure.getValue().getUnitMeasureFamily());
-		valueDao.save(measure.getValue());
+		
 		measureDao.save(measure);
+		
 		return Response.status(200).entity(measure).build();
 
 	}
@@ -134,97 +119,97 @@ public class MeasureEndPoint {
 		return Response.status(200).entity(measures).build();
 	}
 
-	@GET
-	@Path("/betweenDate")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response get(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("fromDate") Date fromDate, @HeaderParam("toDate") Date toDate) {
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		if (fromDate == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
-		if (toDate == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-
-		if(!CheckClass.checkToken(token))
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
-
-		Sensor sensor = sensorDao.findById(sensorId);
-
-		if(sensor == null)
-			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-
-
-		List<Measure> measures = measureDao.getMeasureBetweenDate(sensor, fromDate, toDate);
-
-		if(measures == null || measures.size() == 0)
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
-
-		return Response.status(200).entity(measures).build();
-	}
-
-	@GET
-	@Path("/max")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response getMax(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("fromDate") Date fromDate, @HeaderParam("toDate") Date toDate) {
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		if (fromDate == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
-		if (toDate == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-
-		if(!CheckClass.checkToken(token))
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
-
-		Sensor sensor = sensorDao.findById(sensorId);
-
-		if(sensor == null)
-			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-
-		Measure measure = measureDao.getMax(sensor, fromDate, toDate);
-
-		if(measure == null)
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
-
-		return Response.status(200).entity(measure).build();
-	}
-
-	@GET
-	@Path("/min")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response getMin(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("fromDate") Date fromDate, @HeaderParam("toDate") Date toDate) {
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		if (fromDate == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
-		if (toDate == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-
-		if(!CheckClass.checkToken(token))
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
-
-		Sensor sensor = sensorDao.findById(sensorId);
-
-		if(sensor == null)
-			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-
-
-		Measure measure = measureDao.getMin(sensor, fromDate, toDate);
-
-		if(measure == null)
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
-
-		return Response.status(200).entity(measure).build();
-	}
+//	@GET
+//	@Path("/betweenDate")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Transactional
+//	public Response get(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("froMatate") Date froMatate, @HeaderParam("toDate") Date toDate) {
+//		if (StringUtils.isEmpty(token))
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+//		if (sensorId == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+//		if (froMatate == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - froMatate").build();
+//		if (toDate == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
+//
+//		if(!CheckClass.checkToken(token))
+//			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+//
+//		Sensor sensor = sensorDao.findById(sensorId);
+//
+//		if(sensor == null)
+//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+//
+//
+//		List<Measure> measures = measureDao.getMeasureBetweenDate(sensor, froMatate, toDate);
+//
+//		if(measures == null || measures.size() == 0)
+//			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
+//
+//		return Response.status(200).entity(measures).build();
+//	}
+//
+//	@GET
+//	@Path("/max")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Transactional
+//	public Response getMax(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("froMatate") Date froMatate, @HeaderParam("toDate") Date toDate) {
+//		if (StringUtils.isEmpty(token))
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+//		if (sensorId == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+//		if (froMatate == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - froMatate").build();
+//		if (toDate == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
+//
+//		if(!CheckClass.checkToken(token))
+//			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+//
+//		Sensor sensor = sensorDao.findById(sensorId);
+//
+//		if(sensor == null)
+//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+//
+//		Measure measure = measureDao.getMax(sensor, froMatate, toDate);
+//
+//		if(measure == null)
+//			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
+//
+//		return Response.status(200).entity(measure).build();
+//	}
+//
+//	@GET
+//	@Path("/min")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Transactional
+//	public Response getMin(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("froMatate") Date froMatate, @HeaderParam("toDate") Date toDate) {
+//		if (StringUtils.isEmpty(token))
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+//		if (sensorId == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+//		if (froMatate == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - froMatate").build();
+//		if (toDate == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
+//
+//		if(!CheckClass.checkToken(token))
+//			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
+//
+//		Sensor sensor = sensorDao.findById(sensorId);
+//
+//		if(sensor == null)
+//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+//
+//
+//		Measure measure = measureDao.getMin(sensor, froMatate, toDate);
+//
+//		if(measure == null)
+//			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
+//
+//		return Response.status(200).entity(measure).build();
+//	}
 
 
 
@@ -266,5 +251,7 @@ public class MeasureEndPoint {
 		System.out.println("3. Decrypted Message : " + new String(decryptedString));
 	} 
 	 */
+//	LocalDate
+//	LocalDateTime
 }
 

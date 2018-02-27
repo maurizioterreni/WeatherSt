@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
-import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorType;
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
@@ -44,11 +43,10 @@ public class SensorEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
 
 	
-		Sensor sensor = ModelFactory.sensor();
-		sensor.setDescription(description);
-		sensor.setSensorType(sensorType);
-		sensor.setWeatherStation(weatherStation);
-		weatherStation.addSensor(sensor);
+		Sensor sensor = Sensor.builder()
+				.sensorType(sensorType)
+				.weatherStation(weatherStation)
+				.build();
 		
 		sensorDao.save(sensor);
 		

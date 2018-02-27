@@ -16,6 +16,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
+import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
 import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
@@ -26,7 +27,6 @@ public class Sensor extends BaseEntity implements Usage{
 	private static final long serialVersionUID = -89078019304365613L;
 
 	private SensorType sensorType;
-	private String description;
 	@ManyToOne
 	@JoinColumn(name = "weatherStation")
 	private WeatherStation weatherStation;
@@ -42,6 +42,10 @@ public class Sensor extends BaseEntity implements Usage{
 	public Sensor(String uuid) {
 		super(uuid);
 		measures = new HashSet<>();
+	}
+	
+	public static SensorBuilder builder() {
+		return new SensorBuilder();
 	}
 
 	@Enumerated(EnumType.STRING)
@@ -65,13 +69,7 @@ public class Sensor extends BaseEntity implements Usage{
 		this.measures.add(measure);
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
 	@JsonIgnore
 	public WeatherStation getWeatherStation() {
 		return weatherStation;
@@ -86,6 +84,33 @@ public class Sensor extends BaseEntity implements Usage{
 		visitor.visitSensor(this);
 	}
 	
-	
+	public static class SensorBuilder{
+		private WeatherStation weatherStation;
+		private SensorType sensorType;
+		
+		
+
+		public SensorBuilder weatherStation(WeatherStation weatherStation) {
+			this.weatherStation = weatherStation;
+			return this;
+		}
+		
+		
+		
+		public SensorBuilder sensorType(SensorType sensorType) {
+			this.sensorType = sensorType;
+			return this;
+		}
+		
+		public Sensor build() {
+			Sensor sensor = ModelFactory.sensor();
+			
+			sensor.sensorType = this.sensorType;
+			this.weatherStation.addSensor(sensor);
+			sensor.weatherStation = this.weatherStation;
+			
+			return sensor;
+		}
+	}
 	
 }

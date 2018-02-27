@@ -22,7 +22,7 @@ public class SensorDao {
 	
 	public void update(Sensor sensor) {
 		Sensor persisted = findById(sensor.getId());
-		persisted.setDescription(sensor.getDescription());
+		persisted.setSensorType(sensor.getSensorType());
 		entityManager.flush();
 	}
 	

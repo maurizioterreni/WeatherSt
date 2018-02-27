@@ -7,8 +7,8 @@
 		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Sensor</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.WeatherStation</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.measure.Measure</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.measure.Value</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureFamily</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasure</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.SensorType</class>
 		
         <properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />

@@ -1,9 +1,10 @@
 package it.unifi.sam.terreni.weatherSt.model.measure;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -22,9 +23,8 @@ public class Measure extends BaseEntity implements Usage{
 	@ManyToOne
 	@JoinColumn(name = "sensor")
 	private Sensor sensor;
-	@OneToOne()
-	private Value value;
-	private Long timestamp;
+	private LocalDateTime localDateTime;
+	private Float quantity;
 	
 	protected Measure(){
 		super();
@@ -38,21 +38,24 @@ public class Measure extends BaseEntity implements Usage{
 		return new MeasureBuilder();
 	}
 
-	public Value getValue() {
-		return value;
+	
+
+	public Float getQuantity() {
+		return quantity;
 	}
 
-	public void setValue(Value value) {
-		this.value = value;
+	public void setQuantity(Float quantity) {
+		this.quantity = quantity;
 	}
 
-	public Long getTimestamp() {
-		return timestamp;
+	public LocalDateTime getLocalDateTime() {
+		return localDateTime;
 	}
 
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
+	public void setLocalDateTime(LocalDateTime localDateTime) {
+		this.localDateTime = localDateTime;
 	}
+
 	@JsonIgnore
 	public Sensor getSensor() {
 		return sensor;
@@ -69,19 +72,19 @@ public class Measure extends BaseEntity implements Usage{
 
 	public static class MeasureBuilder {
 		private Sensor sensor;
-		private Value value;
-		private Long timestamp;
+		private Float quantity;
+		private LocalDateTime localDateTime;
 		
 		public MeasureBuilder sensor(Sensor sensor) {
 			this.sensor = sensor;
 			return this;
 		}
-		public MeasureBuilder value(Value value) {
-			this.value = value;
+		public MeasureBuilder quantity(Float quantity) {
+			this.quantity = quantity;
 			return this;
 		}
-		public MeasureBuilder timestamp(Long timestamp) {
-			this.timestamp = timestamp;
+		public MeasureBuilder localDateTime(LocalDateTime localDateTime) {
+			this.localDateTime = localDateTime;
 			return this;
 		}
 		
@@ -90,8 +93,8 @@ public class Measure extends BaseEntity implements Usage{
 			
 			this.sensor.addMeasuer(measure);
 			measure.sensor = this.sensor;
-			measure.timestamp = this.timestamp;
-			measure.value = this.value;
+			measure.localDateTime = this.localDateTime;
+			measure.quantity = this.quantity;
 			
 			return measure;
 		}
