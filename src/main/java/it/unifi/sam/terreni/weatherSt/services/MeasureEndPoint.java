@@ -54,7 +54,6 @@ public class MeasureEndPoint {
 				.buider()
 				.localDateTime(LocalDateTime.now())
 				.quantity(quantity)
-				.sensor(sensor)
 				.build();
 		
 		measureDao.save(measure);

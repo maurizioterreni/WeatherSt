@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
-import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasure;
+import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
-import it.unifi.sam.terreni.weatherSt.model.sensor.SensorType;
+import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 
 public final class ModelFactory {
 
@@ -20,16 +20,16 @@ public final class ModelFactory {
 		return new Sensor(uuid());
 	}
 	
-	public static SensorType sensorType() {
-		return new SensorType(uuid());
+	public static SensorTypeKnowledge sensorType() {
+		return new SensorTypeKnowledge(uuid());
 	}
 	
 	public static Measure measure() {
 		return new Measure(uuid());
 	}
 	
-	public static UnitMeasure unitMeasure() {
-		return new UnitMeasure(uuid());
+	public static UnitMeasureKnowledge unitMeasure() {
+		return new UnitMeasureKnowledge(uuid());
 	}
 	
 	

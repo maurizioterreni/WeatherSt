@@ -3,15 +3,11 @@ package it.unifi.sam.terreni.weatherSt.model.measure;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
-import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
 import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 
@@ -19,12 +15,11 @@ import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 @Table(name="measure")
 public class Measure extends BaseEntity implements Usage{
 	private static final long serialVersionUID = 1L;
-	
-	@ManyToOne
-	@JoinColumn(name = "sensor")
-	private Sensor sensor;
+
 	private LocalDateTime localDateTime;
 	private Float quantity;
+	@ManyToOne
+	private UnitMeasureKnowledge unitMeasure;
 	
 	protected Measure(){
 		super();
@@ -55,30 +50,27 @@ public class Measure extends BaseEntity implements Usage{
 	public void setLocalDateTime(LocalDateTime localDateTime) {
 		this.localDateTime = localDateTime;
 	}
+	
+	
 
-	@JsonIgnore
-	public Sensor getSensor() {
-		return sensor;
+	public UnitMeasureKnowledge getUnitMeasure() {
+		return unitMeasure;
 	}
 
-	public void setSensor(Sensor sensor) {
-		this.sensor = sensor;
+	public void setUnitMeasure(UnitMeasureKnowledge unitMeasure) {
+		this.unitMeasure = unitMeasure;
 	}
 
 	@Override
 	public void accept(UsageVisitor visitor) {
 		visitor.visitMeasure(this);
 	}
-
+	
 	public static class MeasureBuilder {
-		private Sensor sensor;
 		private Float quantity;
 		private LocalDateTime localDateTime;
+		private UnitMeasureKnowledge unitMeasure;
 		
-		public MeasureBuilder sensor(Sensor sensor) {
-			this.sensor = sensor;
-			return this;
-		}
 		public MeasureBuilder quantity(Float quantity) {
 			this.quantity = quantity;
 			return this;
@@ -88,13 +80,17 @@ public class Measure extends BaseEntity implements Usage{
 			return this;
 		}
 		
+		public MeasureBuilder unitMeasure(UnitMeasureKnowledge unitMeasure) {
+			this.unitMeasure = unitMeasure;
+			return this;
+		}
+		
 		public Measure build() {
 			Measure measure = ModelFactory.measure();
 			
-			this.sensor.addMeasuer(measure);
-			measure.sensor = this.sensor;
 			measure.localDateTime = this.localDateTime;
 			measure.quantity = this.quantity;
+			measure.unitMeasure = this.unitMeasure;
 			
 			return measure;
 		}

@@ -16,24 +16,24 @@ import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 @Table(name="weatherStations")
 public class WeatherStation extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String longitude;
 	private String latitude;
 	private String description;
-	@OneToMany(mappedBy = "weatherStation", cascade = CascadeType.REMOVE)
+	@OneToMany( targetEntity=Sensor.class , cascade = CascadeType.REMOVE )
 	private Set<Sensor> sensors;
-	
+
 	WeatherStation() {
 		super();
 		sensors = new HashSet<>();
 	} 
-	
+
 	public WeatherStation(String uuid) {
 		super(uuid);
 		sensors = new HashSet<>();
 	}
-	
-	
+
+
 	public String getLongitude() {
 		return longitude;
 	}
