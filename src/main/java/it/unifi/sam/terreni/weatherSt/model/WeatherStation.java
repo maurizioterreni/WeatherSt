@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 
 @Entity
@@ -33,6 +34,9 @@ public class WeatherStation extends BaseEntity {
 		sensors = new HashSet<>();
 	}
 
+	public static WeatherStationBuilder builder() {
+		return new WeatherStationBuilder();
+	}
 
 	public String getLongitude() {
 		return longitude;
@@ -61,5 +65,37 @@ public class WeatherStation extends BaseEntity {
 	}
 	public void addSensor(Sensor sensor) {
 		this.sensors.add(sensor);
+	}
+	
+	
+	public static class WeatherStationBuilder{
+		private String longitude;
+		private String latitude;
+		private String description;
+		
+		public WeatherStationBuilder longitude(String longitude) {
+			this.longitude = longitude;
+			return this;
+		}
+		public WeatherStationBuilder latitude(String latitude) {
+			this.latitude = latitude;
+			return this;
+		}
+		public WeatherStationBuilder description(String description) {
+			this.longitude = description;
+			return this;
+		}
+		
+		public WeatherStation build() {
+			WeatherStation weatherStation = ModelFactory.weatherStation();
+			
+			weatherStation.setDescription(description);
+			weatherStation.setLatitude(latitude);
+			weatherStation.setLongitude(longitude);
+			
+			return weatherStation;
+		}
+		
+		
 	}
 }

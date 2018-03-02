@@ -13,8 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
-import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
@@ -27,22 +27,19 @@ public class WeatherStationEndPoint {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("description") String description, @HeaderParam("latitude") String latitude, @HeaderParam("longitude") String longitude) {
-		if (StringUtils.isEmpty(description))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - description").build();
-		if (StringUtils.isEmpty(longitude))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - longitude").build();
-		if (StringUtils.isEmpty(latitude))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - latitude").build();
+	public Response add(@HeaderParam("token") String token, WeatherStationPostRequestDto weatherStationDto) {
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		if (weatherStationDto == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherStationDto").build();
 		
-		WeatherStation weatherStation = ModelFactory.weatherStation();
-		weatherStation.setDescription(description);
-		weatherStation.setLatitude(latitude);
-		weatherStation.setLongitude(longitude);
-		
-		weatherStationDao.save(weatherStation);
+		weatherStationDao.save(WeatherStation.builder()
+				.description(weatherStationDto.getDescription())
+				.latitude(weatherStationDto.getLatitude())
+				.longitude(weatherStationDto.getLongitude())
+				.build());
 	
-		return Response.status(200).entity(weatherStation).build();
+		return Response.status(200).entity(weatherStationDto).build();
 		
 
 	}
