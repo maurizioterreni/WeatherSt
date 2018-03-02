@@ -33,8 +33,6 @@ public class Measure extends BaseEntity implements Usage{
 		return new MeasureBuilder();
 	}
 
-	
-
 	public Float getQuantity() {
 		return quantity;
 	}

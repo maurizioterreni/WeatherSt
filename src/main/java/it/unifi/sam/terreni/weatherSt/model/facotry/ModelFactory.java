@@ -3,6 +3,7 @@ package it.unifi.sam.terreni.weatherSt.model.facotry;
 import java.util.UUID;
 
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
+import it.unifi.sam.terreni.weatherSt.model.converter.ConversionFactor;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
@@ -32,6 +33,9 @@ public final class ModelFactory {
 		return new UnitMeasureKnowledge(uuid());
 	}
 	
+	public static ConversionFactor conversionFactor() {
+		return new ConversionFactor(uuid());
+	}
 	
 	
 	private static String uuid() {
