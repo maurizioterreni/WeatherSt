@@ -1,17 +1,17 @@
 package it.unifi.sam.terreni.weatherSt.dto.sensor;
 
-import it.unifi.sam.terreni.weatherSt.dto.BaseDTO;
+import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
-public class SensorToAddDto extends BaseDTO{
+public class SensorPostRequestDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	private Long weatherId;
 	private Long sensorTypeId;
 	
-	public SensorToAddDto() {
+	public SensorPostRequestDto() {
 	}
 	
-	public static SensorToAddDtoBuilder builder() {
-		return new SensorToAddDtoBuilder();
+	public static SensorPostRequestDtoBuilder builder() {
+		return new SensorPostRequestDtoBuilder();
 	}
 	
 	
@@ -30,23 +30,23 @@ public class SensorToAddDto extends BaseDTO{
 		this.sensorTypeId = sensorTypeId;
 	}
 	
-	public static class SensorToAddDtoBuilder{
+	public static class SensorPostRequestDtoBuilder{
 		private Long weatherId;
 		private Long sensorTypeId;
 		
-		public SensorToAddDtoBuilder weatherId(Long weatherId) {
+		public SensorPostRequestDtoBuilder weatherId(Long weatherId) {
 			this.weatherId = weatherId;
 			return this;
 		}
 		
-		public SensorToAddDtoBuilder sensorTypeId(Long sensorTypeId) {
+		public SensorPostRequestDtoBuilder sensorTypeId(Long sensorTypeId) {
 			this.sensorTypeId = sensorTypeId;
 			return this;
 		}
 		
 		
-		public SensorToAddDto build() {
-			SensorToAddDto addDto = new SensorToAddDto();
+		public SensorPostRequestDto build() {
+			SensorPostRequestDto addDto = new SensorPostRequestDto();
 			
 			addDto.setSensorTypeId(sensorTypeId);
 			addDto.setWeatherId(weatherId);

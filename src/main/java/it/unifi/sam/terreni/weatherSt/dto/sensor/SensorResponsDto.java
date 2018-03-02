@@ -1,8 +1,8 @@
 package it.unifi.sam.terreni.weatherSt.dto.sensor;
 
-import it.unifi.sam.terreni.weatherSt.dto.BaseDTO;
+import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
-public class SensorResponsDto extends BaseDTO{
+public class SensorResponsDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 
 	private Long weatherId;

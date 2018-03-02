@@ -2,9 +2,9 @@ package it.unifi.sam.terreni.weatherSt.dto.measure;
 
 import java.time.LocalDateTime;
 
-import it.unifi.sam.terreni.weatherSt.dto.BaseDTO;
+import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
-public class MeasureDTO extends BaseDTO{
+public class MeasureDTO extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	private Long sensorId;
 	private LocalDateTime localDateTime;

@@ -1,8 +1,8 @@
 package it.unifi.sam.terreni.weatherSt.dto.measure;
 
-import it.unifi.sam.terreni.weatherSt.dto.BaseDTO;
+import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
-public class UnitMeasureDTO extends BaseDTO{
+public class UnitMeasureDTO extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	private String symbol;
 	private String name;

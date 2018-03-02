@@ -1,5 +1,8 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -11,14 +14,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorTypeKnowledgeDao;
-import it.unifi.sam.terreni.weatherSt.dao.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetRequestDto;
+import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetResponsDto;
+import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
-import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorToAddDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
-import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
+import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
@@ -31,15 +36,15 @@ public class SensorEndPoint {
 	@Inject
 	private WeatherStationDao weatherStationDao;
 	@Inject
-	private UnitMeasureKnowledgeDao unitMeasureKnowledgeDao;
-	@Inject
 	private SensorTypeKnowledgeDao sensorTypeKnowledgeDao;
+	@Inject
+	private MeasureDao measureDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("token") String token, SensorToAddDto sensorDto) {
+	public Response add(@HeaderParam("token") String token, SensorPostRequestDto sensorDto) {
 		if (sensorDto == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorDto").build();
 		if (StringUtils.isEmpty(token))
@@ -62,16 +67,66 @@ public class SensorEndPoint {
 		sensorDao.save(sensor);
 
 		return Response.status(200).entity(sensorToSensorResponsDto(weatherStation.getId(), sensor)).build();
-
-
 	}
 
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response get() {
-		//Temperatura
+	public Response get(@HeaderParam("token") String token, SensorGetRequestDto sensorDto) {
+		if (sensorDto == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorDto").build();
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		
+		Sensor sensor = sensorDao.findById(sensorDto.getSensorId());
+		
+		if(sensor == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+		
+		LocalDateTime froMatate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT);
+		LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MAX);
+		
+		Measure maxMeasure = measureDao.getMax(sensor, froMatate, toDate);
+		Measure minMeasure = measureDao.getMin(sensor, froMatate, toDate);
+		Measure measure = measureDao.getLastMeasue(sensor);
+		
+		
+		
+		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure)).build();
+	}
+
+//	private SensorToAddDto sensorToSensorToAddDTO(Long weatherId,Sensor sensor) {
+//		return SensorToAddDto.builder()
+//				.sensorTypeId(sensor.getSensorType().getId())
+//				.weatherId(weatherId)
+//				.build();
+//	}
+//	
+	private SensorResponsDto sensorToSensorResponsDto(Long weatherId, Sensor sensor) {
+		return SensorResponsDto.builder()
+				.description(sensor.getSensorType().getDescription())
+				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
+				.name(sensor.getSensorType().getUnitMeasure().getName())
+				.weatherId(weatherId)
+				.build();
+	}
+	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure) {
+		return SensorGetResponsDto.builder()
+				.description(sensor.getSensorType().getDescription())
+				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
+				.name(sensor.getSensorType().getUnitMeasure().getName())
+				.measure(measure)
+				.maxMeasure(maxMeasure)
+				.minMeasure(minMeasure)
+				.build();
+	}
+}
+
+
+/*
+ * //Temperatura
 		UnitMeasureKnowledge celsius = UnitMeasureKnowledge
 				.builder()
 				.symbol("°C")
@@ -214,40 +269,5 @@ public class SensorEndPoint {
 				.descrition("Pressure sensor")
 				.unitMeasureKnowledge(millibar)
 				.build());
-
-
-		return Response.status(200).build();
-	}
-
-	@GET
-	@Path("/sensorList")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response getAllSensor() {
-
-		WeatherStation weatherStation = weatherStationDao.fetchById(new Long(1));
-
-
-		if(weatherStation.getSensors() == null)
-			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensors").build();
-
-
-		return Response.status(200).entity(weatherStation.getSensors()).build();
-	}
-	
-	private SensorToAddDto sensorToSensorToAddDTO(Long weatherId,Sensor sensor) {
-		return SensorToAddDto.builder()
-				.sensorTypeId(sensor.getSensorType().getId())
-				.weatherId(weatherId)
-				.build();
-	}
-	
-	private SensorResponsDto sensorToSensorResponsDto(Long weatherId, Sensor sensor) {
-		return SensorResponsDto.builder()
-				.description(sensor.getSensorType().getDescription())
-				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
-				.name(sensor.getSensorType().getUnitMeasure().getName())
-				.weatherId(weatherId)
-				.build();
-	}
-}
+ * 
+ * */
