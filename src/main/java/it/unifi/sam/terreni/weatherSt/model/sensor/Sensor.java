@@ -1,6 +1,8 @@
 package it.unifi.sam.terreni.weatherSt.model.sensor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,12 +28,12 @@ public class Sensor extends BaseEntity implements Usage{
 	@ManyToOne
 	private SensorTypeKnowledge sensorType;
 
-	@OneToMany( targetEntity=Measure.class , cascade = CascadeType.REMOVE )
-	private LinkedList<Measure> measures;
+	@OneToMany( mappedBy = "sensor" , cascade = CascadeType.REMOVE )
+	private List<Measure> measures;
 	
 	Sensor() {
 		super();
-		measures = new LinkedList<>();
+		measures = new ArrayList<>();
 	}
 	
 	public Sensor(String uuid) {
@@ -52,11 +54,11 @@ public class Sensor extends BaseEntity implements Usage{
 		this.sensorType = sensorType;
 	}
 	@JsonIgnore
-	public LinkedList<Measure> getMeasures() {
+	public List<Measure> getMeasures() {
 		return measures;
 	}
 	
-	public void setMeasures(LinkedList<Measure> measures) {
+	public void setMeasures(List<Measure> measures) {
 		this.measures = measures;
 	}
 	

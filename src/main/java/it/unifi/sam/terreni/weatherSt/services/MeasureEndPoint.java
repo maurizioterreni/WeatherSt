@@ -1,11 +1,14 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -16,9 +19,12 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
+import it.unifi.sam.terreni.weatherSt.dao.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasurePostRequestDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
@@ -35,30 +41,41 @@ public class MeasureEndPoint {
 	private MeasureDao measureDao;
 	@Inject
 	private WeatherStationDao weatherStationDao;
+	@Inject
+	private UnitMeasureKnowledgeDao unitMeasureKnowledgeDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response add(@HeaderParam("sensorId") Long sensorId, @HeaderParam("quantity") Float quantity) {
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		if (quantity == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - value").build();
+	public Response add(MeasurePostRequestDto requestDto) {
+		if (requestDto == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - requestDto").build();
 		
+		Sensor sensor = sensorDao.findById(requestDto.getSensorId());
 		
-		Sensor sensor = sensorDao.findById(sensorId);
 		if (sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+		
+		UnitMeasureKnowledge unitMeasure = unitMeasureKnowledgeDao.findById(requestDto.getUnitMeasureId());
+		if (unitMeasure == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - unitMeasure").build();
 
+		LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(requestDto.getDateTime()), ZoneId.systemDefault());
+		
 		Measure measure = Measure
 				.buider()
-				.localDateTime(LocalDateTime.now())
-				.quantity(quantity)
+				//.localDateTime(LodcalDateTime.now())
+				.localDateTime(dateTime)
+				.quantity(requestDto.getQuantity())
+				.unitMeasure(unitMeasure)
+				.sensor(sensor)
 				.build();
+
 		
 		measureDao.save(measure);
 		
-		return Response.status(200).entity(measure).build();
+		return Response.status(200).entity(requestDto).build();
 
 	}
 	

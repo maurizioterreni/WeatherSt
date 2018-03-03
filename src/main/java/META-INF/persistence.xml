@@ -9,6 +9,7 @@
 		<class>it.unifi.sam.terreni.weatherSt.model.measure.Measure</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.converter.ConversionFactor</class>
 		
         <properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />

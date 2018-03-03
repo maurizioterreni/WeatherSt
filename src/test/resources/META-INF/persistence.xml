@@ -5,15 +5,15 @@
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
-	<persistence-unit name="integration" transaction-type="RESOURCE_LOCAL">
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+	<persistence-unit name="unit" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
 		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Sensor</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.WeatherStation</class>
 		<class>it.unifi.sam.terreni.weatherSt.model.measure.Measure</class>
-		<class>it.unifi.sam.terreni.weatherSt.model.measure.Value</class>
-
-
+		<class>it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.converter.ConversionFactor</class>
 
 		<properties>
 			<property name="javax.persistence.validation.mode" value="none" />
@@ -23,27 +23,31 @@
 			<property name="hibernate.connection.password" value="" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
 			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 		</properties>
 	</persistence-unit>
+<!--  
+	<persistence-unit name="integration" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-	<!-- <persistence-unit name="test_mysql" transaction-type="RESOURCE_LOCAL"> -->
-	<!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.Sensor</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.WeatherStation</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.measure.Measure</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge</class>
+		<class>it.unifi.sam.terreni.weatherSt.model.converter.ConversionFactor</class>
 
-	<!-- <properties> -->
-	<!-- <property name="javax.persistence.validation.mode" value="none" /> -->
-	<!-- <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" 
-		/> -->
-	<!-- <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/majora_test" 
-		/> -->
-	<!-- <property name="hibernate.connection.username" value="root" /> -->
-	<!-- <property name="hibernate.connection.password" value="root" /> -->
-	<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" 
-		/> -->
-	<!-- <property name="hibernate.hbm2ddl.auto" value="update" /> -->
-	<!-- <property name="hibernate.show_sql" value="true" /> -->
-	<!-- <property name="hibernate.default_batch_fetch_size" value="16" /> -->
-	<!-- </properties> -->
-	<!-- </persistence-unit> -->
-
+		<properties>
+			<property name="javax.persistence.validation.mode" value="none" />
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url"
+				value="jdbc:mysql://localhost:3306/weatherst?createDatabaseIfNotExist=true" />
+			<property name="hibernate.connection.username" value="root" />
+			<property name="hibernate.connection.password" value="root" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.default_batch_fetch_size" value="16" />
+		</properties>
+	</persistence-unit>-->
 </persistence>

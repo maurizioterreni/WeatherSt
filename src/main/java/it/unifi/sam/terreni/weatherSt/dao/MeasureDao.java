@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
@@ -33,45 +34,62 @@ public class MeasureDao {
 		entityManager.flush();
 	}
 
-	public List<Measure> getMeasureBetweenDate(Sensor sensor, LocalDateTime froMatate, LocalDateTime toDate){
-		return entityManager
-				.createQuery("from Measure m where "
-						+ "m.sensor_id = :sensor AND m.timestamp BETWEEN :froMatate AND :toDate ", Measure.class)
-				.setParameter("sensor", sensor)
-				.setParameter("froMatate", froMatate)
-				.setParameter("toDate", toDate)
-				.getResultList();
+	public List<Measure> getMeasureBetweenDate(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate){
+		try {
+			return entityManager
+					.createQuery("from Measure m where "
+							+ "m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) order by m.localDateTime desc", Measure.class)
+					.setParameter("sensor", sensor)
+					.setParameter("fromDate", fromDate)
+					.setParameter("toDate", toDate)
+					.getResultList();
+		}catch (NoResultException nre){
+			return null;
+		}
 	}
 
 
-	public Measure getMax(Sensor sensor, LocalDateTime froMatate, LocalDateTime toDate){
-		return entityManager
-				.createQuery("from Measure m where "
-						+ "m.sensor_id = :sensor AND m.timestamp BETWEEN :froMatate AND :toDate order by m.value desc", Measure.class)
-				.setParameter("sensor", sensor)
-				.setParameter("froMatate", froMatate)
-				.setParameter("toDate", toDate)
-				.setMaxResults(1)
-				.getSingleResult();
+	public Measure getMax(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate){
+		try{
+			return entityManager
+					.createQuery("from Measure m where "
+							+ "m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) order by m.quantity desc", Measure.class)
+					.setParameter("sensor", sensor)
+					.setParameter("fromDate", fromDate)
+					.setParameter("toDate", toDate)
+					.setMaxResults(1)
+					.getSingleResult();
+		}catch (NoResultException nre){
+			return null;
+		}
 	}
 
-	public Measure getMin(Sensor sensor, LocalDateTime froMatate, LocalDateTime toDate){
-		return entityManager
-				.createQuery("from Measure m where "
-						+ "m.sensor_id = :sensor AND m.timestamp BETWEEN :froMatate AND :toDate order by m.value asc", Measure.class)
-				.setParameter("sensor", sensor)
-				.setParameter("froMatate", froMatate)
-				.setParameter("toDate", toDate)
-				.setMaxResults(1)
-				.getSingleResult();
+	public Measure getMin(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate){
+		try{
+			return entityManager
+					.createQuery("from Measure m where "
+							+ "m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) order by m.quantity asc", Measure.class)
+					.setParameter("sensor", sensor)
+					.setParameter("fromDate", fromDate)
+					.setParameter("toDate", toDate)
+					.setMaxResults(1)
+					.getSingleResult();
+		}catch (NoResultException nre){
+			return null;
+		}
+
 	}
 
 	public Measure getLastMeasue(Sensor sensor) {
-		return entityManager
-				.createQuery("from Measure m where "
-						+ "m.sensor = :sensor order by m.timestamp desc", Measure.class)
-				.setParameter("sensor", sensor)
-				.setMaxResults(1)
-				.getSingleResult();
+		try {
+			return entityManager
+					.createQuery("from Measure m where "
+							+ "m.sensor = :sensor order by m.localDateTime desc", Measure.class)
+					.setParameter("sensor", sensor)
+					.setMaxResults(1)
+					.getSingleResult();
+		}catch (NoResultException nre){
+			return null;
+		}
 	}
 }

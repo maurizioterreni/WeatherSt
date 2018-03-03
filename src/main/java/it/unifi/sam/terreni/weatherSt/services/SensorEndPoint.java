@@ -18,7 +18,6 @@ import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorTypeKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
-import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetResponsDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
@@ -64,46 +63,50 @@ public class SensorEndPoint {
 				.sensorType(sensorType)
 				.build();
 
+		weatherStation.addSensor(sensor);
+
 		sensorDao.save(sensor);
 
 		return Response.status(200).entity(sensorToSensorResponsDto(weatherStation.getId(), sensor)).build();
 	}
-	
-	
+
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response get(@HeaderParam("token") String token, SensorGetRequestDto sensorDto) {
-		if (sensorDto == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorDto").build();
+	public Response get(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("unitMeasureId") Long unitMeasureId) {
+		if (sensorId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+		if (unitMeasureId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasureId").build();
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
-		Sensor sensor = sensorDao.findById(sensorDto.getSensorId());
-		
+
+		Sensor sensor = sensorDao.findById(sensorId);
+
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		LocalDateTime froMatate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT);
+
+		LocalDateTime fromDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT);
 		LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MAX);
-		
-		Measure maxMeasure = measureDao.getMax(sensor, froMatate, toDate);
-		Measure minMeasure = measureDao.getMin(sensor, froMatate, toDate);
+
+		Measure maxMeasure = measureDao.getMax(sensor, fromDate, toDate);
+		Measure minMeasure = measureDao.getMin(sensor, fromDate, toDate);
 		Measure measure = measureDao.getLastMeasue(sensor);
-		
-		
-		
-		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure)).build();
+
+
+
+		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure,1f)).build();
 	}
 
-//	private SensorToAddDto sensorToSensorToAddDTO(Long weatherId,Sensor sensor) {
-//		return SensorToAddDto.builder()
-//				.sensorTypeId(sensor.getSensorType().getId())
-//				.weatherId(weatherId)
-//				.build();
-//	}
-//	
+	//	private SensorToAddDto sensorToSensorToAddDTO(Long weatherId,Sensor sensor) {
+	//		return SensorToAddDto.builder()
+	//				.sensorTypeId(sensor.getSensorType().getId())
+	//				.weatherId(weatherId)
+	//				.build();
+	//	}
+	//	
 	private SensorResponsDto sensorToSensorResponsDto(Long weatherId, Sensor sensor) {
 		return SensorResponsDto.builder()
 				.description(sensor.getSensorType().getDescription())
@@ -112,7 +115,7 @@ public class SensorEndPoint {
 				.weatherId(weatherId)
 				.build();
 	}
-	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure) {
+	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure, Float conversionFactor) {
 		return SensorGetResponsDto.builder()
 				.description(sensor.getSensorType().getDescription())
 				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
@@ -120,6 +123,7 @@ public class SensorEndPoint {
 				.measure(measure)
 				.maxMeasure(maxMeasure)
 				.minMeasure(minMeasure)
+				.conversionFactor(conversionFactor)
 				.build();
 	}
 }

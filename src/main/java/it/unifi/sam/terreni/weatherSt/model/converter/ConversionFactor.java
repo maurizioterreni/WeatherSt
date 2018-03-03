@@ -19,6 +19,7 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 	private UnitMeasureKnowledge fromUnitMeasure;
 	@ManyToOne
 	private UnitMeasureKnowledge toUnitMeasure;
+	
 	private Float conversionFactor;
 
 	ConversionFactor(){
