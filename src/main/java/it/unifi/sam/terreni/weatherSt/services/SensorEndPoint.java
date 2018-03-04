@@ -18,6 +18,7 @@ import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dao.SensorTypeKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetResponsDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
@@ -88,8 +89,8 @@ public class SensorEndPoint {
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
-		LocalDateTime fromDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MIDNIGHT);
-		LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.MAX);
+		LocalDateTime fromDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(0, 0, 1));
+		LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(23, 59, 59));
 
 		Measure maxMeasure = measureDao.getMax(sensor, fromDate, toDate);
 		Measure minMeasure = measureDao.getMin(sensor, fromDate, toDate);
@@ -107,6 +108,20 @@ public class SensorEndPoint {
 	//				.build();
 	//	}
 	//	
+	
+	private MeasureDto measureToMeasureDto(Measure measure) {
+		if(measure == null)
+			return null;
+		
+		
+		return MeasureDto.builder()
+				.dateTime(measure.getLocalDateTime().toString())
+				.quantity(measure.getQuantity())
+				.name(measure.getUnitMeasure().getName())
+				.symbol(measure.getUnitMeasure().getSymbol())
+				.build();
+	}
+	
 	private SensorResponsDto sensorToSensorResponsDto(Long weatherId, Sensor sensor) {
 		return SensorResponsDto.builder()
 				.description(sensor.getSensorType().getDescription())
@@ -120,9 +135,9 @@ public class SensorEndPoint {
 				.description(sensor.getSensorType().getDescription())
 				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
 				.name(sensor.getSensorType().getUnitMeasure().getName())
-				.measure(measure)
-				.maxMeasure(maxMeasure)
-				.minMeasure(minMeasure)
+				.measure(measureToMeasureDto(measure))
+				.maxMeasure(measureToMeasureDto(maxMeasure))
+				.minMeasure(measureToMeasureDto(minMeasure))
 				.conversionFactor(conversionFactor)
 				.build();
 	}

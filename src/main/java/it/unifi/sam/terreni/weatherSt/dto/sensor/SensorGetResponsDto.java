@@ -1,7 +1,7 @@
 package it.unifi.sam.terreni.weatherSt.dto.sensor;
 
 import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
-import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
 
 public class SensorGetResponsDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
@@ -9,9 +9,9 @@ public class SensorGetResponsDto extends BaseDto{
 	private String description;
 	private String symbol;
 	private String name;
-	private Measure maxMeasure;
-	private Measure measure;
-	private Measure minMeasue;
+	private MeasureDto maxMeasure;
+	private MeasureDto measure;
+	private MeasureDto minMeasue;
 	private Float conversionFactor;
 	
 	public SensorGetResponsDto() {
@@ -59,27 +59,27 @@ public class SensorGetResponsDto extends BaseDto{
 		this.conversionFactor = conversionFactor;
 	}
 
-	public Measure getMaxMeasure() {
+	public MeasureDto getMaxMeasure() {
 		return maxMeasure;
 	}
 
-	public void setMaxMeasure(Measure maxMeasure) {
+	public void setMaxMeasure(MeasureDto maxMeasure) {
 		this.maxMeasure = maxMeasure;
 	}
 
-	public Measure getMeasure() {
+	public MeasureDto getMeasure() {
 		return measure;
 	}
 
-	public void setMeasure(Measure measure) {
+	public void setMeasure(MeasureDto measure) {
 		this.measure = measure;
 	}
 
-	public Measure getMinMeasue() {
+	public MeasureDto getMinMeasue() {
 		return minMeasue;
 	}
 
-	public void setMinMeasue(Measure minMeasue) {
+	public void setMinMeasue(MeasureDto minMeasue) {
 		this.minMeasue = minMeasue;
 	}
 
@@ -90,10 +90,10 @@ public class SensorGetResponsDto extends BaseDto{
 		private String description;
 		private String symbol;
 		private String name;
-		private Measure maxMeasure;
-		private Measure measure;
+		private MeasureDto maxMeasure;
+		private MeasureDto measure;
 		private Float conversionFactor;
-		private Measure minMeasure;
+		private MeasureDto minMeasure;
 		
 		public SensorGetResponsDtoBuilder description(String description) {
 			this.description = description;
@@ -107,15 +107,15 @@ public class SensorGetResponsDto extends BaseDto{
 			this.name = name;
 			return this;
 		}
-		public SensorGetResponsDtoBuilder maxMeasure(Measure maxMeasure) {
+		public SensorGetResponsDtoBuilder maxMeasure(MeasureDto maxMeasure) {
 			this.maxMeasure = maxMeasure;
 			return this;
 		}
-		public SensorGetResponsDtoBuilder measure(Measure measure) {
+		public SensorGetResponsDtoBuilder measure(MeasureDto measure) {
 			this.measure = measure;
 			return this;
 		}
-		public SensorGetResponsDtoBuilder minMeasure(Measure minMeasure) {
+		public SensorGetResponsDtoBuilder minMeasure(MeasureDto minMeasure) {
 			this.minMeasure = minMeasure;
 			return this;
 		}

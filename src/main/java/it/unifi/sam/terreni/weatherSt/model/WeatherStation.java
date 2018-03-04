@@ -82,7 +82,7 @@ public class WeatherStation extends BaseEntity {
 			return this;
 		}
 		public WeatherStationBuilder description(String description) {
-			this.longitude = description;
+			this.description = description;
 			return this;
 		}
 		
