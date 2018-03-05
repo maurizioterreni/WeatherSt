@@ -1,4 +1,4 @@
-package it.unifi.sam.terreni.weatherSt.dao;
+package it.unifi.sam.terreni.weatherSt.dao.measure;
 
 import java.time.LocalDateTime;
 import java.util.List;

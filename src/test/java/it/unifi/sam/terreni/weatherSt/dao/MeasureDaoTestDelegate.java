@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import it.unifi.sam.terreni.weatherSt.dao.measure.MeasureDao;
+import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorDao;
 import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;

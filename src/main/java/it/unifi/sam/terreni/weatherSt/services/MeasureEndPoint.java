@@ -17,10 +17,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import it.unifi.sam.terreni.weatherSt.dao.MeasureDao;
-import it.unifi.sam.terreni.weatherSt.dao.SensorDao;
-import it.unifi.sam.terreni.weatherSt.dao.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.dao.measure.MeasureDao;
+import it.unifi.sam.terreni.weatherSt.dao.measure.UnitMeasureKnowledgeDao;
+import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasurePostRequestDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;

@@ -1,4 +1,4 @@
-package it.unifi.sam.terreni.weatherSt.dao;
+package it.unifi.sam.terreni.weatherSt.dao.sensor;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
