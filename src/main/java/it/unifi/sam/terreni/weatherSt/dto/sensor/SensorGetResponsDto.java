@@ -11,7 +11,7 @@ public class SensorGetResponsDto extends BaseDto{
 	private String name;
 	private MeasureDto maxMeasure;
 	private MeasureDto measure;
-	private MeasureDto minMeasue;
+	private MeasureDto minMeasure;
 	private Float conversionFactor;
 	
 	public SensorGetResponsDto() {
@@ -75,12 +75,12 @@ public class SensorGetResponsDto extends BaseDto{
 		this.measure = measure;
 	}
 
-	public MeasureDto getMinMeasue() {
-		return minMeasue;
+	public MeasureDto getMinMeasure() {
+		return minMeasure;
 	}
 
-	public void setMinMeasue(MeasureDto minMeasue) {
-		this.minMeasue = minMeasue;
+	public void setMinMeasure(MeasureDto minMeasure) {
+		this.minMeasure = minMeasure;
 	}
 
 
@@ -134,7 +134,7 @@ public class SensorGetResponsDto extends BaseDto{
 			dto.setName(name);
 			dto.setMaxMeasure(maxMeasure);
 			dto.setMeasure(measure);
-			dto.setMinMeasue(minMeasure);
+			dto.setMinMeasure(minMeasure);
 			dto.setConversionFactor(conversionFactor);
 					
 			return dto;

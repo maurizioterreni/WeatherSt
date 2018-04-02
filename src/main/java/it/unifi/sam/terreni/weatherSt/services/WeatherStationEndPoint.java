@@ -1,5 +1,6 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,7 +15,9 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationPostRequestDto;
+import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationResponseDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
+import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
@@ -61,6 +64,28 @@ public class WeatherStationEndPoint {
 		if(weatherStations == null || weatherStations.size() == 0)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 		
-		return Response.status(200).entity(weatherStations).build();
+		List<WeatherStationResponseDto> listWeatherStationDto = new ArrayList<>();
+		
+		for (WeatherStation weatherStation : weatherStations) {
+			listWeatherStationDto.add(weatherStationToDto(weatherStation));
+		}
+		
+		
+		return Response.status(200).entity(listWeatherStationDto).build();
+	}
+	
+	private WeatherStationResponseDto weatherStationToDto(WeatherStation weatherStation) {
+		WeatherStationResponseDto dto = new WeatherStationResponseDto();
+		
+		dto.setWeatherId(weatherStation.getId());
+		dto.setDescription(weatherStation.getDescription());
+		dto.setLatitude(weatherStation.getLatitude());
+		dto.setLongitude(weatherStation.getLongitude());
+		
+		for (Sensor sensor : weatherStation.getSensors()) {
+			dto.addSensorId(sensor.getId());
+		}
+		
+		return dto;
 	}
 }

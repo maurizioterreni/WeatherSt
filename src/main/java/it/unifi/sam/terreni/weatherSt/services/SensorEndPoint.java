@@ -100,6 +100,8 @@ public class SensorEndPoint {
 
 		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure,1f)).build();
 	}
+	
+	
 
 	//	private SensorToAddDto sensorToSensorToAddDTO(Long weatherId,Sensor sensor) {
 	//		return SensorToAddDto.builder()

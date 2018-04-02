@@ -1,0 +1,10 @@
+.weather-item{
+    width: 200px;
+    height: 200px;
+    background: #fff;
+    margin: auto;
+}
+
+.svg{
+  margin-top: 20px;
+}

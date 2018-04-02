@@ -1,18 +1,22 @@
 package it.unifi.sam.terreni.weatherSt.dto.weatherStation;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
-import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
 
 public class WeatherStationResponseDto extends BaseDto{
 	private static final long serialVersionUID = 9222022175701191010L;
 
 
 	private Long weatherId;
-	private LinkedList<SensorResponsDto> sensors;
+	private String description;
+	private String longitude;
+	private String latitude;
+	private List<Long> sensors;
 
 	public WeatherStationResponseDto() {
+		sensors = new ArrayList<>();
 	}
 
 	public Long getWeatherId() {
@@ -23,12 +27,42 @@ public class WeatherStationResponseDto extends BaseDto{
 		this.weatherId = weatherId;
 	}
 
-	public LinkedList<SensorResponsDto> getSensors() {
-		return sensors;
+	
+	public String getDescription() {
+		return description;
 	}
 
-	public void setSensors(LinkedList<SensorResponsDto> sensors) {
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<Long> getSensors() {
+		return sensors;
+	}
+	
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public void setSensors(List<Long> sensors) {
 		this.sensors = sensors;
+	}
+	
+	public void addSensorId(Long sensorId) {
+		this.sensors.add(sensorId);
 	}
 
 }

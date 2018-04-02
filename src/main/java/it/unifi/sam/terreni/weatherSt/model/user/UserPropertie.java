@@ -3,10 +3,12 @@ package it.unifi.sam.terreni.weatherSt.model.user;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,9 +23,9 @@ public class UserPropertie extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	@Enumerated	
-	@Column(columnDefinition = "userRole")
+	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
+	@OneToMany( targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.REMOVE )
 	private Set<UnitMeasureKnowledge> unitMeasure;
 
 	UserPropertie() {

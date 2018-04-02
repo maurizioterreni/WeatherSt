@@ -1,0 +1,13 @@
+#header{
+	position:fixed;
+	z-index:10;
+	top: 0;
+	left: 0;
+	text-aling: left;
+}
+
+.spacer {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}

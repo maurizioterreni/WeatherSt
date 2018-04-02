@@ -1,0 +1,11 @@
+<div class="sensorItems">
+	<!--------------------------------------------------------------------------------------->
+	<mat-card *ngFor="let sensor of sensors let i = index"
+		style='margin:10px; text-align:center;'>
+		<mat-card-title>{{sensor.description}}</mat-card-title>
+		<mat-card-content>
+			<app-temperature-gauge *ngIf="sensor.description=='Temperature Sensor'" [sensor]="sensor"></app-temperature-gauge>
+			<app-windDirection-gauge *ngIf="sensor.description=='Wind direction sensor'" [sensor]="sensor"></app-windDirection-gauge>
+		</mat-card-content>
+</mat-card>
+</div>
