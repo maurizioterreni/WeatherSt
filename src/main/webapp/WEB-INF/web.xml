@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 	<display-name>WeatherApp</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
 		<url-pattern>/rest/1.0/*</url-pattern>

@@ -9,6 +9,7 @@ import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.user.User;
+import it.unifi.sam.terreni.weatherSt.model.user.UserPropertie;
 
 public final class ModelFactory {
 
@@ -39,6 +40,9 @@ public final class ModelFactory {
 	}
 	public static User user() {
 		return new User(uuid());
+	}
+	public static UserPropertie userPropertie() {
+		return new UserPropertie(uuid());
 	}
 	
 	

@@ -16,15 +16,24 @@ import { SensorComponent } from './sensor/sensor.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TemperatureGaugeComponent } from './sensor/gauge/temperature/temperatureGauge.component';
 import { WindDirectionGaugeComponent } from './sensor/gauge/windDirection/windDirectionGauge.component';
+import { LoginComponent } from './dialog/login/login.component';
+import { RegisterComponent } from './dialog/register/register.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 const appRoute: Routes = [
       {path: 'sensor/:weather', component: SensorComponent},
-      {path: '', component: WeatherStationComponent}];
+      {path: '', component: WeatherStationComponent},
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
+      // otherwise redirect to home
+      { path: '**', redirectTo: '' }];
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent, TemperatureGaugeComponent, WindDirectionGaugeComponent],
-  imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,
+  declarations: [AppComponent, HeaderComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent, TemperatureGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
+        RegisterComponent],
+  imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
+    ReactiveFormsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyB9t2Ki03ItPGImdj2sro-hMyBcQEsnloc'
     }),

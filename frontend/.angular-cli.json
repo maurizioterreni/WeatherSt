@@ -22,7 +22,7 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": ["./assets/rgraph/RGraph.gauge.js", "./assets/rgraph/RGraph.common.core.js"],
+      "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

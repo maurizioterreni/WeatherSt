@@ -7,10 +7,12 @@ import javax.persistence.Table;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
 import it.unifi.sam.terreni.weatherSt.model.facotry.ModelFactory;
+import it.unifi.sam.terreni.weatherSt.model.usage.Usage;
+import it.unifi.sam.terreni.weatherSt.model.usage.UsageVisitor;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Usage{
 	private static final long serialVersionUID = 1L;
 
 	private String username;
@@ -20,7 +22,7 @@ public class User extends BaseEntity {
 	private UserPropertie propertie;
 	
 	User(){
-		super();
+		super(); 
 	}
 	
 	public User(String uuid) {
@@ -95,8 +97,15 @@ public class User extends BaseEntity {
 			user.setPassword(password);
 			user.setUsername(username);
 			user.setPropertie(propertie);
+			propertie.setUser(user);
 			
 			return user;
 		}
+	}
+
+
+	@Override
+	public void accept(UsageVisitor visitor) {
+		
 	}
 }

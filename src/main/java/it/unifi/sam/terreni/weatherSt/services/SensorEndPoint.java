@@ -26,6 +26,7 @@ import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
+import it.unifi.sam.terreni.weatherSt.security.Authentication;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
@@ -49,6 +50,10 @@ public class SensorEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorDto").build();
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		
+		if(Authentication.isNotValid(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
+		
 
 		WeatherStation weatherStation = weatherStationDao.findById(sensorDto.getWeatherId());
 
@@ -76,13 +81,12 @@ public class SensorEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response get(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("unitMeasureId") Long unitMeasureId) {
+	public Response get(@HeaderParam("sensorId") Long sensorId, @HeaderParam("unitMeasureId") Long unitMeasureId) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
 		if (unitMeasureId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasureId").build();
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+	
 
 		Sensor sensor = sensorDao.findById(sensorId);
 

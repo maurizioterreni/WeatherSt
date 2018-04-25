@@ -18,7 +18,7 @@ import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationPostReque
 import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationResponseDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
-import it.unifi.sam.terreni.weatherSt.utils.CheckClass;
+import it.unifi.sam.terreni.weatherSt.security.Authentication;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
@@ -35,6 +35,8 @@ public class WeatherStationEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
 		if (weatherStationDto == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherStationDto").build();
+		if(Authentication.isNotValid(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
 		
 		weatherStationDao.save(WeatherStation.builder()
 				.description(weatherStationDto.getDescription())
@@ -52,13 +54,8 @@ public class WeatherStationEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
 	@Transactional
-	public Response getAll(@HeaderParam("token") String token) {
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+	public Response getAll() {
 		
-		if(!CheckClass.checkToken(token))
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - token error").build();
-
 		List<WeatherStation> weatherStations = weatherStationDao.getAll();
 		
 		if(weatherStations == null || weatherStations.size() == 0)
