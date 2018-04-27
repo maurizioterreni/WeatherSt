@@ -18,6 +18,7 @@ import { TemperatureGaugeComponent } from './sensor/gauge/temperature/temperatur
 import { WindDirectionGaugeComponent } from './sensor/gauge/windDirection/windDirectionGauge.component';
 import { LoginComponent } from './dialog/login/login.component';
 import { RegisterComponent } from './dialog/register/register.component';
+import { CreateSensorComponent } from './sensor/createSensor/createSensor.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
@@ -25,12 +26,14 @@ const appRoute: Routes = [
       {path: 'sensor/:weather', component: SensorComponent},
       {path: '', component: WeatherStationComponent},
       { path: 'login', component: LoginComponent },
+      { path: 'createSensor', component: CreateSensorComponent },
       { path: 'register', component: RegisterComponent },
       // otherwise redirect to home
       { path: '**', redirectTo: '' }];
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent, TemperatureGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
+  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent,
+        TemperatureGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
         RegisterComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
     ReactiveFormsModule,

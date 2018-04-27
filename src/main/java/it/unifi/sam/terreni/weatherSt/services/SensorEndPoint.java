@@ -2,6 +2,8 @@ package it.unifi.sam.terreni.weatherSt.services;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -22,6 +24,7 @@ import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetResponsDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
+import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorTypeKnowledgeDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
@@ -106,14 +109,33 @@ public class SensorEndPoint {
 	}
 	
 	
+	
+	@GET
+	@Path("/sensorType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response get() {
+	
+		List<SensorTypeKnowledgeDto> dtos = new ArrayList<>();
+		
+		for (SensorTypeKnowledge sensorTypeKnowledge : sensorTypeKnowledgeDao.getAllSensorType()) {
+			dtos.add(sensorTypeKnowledgeToDto(sensorTypeKnowledge));
+		}
+		
+		return Response.status(200).entity(dtos).build();
+	}
+	
+	
+	private SensorTypeKnowledgeDto sensorTypeKnowledgeToDto(SensorTypeKnowledge obj) {
+		return SensorTypeKnowledgeDto.builder()
+				.withDescription(obj.getDescription())
+				.withId(obj.getId())
+				.withName(obj.getUnitMeasure().getName())
+				.withSymbol(obj.getUnitMeasure().getSymbol())
+				.build();
+	}
 
-	//	private SensorToAddDto sensorToSensorToAddDTO(Long weatherId,Sensor sensor) {
-	//		return SensorToAddDto.builder()
-	//				.sensorTypeId(sensor.getSensorType().getId())
-	//				.weatherId(weatherId)
-	//				.build();
-	//	}
-	//	
 	
 	private MeasureDto measureToMeasureDto(Measure measure) {
 		if(measure == null)
@@ -148,151 +170,3 @@ public class SensorEndPoint {
 				.build();
 	}
 }
-
-
-/*
- * //Temperatura
-		UnitMeasureKnowledge celsius = UnitMeasureKnowledge
-				.builder()
-				.symbol("°C")
-				.name("degree celsius")
-				.build();
-
-		unitMeasureKnowledgeDao.save(celsius);
-
-		UnitMeasureKnowledge fahrenheit = UnitMeasureKnowledge
-				.builder()
-				.symbol("°F")
-				.name("fahrenheit degree")
-				.build();
-
-		unitMeasureKnowledgeDao.save(fahrenheit);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Temperature Sensor")
-				.unitMeasureKnowledge(celsius)
-				.build());
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Temperature Sensor")
-				.unitMeasureKnowledge(fahrenheit)
-				.build());
-
-		//Sensore velocità vento
-
-		UnitMeasureKnowledge ms = UnitMeasureKnowledge
-				.builder()
-				.symbol("kmh")
-				.name("kilometer per hour")
-				.build();
-
-		unitMeasureKnowledgeDao.save(ms);
-
-		UnitMeasureKnowledge mis = UnitMeasureKnowledge
-				.builder()
-				.symbol("mph")
-				.name("miles per hour")
-				.build();
-
-		unitMeasureKnowledgeDao.save(mis);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Wind speed sensor")
-				.unitMeasureKnowledge(ms)
-				.build());
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Wind speed sensor")
-				.unitMeasureKnowledge(mis)
-				.build());
-
-		//direction wind
-
-
-		UnitMeasureKnowledge angular = UnitMeasureKnowledge
-				.builder()
-				.symbol("°")
-				.name("degree")
-				.build();
-
-		unitMeasureKnowledgeDao.save(angular);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Wind direction sensor")
-				.unitMeasureKnowledge(angular)
-				.build());
-
-		//rain
-
-		UnitMeasureKnowledge millimetre = UnitMeasureKnowledge
-				.builder()
-				.symbol("mm")
-				.name("millimetre")
-				.build();
-
-		unitMeasureKnowledgeDao.save(millimetre);
-
-		UnitMeasureKnowledge inch = UnitMeasureKnowledge
-				.builder()
-				.symbol("in")
-				.name("innch")
-				.build();
-
-		unitMeasureKnowledgeDao.save(inch);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("rain sensor")
-				.unitMeasureKnowledge(millimetre)
-				.build());
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("rain sensor")
-				.unitMeasureKnowledge(inch)
-				.build());
-
-		//Sensore Umidità
-
-		UnitMeasureKnowledge hum = UnitMeasureKnowledge
-				.builder()
-				.symbol("%")
-				.name("humidity")
-				.build();
-
-		unitMeasureKnowledgeDao.save(hum);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Humidity sensor")
-				.unitMeasureKnowledge(hum)
-				.build());
-
-		//Sensore UV
-
-		UnitMeasureKnowledge uv = UnitMeasureKnowledge
-				.builder()
-				.symbol("")
-				.name("uv")
-				.build();
-
-		unitMeasureKnowledgeDao.save(uv);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Uv sensor")
-				.unitMeasureKnowledge(uv)
-				.build());
-
-
-		//Sensore pressione
-
-		UnitMeasureKnowledge millibar = UnitMeasureKnowledge
-				.builder()
-				.symbol("mb")
-				.name("millibar")
-				.build();
-
-		unitMeasureKnowledgeDao.save(millibar);
-
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition("Pressure sensor")
-				.unitMeasureKnowledge(millibar)
-				.build());
- * 
- * */

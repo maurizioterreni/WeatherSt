@@ -14,3 +14,7 @@
 .accent-color{
   padding: 30px;
 }
+
+::ng-deep .mat-tab-labels{
+    justify-content: center; /* align items in Main Axis */
+}

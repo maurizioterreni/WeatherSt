@@ -1,5 +1,7 @@
 package it.unifi.sam.terreni.weatherSt.dao.sensor;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,6 +17,11 @@ public class SensorTypeKnowledgeDao {
 
 	public SensorTypeKnowledge findById(Long sensorTypeKnowledgeId){
 		return entityManager.find(SensorTypeKnowledge.class, sensorTypeKnowledgeId);
+	}
+	
+	public List<SensorTypeKnowledge> getAllSensorType(){
+		return entityManager.createQuery("from SensorTypeKnowledge s ", SensorTypeKnowledge.class)
+				.getResultList();
 	}
 
 	public void delete(SensorTypeKnowledge sensorTypeKnowledge) {
