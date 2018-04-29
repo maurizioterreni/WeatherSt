@@ -7,12 +7,12 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MeasureService } from '../../../measure/measure.service';
 
 @Component({
-  selector: 'app-temperature-gauge',
-  templateUrl: './temperatureGauge.html',
-  styleUrls: ['./temperatureGauge.css'],
+  selector: 'app-windspeed-gauge',
+  templateUrl: './windspeedGauge.html',
+  styleUrls: ['./windspeedGauge.css'],
   providers: [MeasureService]
 })
-export class TemperatureGaugeComponent implements OnInit, OnChanges {
+export class WindspeedGaugeComponent implements OnInit, OnChanges {
   @Input() sensor: Sensor;
   chart: Chart;
   fromDate: Date;
@@ -65,7 +65,7 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
 
   initChart(){
     if (this.chart) this.chart.destroy();
-    this.chart = new Chart('canvas-TemperatureGaugeComponent',{
+    this.chart = new Chart('canvas-WindspeedGaugeComponent',{
       type: 'line',
       data: {
         labels: this.labelArray,
@@ -73,7 +73,8 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
               {
                 data: this.quantityArray,
                 borderColor: "#3cba9f",
-                fill: false
+                fill: false,
+                steppedLine: true
               },
             ]
           },

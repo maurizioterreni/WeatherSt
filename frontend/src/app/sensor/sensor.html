@@ -2,24 +2,10 @@
 	<!--------------------------------------------------------------------------------------->
 	<mat-card *ngFor="let sensor of sensors let i = index" class="sensorCard">
 		<mat-card-title>{{sensor.description}}</mat-card-title>
-			<mat-tab-group (selectedTabChange)="onTabChange($event)">
-  			<mat-tab>
-    			<ng-template mat-tab-label>Current data</ng-template>
-						<mat-card-content class="sensorContent">
-							<app-temperature-gauge *ngIf="sensor.description=='Temperature Sensor'" [sensor]="sensor"></app-temperature-gauge>
-							<app-windDirection-gauge *ngIf="sensor.description=='Wind direction sensor'" [sensor]="sensor"></app-windDirection-gauge>
-							<mat-card-actions class="sensorAction">
-								<button mat-button>LIKE</button>
-								<button mat-button>SHARE</button>
-							</mat-card-actions>
-						</mat-card-content>
-					</mat-tab>
-			<mat-tab>
-				<ng-template mat-tab-label>View Chart</ng-template>
-				<div [hidden]="!chart" style="position: relative; height:30vh; width:90vw">
-  				<canvas id="canvas">{{ chart }}</canvas>
-				</div>
-			</mat-tab>
-		</mat-tab-group>
-</mat-card>
+					<mat-card-content class="sensorContent">
+						<app-temperature-gauge *ngIf="sensor.description=='Temperature Sensor'" [sensor]="sensor"></app-temperature-gauge>
+						<app-windspeed-gauge *ngIf="sensor.description=='Wind speed sensor'" [sensor]="sensor"></app-windspeed-gauge>
+						<app-windDirection-gauge *ngIf="sensor.description=='Wind direction sensor'" [sensor]="sensor"></app-windDirection-gauge>
+					</mat-card-content>
+	</mat-card>
 </div>

@@ -10,11 +10,12 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { DialogMaps } from './dialog/maps/dialog.maps.component';
 import { WeatherStationComponent } from './weatherStation/weatherStation.component';
-import {AgmCoreModule} from '@agm/core';
+import { AgmCoreModule } from '@agm/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SensorComponent } from './sensor/sensor.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TemperatureGaugeComponent } from './sensor/gauge/temperature/temperatureGauge.component';
+import { WindspeedGaugeComponent } from './sensor/gauge/windspeed/windspeedGauge.component';
 import { WindDirectionGaugeComponent } from './sensor/gauge/windDirection/windDirectionGauge.component';
 import { LoginComponent } from './dialog/login/login.component';
 import { RegisterComponent } from './dialog/register/register.component';
@@ -33,7 +34,7 @@ const appRoute: Routes = [
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent,
-        TemperatureGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
+        TemperatureGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
         RegisterComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
     ReactiveFormsModule,

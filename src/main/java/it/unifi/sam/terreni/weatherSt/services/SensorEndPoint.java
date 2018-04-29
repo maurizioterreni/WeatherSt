@@ -141,10 +141,9 @@ public class SensorEndPoint {
 		if(measure == null)
 			return null;
 		
-		
 		return MeasureDto.builder()
 				.dateTime(measure.getLocalDateTime().toString())
-				.quantity(measure.getQuantity())
+				.quantity(StringUtils.floatToString(measure.getQuantity()))
 				.name(measure.getUnitMeasure().getName())
 				.symbol(measure.getUnitMeasure().getSymbol())
 				.build();
@@ -160,6 +159,7 @@ public class SensorEndPoint {
 	}
 	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure, Float conversionFactor) {
 		return SensorGetResponsDto.builder()
+				.id(sensor.getId())
 				.description(sensor.getSensorType().getDescription())
 				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
 				.name(sensor.getSensorType().getUnitMeasure().getName())

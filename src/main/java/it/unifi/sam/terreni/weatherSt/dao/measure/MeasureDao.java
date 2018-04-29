@@ -1,14 +1,18 @@
 package it.unifi.sam.terreni.weatherSt.dao.measure;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
+import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 public class MeasureDao {
 	@PersistenceContext
@@ -38,13 +42,55 @@ public class MeasureDao {
 		try {
 			return entityManager
 					.createQuery("from Measure m where "
-							+ "m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) order by m.localDateTime desc", Measure.class)
+							+ "m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) order by m.localDateTime asc", Measure.class)
 					.setParameter("sensor", sensor)
 					.setParameter("fromDate", fromDate)
 					.setParameter("toDate", toDate)
 					.getResultList();
 		}catch (NoResultException nre){
-			return null;
+			return new ArrayList<>();
+		}
+	}
+
+	//select avg(quantity) from measure where sensor_id = 1
+	//group by month(localDateTime) order by localDateTime asc
+	public List<MeasureDto> getLotOfMeasureDtoBetweenDate(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate, String groupby){
+		try {
+			TypedQuery<Object[]> query = entityManager.createQuery(
+					"SELECT m.localDateTime, avg(m.quantity) FROM Measure m where "
+					+ " m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) "
+					+ " group by " + groupby + "(m.localDateTime) "
+					+ " order by m.localDateTime asc", Object[].class)
+					.setParameter("sensor", sensor)
+					.setParameter("fromDate", fromDate)
+					.setParameter("toDate", toDate);
+			String pattern = "";
+			if(groupby.equals("hour"))
+				pattern = "HH:mm";
+			else if(groupby.equals("week"))
+				pattern = "yy, 'week' w";
+			else if(groupby.equals("day"))
+				pattern = "dd/MM";
+			else if(groupby.equals("month"))
+				pattern = "MM-yy";
+			else if(groupby.equals("year"))
+				pattern = "yy";
+			else
+				pattern = "yy-MM-dd";
+			
+			System.out.println(pattern + "  " + groupby);
+			
+			List<MeasureDto> results = new ArrayList<>();
+			for (Object[] result : query.getResultList()) {
+				results.add(MeasureDto.builder()
+						.dateTime(StringUtils.locatDateTimeToString((LocalDateTime) result[0], pattern))
+						.quantity(StringUtils.doubleToString((Double) result[1]))
+						.build());
+			}
+			
+			return results;
+		}catch (NoResultException nre){
+			return new ArrayList<>();
 		}
 	}
 

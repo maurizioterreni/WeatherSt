@@ -6,6 +6,7 @@ import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
 public class SensorGetResponsDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String description;
 	private String symbol;
 	private String name;
@@ -46,7 +47,13 @@ public class SensorGetResponsDto extends BaseDto{
 		this.name = name;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
+	public Long getId() {
+		return id;
+	}
 	
 	
 //	public 
@@ -87,6 +94,7 @@ public class SensorGetResponsDto extends BaseDto{
 
 
 	public static class SensorGetResponsDtoBuilder{
+		private Long id;
 		private String description;
 		private String symbol;
 		private String name;
@@ -95,6 +103,10 @@ public class SensorGetResponsDto extends BaseDto{
 		private Float conversionFactor;
 		private MeasureDto minMeasure;
 		
+		public SensorGetResponsDtoBuilder id(Long id) {
+			this.id = id;
+			return this;
+		}
 		public SensorGetResponsDtoBuilder description(String description) {
 			this.description = description;
 			return this;
@@ -129,6 +141,7 @@ public class SensorGetResponsDto extends BaseDto{
 		public SensorGetResponsDto build() {
 			SensorGetResponsDto dto = new SensorGetResponsDto();
 			
+			dto.setId(id);
 			dto.setDescription(description);
 			dto.setSymbol(symbol);
 			dto.setName(name);

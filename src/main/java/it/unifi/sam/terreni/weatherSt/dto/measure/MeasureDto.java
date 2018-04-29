@@ -4,7 +4,7 @@ import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
 public class MeasureDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
-	private Float quantity;
+	private String quantity;
 	private String name;
 	private String symbol;
 	private String dateTime;
@@ -17,11 +17,11 @@ public class MeasureDto extends BaseDto{
 		return new MeasurePostRequestDtoBuilder();
 	}
 
-	public Float getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Float quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 
@@ -54,7 +54,7 @@ public class MeasureDto extends BaseDto{
 
 
 	public static class MeasurePostRequestDtoBuilder{
-		private Float quantity;
+		private String quantity;
 		private String name;
 		private String symbol;
 		private String dateTime;
@@ -63,7 +63,7 @@ public class MeasureDto extends BaseDto{
 			this.name = name;
 			return this;
 		}
-		public MeasurePostRequestDtoBuilder quantity(Float quantity) {
+		public MeasurePostRequestDtoBuilder quantity(String quantity) {
 			this.quantity = quantity;
 			return this;
 		}

@@ -14,7 +14,6 @@ export class WeatherStationService {
    getAllWeathrStation(): Observable<WeatherStation[]> {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
-        .set('token', 'fsdfsdfsdf');
 
       return this._http.get(this._weatherurl , {headers})
         .map((response) => <WeatherStation[]> response);

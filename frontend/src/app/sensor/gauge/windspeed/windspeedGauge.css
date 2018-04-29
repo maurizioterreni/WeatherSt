@@ -48,25 +48,25 @@
   max-height: 250px;
 }
 
-.weather-temperature-div{
+.weather-windspeed-div{
   width: 100%;
 }
 
-.temperature-sensor-value{
+.windspeed-sensor-value{
   margin-left: 10px;
 }
 
-.actual-temperature{
+.actual-windspeed{
   font-size:50px;
   color: #656565;
 }
 
-.max-temperature{
+.max-windspeed{
   font-size:20px;
   color: #790000;
 }
 
-.min-temperature{
+.min-windspeed{
   font-size:20px;
   color: #055782;
 }
