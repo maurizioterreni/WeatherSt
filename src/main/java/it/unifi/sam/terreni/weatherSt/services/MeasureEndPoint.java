@@ -22,7 +22,7 @@ import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.dao.measure.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.measure.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorDao;
-import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureChartDto;
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasurePostRequestDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
@@ -157,7 +157,7 @@ public class MeasureEndPoint {
 		
 		String groupby = getGroupBy(fromDate, toDate);
 		
-		List<MeasureDto> measures = measureDao.getLotOfMeasureDtoBetweenDate(sensor, 
+		List<MeasureChartDto> measures = measureDao.getLotOfMeasureDtoBetweenDate(sensor, 
 				Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDateTime(), 
 				Instant.ofEpochMilli(toDate).atZone(ZoneId.systemDefault()).toLocalDateTime(),
 				groupby);
@@ -169,15 +169,15 @@ public class MeasureEndPoint {
 	private String getGroupBy(Long fromDate, Long toDate) {
 		Long dif = toDate - fromDate;
 		if(dif > MAX_DAY)
-			return "day";
+			return " day(m.localDateTime), month(m.localDateTime), year(m.localDateTime) ";
 		else if(dif > MAX_WEEK)
-			return "week";
+			return " week(m.localDateTime), month(m.localDateTime), year(m.localDateTime) ";
 		else if(dif > MAX_MONTH)
-			return "month";
+			return " year(m.localDateTime), month(m.localDateTime) ";
 		else if(dif > MAX_YEAR)
-			return "year";
+			return " year(m.localDateTime) ";
 		else
-			return "hour";
+			return " hour(m.localDateTime), day(m.localDateTime), month(m.localDateTime)  ";
 		
 	}
 

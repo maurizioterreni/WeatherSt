@@ -2,15 +2,15 @@
 
 	<mat-tab-group (selectedTabChange)="onTabChange($event)">
 		<mat-tab label="Current data">
-			<div class="weather-windspeed-div">
+			<div class="weather-windsdirection-div">
 				<mat-grid-list cols="3" style="margin-top:40px" rowHeight="200px">
-  				<mat-grid-tile [colspan]="1" [rowspan]="1"><img src="http://chittagongit.com//images/wind-speed-icon/wind-speed-icon-22.jpg" width="100px" height="100px" /></mat-grid-tile>
+  				<mat-grid-tile [colspan]="1" [rowspan]="1"><img src="https://image.flaticon.com/icons/svg/13/13020.svg" width="100px" height="100px" /></mat-grid-tile>
   				<mat-grid-tile [colspan]="2" [rowspan]="1">
-						<div class="windspeed-sensor-value">
+						<div class="windsdirection-sensor-value">
 							<mat-list>
-  							<mat-list-item class="actual-windspeed" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.measure.quantity | number:'.1'}}{{sensor.measure.symbol}}</mat-list-item>
+  							<mat-list-item class="actual-windsdirection" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{getAngle(sensor.measure.quantity)}}</mat-list-item>
   							<mat-divider></mat-divider>
-  							<mat-list-item><p matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-windspeed">{{sensor.maxMeasure.quantity | number:'.1'}}{{sensor.maxMeasure.symbol}}</p>&nbsp;&nbsp;|&nbsp;&nbsp;<p matTooltip="{{sensor.minMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="min-windspeed">{{sensor.minMeasure.quantity | number:'.1'}}{{sensor.minMeasure.symbol}}</p></mat-list-item>
+  							<mat-list-item><p matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-windsdirection">{{sensor.measure.quantity | number:'.0'}}{{sensor.measure.symbol}}</p></mat-list-item>
 							</mat-list>
 
 
@@ -23,7 +23,7 @@
 		</mat-tab>
 		<mat-tab label="Chart">
 			<div [hidden]="!chart" class="chartDv">
-		    <canvas id="canvas-WindspeedGaugeComponent">{{ chart }}</canvas>
+		    <canvas id="canvas-WindDirectionGaugeComponent">{{ chart }}</canvas>
 		  </div>
 			<form class="draw-measure" (submit)="drawChart($event)">
 				<mat-form-field>

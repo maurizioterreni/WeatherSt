@@ -5,7 +5,11 @@
 					<mat-card-content class="sensorContent">
 						<app-temperature-gauge *ngIf="sensor.description=='Temperature Sensor'" [sensor]="sensor"></app-temperature-gauge>
 						<app-windspeed-gauge *ngIf="sensor.description=='Wind speed sensor'" [sensor]="sensor"></app-windspeed-gauge>
+						<app-rain-gauge *ngIf="sensor.description=='Rain sensor'" [sensor]="sensor"></app-rain-gauge>
 						<app-windDirection-gauge *ngIf="sensor.description=='Wind direction sensor'" [sensor]="sensor"></app-windDirection-gauge>
+						<app-humidity-gauge *ngIf="sensor.description=='Humidity sensor'" [sensor]="sensor"></app-humidity-gauge>
+						<app-uv-gauge *ngIf="sensor.description=='Uv sensor'" [sensor]="sensor"></app-uv-gauge>
+						<app-pressure-gauge *ngIf="sensor.description=='Pressure sensor'" [sensor]="sensor"></app-pressure-gauge>
 					</mat-card-content>
 	</mat-card>
 </div>

@@ -17,6 +17,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { TemperatureGaugeComponent } from './sensor/gauge/temperature/temperatureGauge.component';
 import { WindspeedGaugeComponent } from './sensor/gauge/windspeed/windspeedGauge.component';
 import { WindDirectionGaugeComponent } from './sensor/gauge/windDirection/windDirectionGauge.component';
+import { UVGaugeComponent } from './sensor/gauge/uv/uvGauge.component';
+import { RainGaugeComponent } from './sensor/gauge/rain/rainGauge.component';
+import { PressureGaugeComponent } from './sensor/gauge/pressure/pressureGauge.component';
+import { HumidityGaugeComponent } from './sensor/gauge/humidity/humidityGauge.component';
 import { LoginComponent } from './dialog/login/login.component';
 import { RegisterComponent } from './dialog/register/register.component';
 import { CreateSensorComponent } from './sensor/createSensor/createSensor.component';
@@ -34,7 +38,7 @@ const appRoute: Routes = [
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent,
-        TemperatureGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
+        TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent, RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
         RegisterComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
     ReactiveFormsModule,

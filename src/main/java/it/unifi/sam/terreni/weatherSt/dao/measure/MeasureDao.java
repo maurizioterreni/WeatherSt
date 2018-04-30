@@ -9,7 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureChartDto;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
@@ -54,12 +54,12 @@ public class MeasureDao {
 
 	//select avg(quantity) from measure where sensor_id = 1
 	//group by month(localDateTime) order by localDateTime asc
-	public List<MeasureDto> getLotOfMeasureDtoBetweenDate(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate, String groupby){
+	public List<MeasureChartDto> getLotOfMeasureDtoBetweenDate(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate, String groupby){
 		try {
 			TypedQuery<Object[]> query = entityManager.createQuery(
-					"SELECT m.localDateTime, avg(m.quantity) FROM Measure m where "
+					"SELECT m.localDateTime, max(quantity), min(quantity)  FROM Measure m where "
 					+ " m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) "
-					+ " group by " + groupby + "(m.localDateTime) "
+					+ " group by " + groupby
 					+ " order by m.localDateTime asc", Object[].class)
 					.setParameter("sensor", sensor)
 					.setParameter("fromDate", fromDate)
@@ -78,13 +78,12 @@ public class MeasureDao {
 			else
 				pattern = "yy-MM-dd";
 			
-			System.out.println(pattern + "  " + groupby);
-			
-			List<MeasureDto> results = new ArrayList<>();
+			List<MeasureChartDto> results = new ArrayList<>();
 			for (Object[] result : query.getResultList()) {
-				results.add(MeasureDto.builder()
-						.dateTime(StringUtils.locatDateTimeToString((LocalDateTime) result[0], pattern))
-						.quantity(StringUtils.doubleToString((Double) result[1]))
+				results.add(MeasureChartDto.builder()
+						.withDateTime(StringUtils.locatDateTimeToString((LocalDateTime) result[0], pattern))
+						.withMaxQuantity(StringUtils.floatToString((Float) result[1]))
+						.withMinQuantity(StringUtils.floatToString((Float) result[2]))
 						.build());
 			}
 			
