@@ -1,0 +1,44 @@
+<div class="weather-item">
+
+	<mat-tab-group (selectedTabChange)="onTabChange($event)">
+		<mat-tab label="Current data">
+			<div class="weather-humidity-div">
+				<mat-grid-list cols="3" style="margin-top:40px" rowHeight="200px">
+  				<mat-grid-tile [colspan]="1" [rowspan]="1"><img src="https://image.flaticon.com/icons/svg/219/219816.svg" width="100px" height="100px" /></mat-grid-tile>
+  				<mat-grid-tile [colspan]="2" [rowspan]="1">
+						<div class="humidity-sensor-value">
+							<mat-list>
+  							<mat-list-item class="actual-humidity" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.measure.quantity | number:'.1'}}{{sensor.measure.symbol}}</mat-list-item>
+  							<mat-divider></mat-divider>
+  							<mat-list-item><p matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-humidity">{{sensor.maxMeasure.quantity | number:'.1'}}{{sensor.maxMeasure.symbol}}</p>&nbsp;&nbsp;|&nbsp;&nbsp;<p matTooltip="{{sensor.minMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="min-humidity">{{sensor.minMeasure.quantity | number:'.1'}}{{sensor.minMeasure.symbol}}</p></mat-list-item>
+							</mat-list>
+
+
+
+						</div>
+					</mat-grid-tile>
+				</mat-grid-list>
+
+			</div>
+		</mat-tab>
+		<mat-tab label="Chart">
+			<div [hidden]="!chart" class="chartDv">
+		    <canvas id="canvas-HumidityGaugeComponent">{{ chart }}</canvas>
+		  </div>
+			<form class="draw-measure" (submit)="drawChart($event)">
+				<mat-form-field>
+  				<input matInput [matDatepicker]="fromDate" (dateChange)="addEvent('fromDate', $event)" placeholder="From date">
+  		 			<mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+  					<mat-datepicker #fromDate></mat-datepicker>
+					</mat-form-field>
+					<mat-form-field>
+	  				<input matInput [matDatepicker]="toDate" (dateChange)="addEvent('toDate', $event)" placeholder="To date">
+	  		 			<mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+	  					<mat-datepicker #toDate></mat-datepicker>
+						</mat-form-field>
+						<button mat-button>Draw</button>
+				</form>
+		</mat-tab>
+</mat-tab-group>
+
+</div>
