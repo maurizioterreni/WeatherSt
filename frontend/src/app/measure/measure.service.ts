@@ -1,4 +1,5 @@
 import { Measure } from './measure';
+import { MeasureChart } from './measureChart';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
@@ -26,9 +27,9 @@ export class MeasureService {
    }
 
 
-   getMeasureBetweenDate(sensorId: number, fromDate: number, toDate: number): Observable<Measure[]> {
+   getMeasureBetweenDate(sensorId: number, fromDate: number, toDate: number): Observable<MeasureChart[]> {
 
-     console.log('fromDate: ' + fromDate + ' toDate: ' + toDate);
+     //console.log('fromDate: ' + fromDate + ' toDate: ' + toDate);
      const headers = new HttpHeaders()
        .set('Content-Type', 'application/json')
        .set('sensorId', '' + sensorId)
@@ -37,7 +38,7 @@ export class MeasureService {
        .set('Access-Control-Allow-Origin', '*');
 
        return this._http.get(this._getMeasureBetweenDateUrl,  {headers} )
-         .map((response) => <Measure[]> response);
+         .map((response) => <MeasureChart[]> response);
 
    }
 }

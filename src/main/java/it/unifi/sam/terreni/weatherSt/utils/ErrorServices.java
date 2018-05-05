@@ -4,6 +4,7 @@ public enum ErrorServices {
 	NULL_OBJECT("Object cannot be null "),
 	OBJECT_NOT_FOUND("Object not found "),
 	OBJECTS_NOT_COMPATIBLE("Objects not compatible "),
+	GENERIC_ERROR("Generic error"),
 	UNAUTHORIZED("Unauthorized ");
 	
 	private String message;

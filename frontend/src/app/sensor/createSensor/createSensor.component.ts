@@ -4,33 +4,38 @@
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import { SensorKnowledgeService } from './sensorKnowledge.service'
 import { SensorKnowledge } from './sensorKnowledge';
-import { CreateSensorService } from './createSensor.service';
+import { SensorService } from '../sensor.service';
+import { User } from '../../user/user';
+
+
 
 @Component({
   selector: 'app-CreateSensor',
   templateUrl: 'createSensor.component.html',
   styleUrls: ['createSensor.component.css'],
-  providers: [SensorKnowledgeService,CreateSensorService]
+  providers: [SensorService]
 })
 export class CreateSensorComponent  implements OnInit {
+  private user : User;
   // -----------------------------------------------------------------------//
   sensorKnowledges: SensorKnowledge[];
   selectedSensorKnowledge: string;
   // -----------------------------------------------------------------------//
-  constructor(private _createSensorService: CreateSensorService, private _sensorKnowledgeService: SensorKnowledgeService, public dialogRef: MatDialogRef<CreateSensorComponent>,
+  constructor(private _sensorService: SensorService, public dialogRef: MatDialogRef<CreateSensorComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
+      this.user = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
     this.selectedSensorKnowledge = '0';
-    this._sensorKnowledgeService.getAllSensorKnowledge()
+    this._sensorService.getAllSensorKnowledge()
     .subscribe(sensorKnowledges => this.sensorKnowledges = sensorKnowledges);
   }
 
   createSensor(e){
-    this._createSensorService.createSensor(this.selectedSensorKnowledge)
+
+    this._sensorService.createSensor(this.selectedSensorKnowledge, this.user)
     .subscribe(
       res => {
           this.dialogRef.close();
@@ -38,7 +43,7 @@ export class CreateSensorComponent  implements OnInit {
         err => {
           console.log('ERROR');
           //openSnackBar("User or Password wrong", "undo");
-          
+
       });
   }
 }

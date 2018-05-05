@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureChartDto;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
+import it.unifi.sam.terreni.weatherSt.utils.GroupByClass;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 public class MeasureDao {
@@ -65,15 +66,15 @@ public class MeasureDao {
 					.setParameter("fromDate", fromDate)
 					.setParameter("toDate", toDate);
 			String pattern = "";
-			if(groupby.equals("hour"))
+			if(groupby.equals(GroupByClass.HOUR_GROUPBY))
 				pattern = "HH:mm";
-			else if(groupby.equals("week"))
+			else if(groupby.equals(GroupByClass.WEEK_GROUPBY))
 				pattern = "yy, 'week' w";
-			else if(groupby.equals("day"))
+			else if(groupby.equals(GroupByClass.DAY_GROUPBY))
 				pattern = "dd/MM";
-			else if(groupby.equals("month"))
+			else if(groupby.equals(GroupByClass.MONTH_GROUPBY))
 				pattern = "MM-yy";
-			else if(groupby.equals("year"))
+			else if(groupby.equals(GroupByClass.YEAR_GROUPBY))
 				pattern = "yy";
 			else
 				pattern = "yy-MM-dd";

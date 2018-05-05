@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Sensor } from '../../sensor';
-import { Measure } from '../../../measure/measure';
+import { MeasureChart } from '../../../measure/measureChart';
 import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -55,9 +55,9 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
         this.labelArray.length = 0;
         this.quantityArray.length = 0;
         for (const i of results) {
-          let m = <Measure> i;
+          let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(m.quantity);
+          this.quantityArray.push(m.maxQuantity);
         }
         this.initChart();
       });
@@ -95,7 +95,8 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
         });
   }
 
-  getAngle(angle: number) : string{
+  getAngle(angleStr: string) : string{
+    let angle = Number(angleStr);
     if(angle >= 0 && angle < 22) return "N";
     else if(angle >= 22 && angle < 45) return "NNE";
     else if(angle >= 45 && angle < 67) return "NE";
@@ -121,9 +122,9 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
         this.labelArray.length = 0;
         this.quantityArray.length = 0;
         for (const i of results) {
-          let m = <Measure> i;
+          let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(m.quantity);
+          this.quantityArray.push(m.maxQuantity);
         }
         this.initChart();
       });

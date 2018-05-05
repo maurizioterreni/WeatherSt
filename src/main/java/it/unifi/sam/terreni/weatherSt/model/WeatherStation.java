@@ -21,6 +21,7 @@ public class WeatherStation extends BaseEntity {
 	private String longitude;
 	private String latitude;
 	private String description;
+	private String images;
 	@OneToMany( targetEntity=Sensor.class , cascade = CascadeType.REMOVE )
 	private Set<Sensor> sensors;
 
@@ -68,10 +69,20 @@ public class WeatherStation extends BaseEntity {
 	}
 	
 	
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
+
 	public static class WeatherStationBuilder{
 		private String longitude;
 		private String latitude;
 		private String description;
+		private String images;
 		
 		public WeatherStationBuilder longitude(String longitude) {
 			this.longitude = longitude;
@@ -86,12 +97,18 @@ public class WeatherStation extends BaseEntity {
 			return this;
 		}
 		
+		public WeatherStationBuilder images(String images) {
+			this.images = images;
+			return this;
+		}
+		
 		public WeatherStation build() {
 			WeatherStation weatherStation = ModelFactory.weatherStation();
 			
 			weatherStation.setDescription(description);
 			weatherStation.setLatitude(latitude);
 			weatherStation.setLongitude(longitude);
+			weatherStation.setImages(images);
 			
 			return weatherStation;
 		}

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -124,6 +125,47 @@ public class SensorEndPoint {
 		}
 		
 		return Response.status(200).entity(dtos).build();
+	}
+	
+	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response delete(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("weatherId") Long weatherId) {
+		if (sensorId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		if (weatherId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
+		
+		
+		
+		if(Authentication.isNotValid(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
+		
+
+		Sensor sensor = sensorDao.fetchById(sensorId);
+
+		if(sensor == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+
+		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
+		
+		if(!weatherStation.getSensors().contains(sensor))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - weather station not contain sensor").build();
+		
+		
+		weatherStation.getSensors().remove(sensor);
+		
+		for (Measure measure : sensor.getMeasures()) {
+			measureDao.delete(measure);
+		}
+		
+		sensorDao.delete(sensor);
+
+		return Response.status(200).entity(null).build();
 	}
 	
 	

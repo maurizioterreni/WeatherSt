@@ -5,10 +5,11 @@ import { Measure } from '../measure/measure';
 import { MeasureService } from '../measure/measure.service';
 import { Sensor } from './sensor';
 import { SensorService } from './sensor.service';
+import { DialogDeleteSensor } from './sheet/delete/dialogDeleteSensor.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA} from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
@@ -23,7 +24,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 })
 export class SensorComponent {
 
-  constructor(private http: HttpClient, private _sensor: SensorService, private route: ActivatedRoute) {}
+  constructor(public dialog: MatDialog,private http: HttpClient, private _sensor: SensorService, private route: ActivatedRoute) {}
   sensors: Sensor[];
 
   ngOnInit(): void {
@@ -39,8 +40,14 @@ export class SensorComponent {
         this.sensors.push(<Sensor> i);
       }
     });
+  }
 
-
-
+  openDeleteSensorSheet(sensorId:string): void {
+    let dialogRef = this.dialog.open(DialogDeleteSensor, {
+      data: { sensorId: sensorId }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 }

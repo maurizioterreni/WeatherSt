@@ -3,7 +3,7 @@
 <div style="margin-top:100px"></div>
 
 <mat-toolbar id="header" color="primary">
-    <span>{{ title }}</span>
+    <span><a class="home-bt-link" href="">{{ title }}</a></span>
     <span class="spacer"></span>
     <span *ngIf="user">Welcome {{user.username }}</span>
     <button mat-icon-button [matMenuTriggerFor]="menu">

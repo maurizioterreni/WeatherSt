@@ -13,6 +13,7 @@ import { WeatherStationComponent } from './weatherStation/weatherStation.compone
 import { AgmCoreModule } from '@agm/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SensorComponent } from './sensor/sensor.component';
+import { DialogDeleteSensor } from './sensor/sheet/delete/dialogDeleteSensor.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TemperatureGaugeComponent } from './sensor/gauge/temperature/temperatureGauge.component';
 import { WindspeedGaugeComponent } from './sensor/gauge/windspeed/windspeedGauge.component';
@@ -37,7 +38,7 @@ const appRoute: Routes = [
       { path: '**', redirectTo: '' }];
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps, SensorComponent, WeatherStationComponent,
+  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps,DialogDeleteSensor ,SensorComponent, WeatherStationComponent,
         TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent, RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
         RegisterComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
@@ -47,7 +48,7 @@ const appRoute: Routes = [
     }),
     RouterModule.forRoot(appRoute)],
   providers: [] ,
-  entryComponents: [DialogMaps],
+  entryComponents: [DialogMaps,DialogDeleteSensor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

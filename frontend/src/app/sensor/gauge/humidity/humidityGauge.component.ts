@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Sensor } from '../../sensor';
-import { Measure } from '../../../measure/measure';
+import { MeasureChart } from '../../../measure/measureChart';
 import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -17,11 +17,13 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
   chart: Chart;
   fromDate: Date;
   toDate: Date;
-  quantityArray: string[];
+  maxQuantityArray: string[];
+  minQuantityArray: string[];
   labelArray: string[];
 
   constructor(private meausureService: MeasureService) {
-      this.quantityArray = new Array();
+      this.maxQuantityArray = new Array();
+      this.minQuantityArray = new Array();
       this.labelArray = new Array();
   }
 
@@ -53,11 +55,13 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
     this.meausureService.getMeasureBetweenDate(this.sensor.id,this.fromDate.getTime(),this.toDate.getTime())
       .subscribe(results => {
         this.labelArray.length = 0;
-        this.quantityArray.length = 0;
+        this.maxQuantityArray.length = 0;
+        this.minQuantityArray.length = 0;
         for (const i of results) {
-          let m = <Measure> i;
+          let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(m.quantity);
+          this.maxQuantityArray.push(m.maxQuantity);
+          this.minQuantityArray.push(m.minQuantity);
         }
         this.initChart();
       });
@@ -71,10 +75,15 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
         labels: this.labelArray,
         datasets: [
               {
-                data: this.quantityArray,
-                borderColor: "#3cba9f",
+                data: this.maxQuantityArray,
+                borderColor: "#790000",
                 fill: false
               },
+              {
+                data: this.minQuantityArray,
+                borderColor: "#055782",
+                fill: false
+              }
             ]
           },
           options: {
@@ -99,11 +108,13 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
     this.meausureService.getMeasureBetweenDate(this.sensor.id,this.fromDate.getTime(),this.toDate.getTime())
       .subscribe(results => {
         this.labelArray.length = 0;
-        this.quantityArray.length = 0;
+        this.maxQuantityArray.length = 0;
+        this.minQuantityArray.length = 0;
         for (const i of results) {
-          let m = <Measure> i;
+          let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(m.quantity);
+          this.maxQuantityArray.push(m.maxQuantity);
+          this.minQuantityArray.push(m.minQuantity);
         }
         this.initChart();
       });

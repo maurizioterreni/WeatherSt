@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Sensor } from '../../sensor';
-import { Measure } from '../../../measure/measure';
+import { MeasureChart } from '../../../measure/measureChart';
 import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -55,9 +55,9 @@ export class RainGaugeComponent implements OnInit, OnChanges {
         this.labelArray.length = 0;
         this.quantityArray.length = 0;
         for (const i of results) {
-          let m = <Measure> i;
+          let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(m.quantity);
+          this.quantityArray.push(m.maxQuantity);
         }
         this.initChart();
       });
@@ -101,9 +101,9 @@ export class RainGaugeComponent implements OnInit, OnChanges {
         this.labelArray.length = 0;
         this.quantityArray.length = 0;
         for (const i of results) {
-          let m = <Measure> i;
+          let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(m.quantity);
+          this.quantityArray.push(m.maxQuantity);
         }
         this.initChart();
       });

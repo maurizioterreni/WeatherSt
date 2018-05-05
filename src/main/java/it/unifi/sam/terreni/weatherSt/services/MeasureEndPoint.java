@@ -29,17 +29,12 @@ import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
+import it.unifi.sam.terreni.weatherSt.utils.GroupByClass;
 
 
 
 @Path("/measure")
 public class MeasureEndPoint {
-	
-	private static Long MAX_YEAR = 631139040000L;//20 anni 31556952000 * 20
-	private static Long MAX_MONTH = 63113904000L;//24 mesi 2629746000 * 24
-	private static Long MAX_WEEK = 7257600000L;//12 settimane 604800000 * 12
-	private static Long MAX_DAY = 864000000L;//10 giorni 86400000 * 10
-
 	@Inject
 	private SensorDao sensorDao;
 	@Inject
@@ -168,16 +163,16 @@ public class MeasureEndPoint {
 
 	private String getGroupBy(Long fromDate, Long toDate) {
 		Long dif = toDate - fromDate;
-		if(dif > MAX_DAY)
-			return " day(m.localDateTime), month(m.localDateTime), year(m.localDateTime) ";
-		else if(dif > MAX_WEEK)
-			return " week(m.localDateTime), month(m.localDateTime), year(m.localDateTime) ";
-		else if(dif > MAX_MONTH)
-			return " year(m.localDateTime), month(m.localDateTime) ";
-		else if(dif > MAX_YEAR)
-			return " year(m.localDateTime) ";
+		if(dif > GroupByClass.MAX_DAY)
+			return GroupByClass.DAY_GROUPBY;
+		else if(dif > GroupByClass.MAX_WEEK)
+			return GroupByClass.WEEK_GROUPBY;
+		else if(dif > GroupByClass.MAX_MONTH)
+			return GroupByClass.MONTH_GROUPBY;
+		else if(dif > GroupByClass.MAX_YEAR)
+			return GroupByClass.YEAR_GROUPBY;
 		else
-			return " hour(m.localDateTime), day(m.localDateTime), month(m.localDateTime)  ";
+			return GroupByClass.HOUR_GROUPBY;
 		
 	}
 
