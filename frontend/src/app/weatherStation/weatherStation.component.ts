@@ -20,15 +20,18 @@ import {DialogMaps} from '../dialog/maps/dialog.maps.component';
    providers: [WeatherStationService]
 })
 export class WeatherStationComponent {
-     status = true;
+    status = true;
 
-     weatherStations: WeatherStation[];
-     constructor(private _weatherStation: WeatherStationService, public dialog: MatDialog, private router: Router) {}
-     ngOnInit(): void {
+    weatherStations: WeatherStation[];
+    constructor(private _weatherStation: WeatherStationService, public dialog: MatDialog, private router: Router) {}
+    ngOnInit(): void {
       this._weatherStation.getAllWeathrStation()
-      .subscribe(weatherStations => this.weatherStations = weatherStations);
+        .subscribe(weatherStations => this.weatherStations = weatherStations);
     }
-    openWeatherStation(sensorsId: number[]) {
+    openWeatherStation(sensorsId: number[], weatherId: string) {
+      console.log(weatherId);
+      sessionStorage.setItem('currentWeatherSelected', weatherId);
+      sessionStorage.setItem('currentSensorSelected', JSON.stringify(sensorsId));
       let parsing = '';
       for (const entry of sensorsId) {
         parsing += entry + '#';

@@ -4,13 +4,15 @@
 		<mat-tab label="Current data">
 			<div class="weather-rain-div">
 				<mat-grid-list cols="3" style="margin-top:40px" rowHeight="200px">
-  				<mat-grid-tile [colspan]="1" [rowspan]="1"><img src="https://png.icons8.com/metro/1600/rain.png" width="100px" height="100px" /></mat-grid-tile>
+  				<mat-grid-tile [colspan]="1" [rowspan]="1"><img src="assets/images/rain.png" width="100px" height="100px" /></mat-grid-tile>
   				<mat-grid-tile [colspan]="2" [rowspan]="1">
 						<div *ngIf="sensor.measure" class="rain-sensor-value">
 							<mat-list>
   							<mat-list-item class="actual-rain" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.measure.quantity | number:'.1'}}{{sensor.measure.symbol}}</mat-list-item>
   							<mat-divider></mat-divider>
-  							<mat-list-item><p matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-rain">{{sensor.maxMeasure.quantity | number:'.1'}}{{sensor.maxMeasure.symbol}}</p></mat-list-item>
+  							<mat-list-item>
+									<p *ngIf="sensor.maxMeasure else nan_max_mex" matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-rain">{{sensor.maxMeasure.quantity | number:'.1'}}{{sensor.maxMeasure.symbol}}</p><ng-template #nan_max_mex ><p class="max-rain" matTooltip="no data">NaN</p></ng-template>
+								</mat-list-item>
 							</mat-list>
 						</div>
 						<div *ngIf="!sensor.measure" style="color: #a90202; font-size: 30px;"><mat-icon>error</mat-icon> Error no data found!</div>

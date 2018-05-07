@@ -24,7 +24,7 @@ export class CreateSensorComponent  implements OnInit {
   // -----------------------------------------------------------------------//
   constructor(private _sensorService: SensorService, public dialogRef: MatDialogRef<CreateSensorComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-      this.user = JSON.parse(localStorage.getItem("currentUser"));
+      this.user = JSON.parse(sessionStorage.getItem("currentUser"));
   }
 
   ngOnInit() {

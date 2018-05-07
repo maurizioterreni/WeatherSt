@@ -24,8 +24,8 @@ export class HeaderComponent  implements OnInit {
   private user : User;
   // -----------------------------------------------------------------------//
   constructor(public dialog: MatDialog,private authenticationService: AuthenticationService,) {
-    if(localStorage.getItem("currentUser"))
-      this.user = JSON.parse(localStorage.getItem("currentUser"));
+    if(sessionStorage.getItem("currentUser"))
+      this.user = JSON.parse(sessionStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class HeaderComponent  implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(this.user == null)
-        this.user = JSON.parse(localStorage.getItem("currentUser"));
+        this.user = JSON.parse(sessionStorage.getItem("currentUser"));
     });
   //   this.dialog.open(LoginComponent, {});
   }
@@ -50,7 +50,7 @@ export class HeaderComponent  implements OnInit {
 
      dialogRef.afterClosed().subscribe(result => {
        if(this.user == null)
-         this.user = JSON.parse(localStorage.getItem("currentUser"));
+         this.user = JSON.parse(sessionStorage.getItem("currentUser"));
      });
   }
 

@@ -9,7 +9,7 @@ public class WeatherStationResponseDto extends BaseDto{
 	private static final long serialVersionUID = 9222022175701191010L;
 
 
-	private Long weatherId;
+	private Long id;
 	private String description;
 	private String longitude;
 	private String latitude;
@@ -19,12 +19,12 @@ public class WeatherStationResponseDto extends BaseDto{
 		sensors = new ArrayList<>();
 	}
 
-	public Long getWeatherId() {
-		return weatherId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setWeatherId(Long weatherId) {
-		this.weatherId = weatherId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	

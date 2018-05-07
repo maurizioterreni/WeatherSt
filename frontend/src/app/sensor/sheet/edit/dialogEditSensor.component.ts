@@ -18,12 +18,12 @@ export class DialogDeleteSensor {
     private _sensor: SensorService,
     public dialogRef: MatDialogRef<DialogDeleteSensor>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-      this.user = JSON.parse(sessionStorage.getItem("currentUser"));
+      this.user = JSON.parse(sessionStorage.getItem("currentUser"));//sessionStorage  localStorage
     }
 
 
   cancelSensor(): void{
-    /*if(this.user != null){
+    if(this.user != null){
       this._sensor.deleteSensor(this.data.sensorId, this.user)
         .subscribe((res: any) => {
           this.snackBar.open("Sensor deleted correctly", null, {duration: 3000,});
@@ -35,10 +35,7 @@ export class DialogDeleteSensor {
           });
     }else{
       this.snackBar.open("User not valid", null, {duration: 3000,});
-    }*/
-
-    this.closeDialog(Number(this.data.sensorId));
-
+    }
   }
 
   onNoClick(): void {

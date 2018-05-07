@@ -17,7 +17,7 @@ export class AuthenticationService {
             .map(user => {
                 // login successful if there's a jwt token in the response
               if (user){
-                localStorage.setItem('currentUser', JSON.stringify(user));
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
               }
 
               return user;
@@ -26,7 +26,7 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('currentUser');
       //  this.router.navigate('');
     }
 }

@@ -74,7 +74,7 @@ public class WeatherStationEndPoint {
 	private WeatherStationResponseDto weatherStationToDto(WeatherStation weatherStation) {
 		WeatherStationResponseDto dto = new WeatherStationResponseDto();
 		
-		dto.setWeatherId(weatherStation.getId());
+		dto.setId(weatherStation.getId());
 		dto.setDescription(weatherStation.getDescription());
 		dto.setLatitude(weatherStation.getLatitude());
 		dto.setLongitude(weatherStation.getLongitude());

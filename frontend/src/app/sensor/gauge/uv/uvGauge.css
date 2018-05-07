@@ -56,12 +56,12 @@
   margin-left: 10px;
 }
 
-.actual-humidity{
+.actual-uv{
   font-size:50px;
   color: #656565;
 }
 
-.max-humidity{
+.max-uv{
   font-size:20px;
   color: #790000;
   margin-left: auto;
