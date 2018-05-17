@@ -24,7 +24,6 @@
 	  <img mat-card-image src="https://www.weather2umbrella.com/wp-content/themes/w2u/image/svg/weather-icons/d01.svg" style="width:200px;">
       <mat-card-content>
         <p>{{weatherStation.description}}</p>
-				<p>- {{weatherStation.id}} -</p>
       </mat-card-content>
       <mat-card-actions>
       	<button mat-button (click)="openWeatherStation(weatherStation.sensors,weatherStation.id);"> <i class="material-icons">near_me</i> Open</button>

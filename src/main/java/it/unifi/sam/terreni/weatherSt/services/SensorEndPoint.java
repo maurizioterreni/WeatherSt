@@ -12,6 +12,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -85,12 +86,10 @@ public class SensorEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response get(@HeaderParam("sensorId") Long sensorId, @HeaderParam("unitMeasureId") Long unitMeasureId) {
+	public Response get(@HeaderParam("sensorId") Long sensorId) {
 		if (sensorId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		if (unitMeasureId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasureId").build();
-	
+		
 
 		Sensor sensor = sensorDao.findById(sensorId);
 
@@ -106,7 +105,7 @@ public class SensorEndPoint {
 
 
 
-		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure,1f)).build();
+		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure)).build();
 	}
 	
 	
@@ -125,6 +124,40 @@ public class SensorEndPoint {
 		}
 		
 		return Response.status(200).entity(dtos).build();
+	}
+	
+	
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response updateSensor(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("sensorKnowledgeId") Long sensorKnowledgeId) {
+	
+		if (sensorId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+		if (sensorKnowledgeId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorKnowledgeId").build();
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		
+		if(Authentication.isNotValid(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
+		
+		Sensor sensor = sensorDao.findById(sensorId);
+		
+		if(sensor == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensor").build();
+		
+		SensorTypeKnowledge typeKnowledge = sensorTypeKnowledgeDao.findById(sensorKnowledgeId);
+		
+		if(typeKnowledge == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - typeKnowledge").build();
+		
+		sensor.setSensorType(typeKnowledge);
+
+		sensorDao.update(sensor);
+		
+		return Response.status(200).build();
 	}
 	
 	
@@ -199,7 +232,7 @@ public class SensorEndPoint {
 				.weatherId(weatherId)
 				.build();
 	}
-	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure, Float conversionFactor) {
+	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure) {
 		return SensorGetResponsDto.builder()
 				.id(sensor.getId())
 				.description(sensor.getSensorType().getDescription())
@@ -208,7 +241,7 @@ public class SensorEndPoint {
 				.measure(measureToMeasureDto(measure))
 				.maxMeasure(measureToMeasureDto(maxMeasure))
 				.minMeasure(measureToMeasureDto(minMeasure))
-				.conversionFactor(conversionFactor)
+				.unitKnowledgeId(sensor.getSensorType().getUnitMeasure().getId())
 				.build();
 	}
 }

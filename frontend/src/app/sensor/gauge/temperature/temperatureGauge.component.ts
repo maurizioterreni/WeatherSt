@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Sensor } from '../../sensor';
+import { ConversionFactor } from '../../../conversion/conversionFactor';
+import { ConversionFactorService } from '../../../conversion/ConversionFactor.service';
 import { MeasureChart } from '../../../measure/measureChart';
 import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
@@ -10,18 +12,21 @@ import { MeasureService } from '../../../measure/measure.service';
   selector: 'app-temperature-gauge',
   templateUrl: './temperatureGauge.html',
   styleUrls: ['./temperatureGauge.css'],
-  providers: [MeasureService]
+  providers: [MeasureService, ConversionFactorService]
 })
 export class TemperatureGaugeComponent implements OnInit, OnChanges {
   @Input() sensor: Sensor;
+  sensorOld: Sensor;
   chart: Chart;
   fromDate: Date;
   toDate: Date;
+  conversionFactors: ConversionFactor[];
   maxQuantityArray: string[];
   minQuantityArray: string[];
   labelArray: string[];
+  unitConverterSelected = '';
 
-  constructor(private meausureService: MeasureService) {
+  constructor(private meausureService: MeasureService, private conversionService: ConversionFactorService) {
     this.maxQuantityArray = new Array();
     this.minQuantityArray = new Array();
     this.labelArray = new Array();
@@ -33,10 +38,37 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
 
     this.fromDate.setHours(0,0,0,0);
     this.toDate.setHours(23,59,59,999);
+
+    this.sensorOld = this.sensor;
+    this.unitConverterSelected = ''+this.sensor.unitKnowledgeId;
+    this.conversionService.getConversionFactorByFromId(this.unitConverterSelected)
+      .subscribe(conversionFactors => this.conversionFactors = conversionFactors);
   }
 
   ngOnChanges(changes: SimpleChanges) {
 
+  }
+
+
+  onChangeObj(event) {
+    let value = new Number(event.value);
+    console.log(value);
+    if(value >= 0){
+      this.changeMeasue(this.conversionFactors[event.value].conversionFactorMul,
+        this.conversionFactors[event.value].conversionFactorAdd,
+        this.conversionFactors[event.value].toSymbol);
+    }else{
+      console.log(this.sensorOld);
+      this.sensor = this.sensorOld;
+    }
+  }
+
+  changeMeasue(mul,add,symbol){
+    this.sensor.measure.quantity = (this.sensor.measure.quantity * mul) + add;
+    this.sensor.minMeasure.quantity = (this.sensor.minMeasure.quantity * mul) + add;
+    this.sensor.maxMeasure.quantity = (this.sensor.maxMeasure.quantity * mul) + add;
+
+    this.sensor.symbol = symbol;
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {

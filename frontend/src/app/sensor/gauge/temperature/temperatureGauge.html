@@ -4,10 +4,20 @@
 		<mat-tab label="Current data">
 			<div class="weather-temperature-div">
 				<mat-grid-list cols="3" style="margin-top:40px" rowHeight="200px">
-  				<mat-grid-tile [colspan]="1" [rowspan]="1"><img src="assets/images/weather-temperature-icons_354261.png" width="100px" height="100px" /></mat-grid-tile>
+  				<mat-grid-tile [colspan]="1" [rowspan]="1">
+							<img src="assets/images/weather-temperature-icons_354261.png" width="100px" height="100px" />
+					</mat-grid-tile>
   				<mat-grid-tile [colspan]="2" [rowspan]="1">
 						<div *ngIf="sensor.measure" class="temperature-sensor-value">
 							<mat-list>
+								<mat-form-field>
+									<mat-select placeholder="Conversion" (change)="onChangeObj($event)">
+										<mat-option *ngFor="let factor of conversionFactors; let i = index" [value]="i">
+											{{ factor.fromSymbol }} => {{factor.toSymbol}}
+										</mat-option>
+										<mat-option [value]="-1">restore value</mat-option>
+									</mat-select>
+								</mat-form-field>
   							<mat-list-item class="actual-temperature" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.measure.quantity | number:'.1'}}{{sensor.measure.symbol}}</mat-list-item>
   							<mat-divider></mat-divider>
   							<mat-list-item>

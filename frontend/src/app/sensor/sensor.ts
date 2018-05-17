@@ -8,5 +8,5 @@ export interface Sensor {
   maxMeasure: Measure;
   measure: Measure;
   minMeasure: Measure;
-  conversionFactor: number;
+  unitKnowledgeId: number;
 }

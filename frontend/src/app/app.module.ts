@@ -14,6 +14,7 @@ import { AgmCoreModule } from '@agm/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SensorComponent } from './sensor/sensor.component';
 import { DialogDeleteSensor } from './sensor/sheet/delete/dialogDeleteSensor.component';
+import { DialogEditSensor } from './sensor/sheet/edit/dialogEditSensor.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TemperatureGaugeComponent } from './sensor/gauge/temperature/temperatureGauge.component';
 import { WindspeedGaugeComponent } from './sensor/gauge/windspeed/windspeedGauge.component';
@@ -29,7 +30,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 const appRoute: Routes = [
-      {path: 'sensor/:weather', component: SensorComponent},
+      {path: 'sensor/', component: SensorComponent},
       {path: '', component: WeatherStationComponent},
       { path: 'login', component: LoginComponent },
       { path: 'createSensor', component: CreateSensorComponent },
@@ -38,7 +39,7 @@ const appRoute: Routes = [
       { path: '**', redirectTo: '' }];
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps,DialogDeleteSensor ,SensorComponent, WeatherStationComponent,
+  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps,DialogDeleteSensor,DialogEditSensor ,SensorComponent, WeatherStationComponent,
         TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent, RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
         RegisterComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
@@ -48,7 +49,7 @@ const appRoute: Routes = [
     }),
     RouterModule.forRoot(appRoute)],
   providers: [] ,
-  entryComponents: [DialogMaps,DialogDeleteSensor],
+  entryComponents: [DialogMaps,DialogDeleteSensor,DialogEditSensor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

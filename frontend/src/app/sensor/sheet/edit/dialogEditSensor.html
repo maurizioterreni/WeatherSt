@@ -1,0 +1,17 @@
+<div class="edit-dialog-title">
+<mat-dialog-content class="accent-color">
+  <h2>Edit Sensor</h2>
+  <form class="edit-sensor-form" (submit)="editSensor($event)">
+    <mat-form-field class="edit-sensor-form-width">
+      <mat-select placeholder="Chose sensor type" [(ngModel)]="selectedSensorKnowledge"  name="-1">
+        <mat-option *ngFor="let sensorK of sensorKnowledges" [value]="sensorK.id">
+          {{ sensorK.description }} [{{sensorK.symbol}}]
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="create-sensor-form-width">
+      <button mat-button>Edit</button>
+    </div>
+  </form>
+</mat-dialog-content>
+</div>

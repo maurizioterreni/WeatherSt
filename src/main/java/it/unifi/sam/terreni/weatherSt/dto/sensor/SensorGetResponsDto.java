@@ -13,7 +13,7 @@ public class SensorGetResponsDto extends BaseDto{
 	private MeasureDto maxMeasure;
 	private MeasureDto measure;
 	private MeasureDto minMeasure;
-	private Float conversionFactor;
+	private Long unitKnowledgeId;
 	
 	public SensorGetResponsDto() {
 		
@@ -58,12 +58,12 @@ public class SensorGetResponsDto extends BaseDto{
 	
 //	public 
 	
-	public Float getConversionFactor() {
-		return conversionFactor;
+	public Long getUnitKnowledgeId() {
+		return unitKnowledgeId;
 	}
 
-	public void setConversionFactor(Float conversionFactor) {
-		this.conversionFactor = conversionFactor;
+	public void setUnitKnowledgeId(Long unitKnowledgeId) {
+		this.unitKnowledgeId = unitKnowledgeId;
 	}
 
 	public MeasureDto getMaxMeasure() {
@@ -100,7 +100,7 @@ public class SensorGetResponsDto extends BaseDto{
 		private String name;
 		private MeasureDto maxMeasure;
 		private MeasureDto measure;
-		private Float conversionFactor;
+		private Long unitKnowledgeId;
 		private MeasureDto minMeasure;
 		
 		public SensorGetResponsDtoBuilder id(Long id) {
@@ -131,8 +131,8 @@ public class SensorGetResponsDto extends BaseDto{
 			this.minMeasure = minMeasure;
 			return this;
 		}
-		public SensorGetResponsDtoBuilder conversionFactor(Float conversionFactor) {
-			this.conversionFactor = conversionFactor;
+		public SensorGetResponsDtoBuilder unitKnowledgeId(Long unitKnowledgeId) {
+			this.unitKnowledgeId = unitKnowledgeId;
 			return this;
 		}
 		
@@ -148,7 +148,7 @@ public class SensorGetResponsDto extends BaseDto{
 			dto.setMaxMeasure(maxMeasure);
 			dto.setMeasure(measure);
 			dto.setMinMeasure(minMeasure);
-			dto.setConversionFactor(conversionFactor);
+			dto.setUnitKnowledgeId(unitKnowledgeId);
 					
 			return dto;
 		}

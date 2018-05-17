@@ -20,7 +20,8 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 	@ManyToOne
 	private UnitMeasureKnowledge toUnitMeasure;
 	
-	private Float conversionFactor;
+	private Float conversionFactorMul;
+	private Float conversionFactorAdd;
 
 	ConversionFactor(){
 		super();
@@ -55,13 +56,24 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 	}
 
 
-	public Float getConversionFactor() {
-		return conversionFactor;
+	public Float getConversionFactorMul() {
+		return conversionFactorMul;
 	}
 
 
-	public void setConversionFactor(Float conversionFactor) {
-		this.conversionFactor = conversionFactor;
+	public void setConversionFactorMul(Float conversionFactorMul) {
+		this.conversionFactorMul = conversionFactorMul;
+	}
+
+	
+
+	public Float getConversionFactorAdd() {
+		return conversionFactorAdd;
+	}
+
+
+	public void setConversionFactorAdd(Float conversionFactorAdd) {
+		this.conversionFactorAdd = conversionFactorAdd;
 	}
 
 
@@ -76,7 +88,8 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 	public static class ConversionFactorBuilder{
 		private UnitMeasureKnowledge fromUnitMeasure;
 		private UnitMeasureKnowledge toUnitMeasure;
-		private Float conversionFactor;
+		private Float conversionFactorMul;
+		private Float conversionFactorAdd;
 		
 		public ConversionFactorBuilder fromUnitMeasure(UnitMeasureKnowledge fromUnitMeasure) {
 			this.fromUnitMeasure = fromUnitMeasure;
@@ -86,14 +99,19 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 			this.toUnitMeasure = toUnitMeasure;
 			return this;
 		}
-		public ConversionFactorBuilder conversionFactor(Float conversionFactor) {
-			this.conversionFactor = conversionFactor;
+		public ConversionFactorBuilder conversionFactorMul(Float conversionFactorMul) {
+			this.conversionFactorMul = conversionFactorMul;
+			return this;
+		}
+		public ConversionFactorBuilder conversionFactorAdd(Float conversionFactorAdd) {
+			this.conversionFactorAdd = conversionFactorAdd;
 			return this;
 		}
 		public ConversionFactor build() {
 			ConversionFactor factor = ModelFactory.conversionFactor();
 			
-			factor.setConversionFactor(conversionFactor);
+			factor.setConversionFactorMul(conversionFactorMul);
+			factor.setConversionFactorAdd(conversionFactorAdd);
 			factor.setFromUnitMeasure(fromUnitMeasure);
 			factor.setToUnitMeasure(toUnitMeasure);
 			

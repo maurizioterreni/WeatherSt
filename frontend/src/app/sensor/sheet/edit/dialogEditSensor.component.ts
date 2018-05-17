@@ -1,48 +1,54 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject,  Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { SensorService } from '../../sensor.service';
+import { SensorKnowledge } from '../../createSensor/sensorKnowledge';
 import {MatSnackBar} from '@angular/material';
 import { User } from '../../../user/user';
 
 @Component({
-  selector: 'app-DialogDeleteSensor',
-  templateUrl: 'dialogDeleteSensor.html',
-  styleUrls: ['dialogDeleteSensor.css'],
+  selector: 'app-DialogEditSensor',
+  templateUrl: 'dialogEditSensor.html',
+  styleUrls: ['dialogEditSensor.css'],
   providers: [ SensorService ]
 })
-export class DialogDeleteSensor {
+export class DialogEditSensor implements OnInit {
   private user : User;
+  sensorKnowledges: SensorKnowledge[];
+  selectedSensorKnowledge: string;
 
   constructor(
     private snackBar: MatSnackBar,
     private _sensor: SensorService,
-    public dialogRef: MatDialogRef<DialogDeleteSensor>,
+    public dialogRef: MatDialogRef<DialogEditSensor>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
       this.user = JSON.parse(sessionStorage.getItem("currentUser"));//sessionStorage  localStorage
     }
 
+  ngOnInit() {
+      this.selectedSensorKnowledge = '0';
+      this._sensor.getAllSensorKnowledge()
+        .subscribe(sensorKnowledges => this.sensorKnowledges = sensorKnowledges);
+  }
 
-  cancelSensor(): void{
-    if(this.user != null){
-      this._sensor.deleteSensor(this.data.sensorId, this.user)
-        .subscribe((res: any) => {
-          this.snackBar.open("Sensor deleted correctly", null, {duration: 3000,});
-            this.closeDialog(Number(this.data.sensorId));
+  editSensor(e){
+
+    this._sensor.editSensor(this.data.sensorId,this.selectedSensorKnowledge, this.user)
+      .subscribe(
+        res => {
+            this.dialogRef.close();
           },
           err => {
-            this.snackBar.open("Generic Error!", null, {duration: 3000,});
-            this.closeDialog(-1);
-          });
-    }else{
-      this.snackBar.open("User not valid", null, {duration: 3000,});
-    }
+            console.log('ERROR');
+          //openSnackBar("User or Password wrong", "undo");
+
+      });
   }
 
   onNoClick(): void {
-    this.closeDialog(-1);
+    this.closeDialog();
   }
 
-  closeDialog(sensorId: number): void{
-    this.dialogRef.close(sensorId);
+  closeDialog(): void{
+    this.dialogRef.close();
   }
 }

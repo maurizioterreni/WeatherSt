@@ -1,5 +1,4 @@
-import { Sensor } from './sensor';
-import { User } from '../user/user';
+import { ConversionFactor } from './ConversionFactor';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -11,37 +10,30 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
 @Injectable()
-export class SensorService {
+export class ConversionFactorService {
   constructor(private http: HttpClient) { }
-   getSensor(sensorId: string): Observable<Object> {
+   getConversionFactorByFromId(unitId: string): Observable<ConversionFactor[]> {
+     
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
-        .set('sensorId', sensorId)
-        .set('unitMeasureId', '1');
+        .set('fronUnitId', unitId);
 
-      return this.http.get("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/",  {headers} );
+      return this.http.get("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/getAllFromUnit",  {headers} )
+        .map((response) => <ConversionFactor[]> response);
    }
 
-
-   deleteSensor(sensorId: string, user: User) {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .set('sensorId', '' + sensorId)
-        .set('weatherId', '' + user.weatherId)
-        .set('token', '' + user.token);
-
-      return this.http.delete("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/",  {headers} );
-   }
-
-   createSensor(sensorTypeId: string, user: User) {
+   createConversionFactor(fronUnitId: string, toUnitId: string, conversionMul:string,conversionAdd:string, user: User) {
        const headers = new HttpHeaders()
          .set('Content-Type', 'application/json')
          .set('token', user.token)
+         .set('fronUnitId', fronUnitId)
+         .set('toUnitId', toUnitId)
+         .set('conversionMul', conversionMul)
+         .set('conversionAdd', conversionAdd);
 
-       return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor',
-           JSON.stringify({ weatherId: user.weatherId, sensorTypeId: sensorTypeId }), {headers})
-         .map(sensor => {
-             return sensor;
+       return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/', {headers})
+         .map(conversionFactor => {
+             return conversionFactor;
          });
    }
 

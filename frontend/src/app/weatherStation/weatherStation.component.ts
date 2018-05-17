@@ -29,14 +29,10 @@ export class WeatherStationComponent {
         .subscribe(weatherStations => this.weatherStations = weatherStations);
     }
     openWeatherStation(sensorsId: number[], weatherId: string) {
-      console.log(weatherId);
       sessionStorage.setItem('currentWeatherSelected', weatherId);
       sessionStorage.setItem('currentSensorSelected', JSON.stringify(sensorsId));
-      let parsing = '';
-      for (const entry of sensorsId) {
-        parsing += entry + '#';
-      }
-      this.router.navigate(['/sensor', parsing]);
+
+      this.router.navigate(['/sensor','']);
     }
     openMap(longitude: string, latitude: string) {
        this.dialog.open(DialogMaps, {

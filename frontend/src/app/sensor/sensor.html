@@ -12,7 +12,7 @@
 						<app-pressure-gauge *ngIf="sensor.description=='Pressure sensor'" [sensor]="sensor"></app-pressure-gauge>
 					</mat-card-content>
 					<mat-card-actions *ngIf="user && weatherStationId && user.weatherId==weatherStationId">
-    				<button mat-button><mat-icon>mode_edit</mat-icon> EDIT</button>
+    				<button mat-button (click)="openEditSensorSheet(sensor.id)"><mat-icon>mode_edit</mat-icon>EDIT</button>
     				<button mat-button (click)="openDeleteSensorSheet(sensor.id)"><mat-icon>delete</mat-icon>DELETE</button>
   				</mat-card-actions>
 	</mat-card>
