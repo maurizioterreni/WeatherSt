@@ -3,4 +3,5 @@ export interface MeasureChart {
     minQuantity: string;
     maxQuantity: string;
     dateTime: string;
+    unitId: string;
 }

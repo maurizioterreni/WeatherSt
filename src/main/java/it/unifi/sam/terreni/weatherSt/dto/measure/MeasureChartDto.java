@@ -1,19 +1,22 @@
 package it.unifi.sam.terreni.weatherSt.dto.measure;
 
-import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 import javax.annotation.Generated;
+
+import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
 public class MeasureChartDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	private String minQuantity;
 	private String maxQuantity;
 	private String dateTime;
+	private Long unitId;
 
 	@Generated("SparkTools")
 	private MeasureChartDto(Builder builder) {
 		this.minQuantity = builder.minQuantity;
 		this.maxQuantity = builder.maxQuantity;
 		this.dateTime = builder.dateTime;
+		this.unitId = builder.unitId;
 	}
 	
 	public MeasureChartDto() {
@@ -47,11 +50,22 @@ public class MeasureChartDto extends BaseDto{
 	public static Builder builder() {
 		return new Builder();
 	}
+	
+	public Long getUnitId() {
+		return unitId;
+	}
+
+	public void setUnitId(Long unitId) {
+		this.unitId = unitId;
+	}
+
+
 
 	public static final class Builder {
 		private String minQuantity;
 		private String maxQuantity;
 		private String dateTime;
+		private Long unitId;
 
 		private Builder() {
 		}
@@ -68,6 +82,11 @@ public class MeasureChartDto extends BaseDto{
 
 		public Builder withDateTime(String dateTime) {
 			this.dateTime = dateTime;
+			return this;
+		}
+		
+		public Builder withUnitId(Long unitId) {
+			this.unitId = unitId;
 			return this;
 		}
 

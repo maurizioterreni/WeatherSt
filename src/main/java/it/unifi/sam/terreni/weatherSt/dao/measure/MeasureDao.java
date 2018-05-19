@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureChartDto;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.GroupByClass;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
@@ -58,7 +59,7 @@ public class MeasureDao {
 	public List<MeasureChartDto> getLotOfMeasureDtoBetweenDate(Sensor sensor, LocalDateTime fromDate, LocalDateTime toDate, String groupby){
 		try {
 			TypedQuery<Object[]> query = entityManager.createQuery(
-					"SELECT m.localDateTime, max(quantity), min(quantity)  FROM Measure m where "
+					"SELECT m.localDateTime, max(quantity), min(quantity), m.unitMeasure  FROM Measure m where "
 					+ " m.sensor = :sensor AND (m.localDateTime >= :fromDate AND m.localDateTime < :toDate) "
 					+ " group by " + groupby
 					+ " order by m.localDateTime asc", Object[].class)
@@ -85,6 +86,7 @@ public class MeasureDao {
 						.withDateTime(StringUtils.locatDateTimeToString((LocalDateTime) result[0], pattern))
 						.withMaxQuantity(StringUtils.floatToString((Float) result[1]))
 						.withMinQuantity(StringUtils.floatToString((Float) result[2]))
+						.withUnitId(((UnitMeasureKnowledge) result[3]).getId())
 						.build());
 			}
 			

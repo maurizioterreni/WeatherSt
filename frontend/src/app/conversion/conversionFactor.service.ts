@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SensorKnowledge } from './createSensor/sensorKnowledge';
+import { User } from '../user/user';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
@@ -13,13 +13,17 @@ import 'rxjs/add/operator/do';
 export class ConversionFactorService {
   constructor(private http: HttpClient) { }
    getConversionFactorByFromId(unitId: string): Observable<ConversionFactor[]> {
-     
+
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
         .set('fronUnitId', unitId);
 
       return this.http.get("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/getAllFromUnit",  {headers} )
-        .map((response) => <ConversionFactor[]> response);
+        .map((response) => {
+          let conv = <ConversionFactor[]> response;
+          return conv;
+
+        });
    }
 
    createConversionFactor(fronUnitId: string, toUnitId: string, conversionMul:string,conversionAdd:string, user: User) {
@@ -48,13 +52,5 @@ export class ConversionFactorService {
 
       return this.http.put("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/",  {headers} );
 
-   }
-
-   getAllSensorKnowledge(): Observable<SensorKnowledge[]> {
-      const headers = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-
-      return this.http.get('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/sensorType' , {headers})
-        .map((response) => <SensorKnowledge[]> response);
    }
 }

@@ -7,6 +7,7 @@ import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MeasureService } from '../../../measure/measure.service';
+import { Measure } from '../../../measure/measure';
 
 @Component({
   selector: 'app-temperature-gauge',
@@ -16,7 +17,6 @@ import { MeasureService } from '../../../measure/measure.service';
 })
 export class TemperatureGaugeComponent implements OnInit, OnChanges {
   @Input() sensor: Sensor;
-  sensorOld: Sensor;
   chart: Chart;
   fromDate: Date;
   toDate: Date;
@@ -24,7 +24,7 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
   maxQuantityArray: string[];
   minQuantityArray: string[];
   labelArray: string[];
-  unitConverterSelected = '';
+  unitConverterSelected = -1;
 
   constructor(private meausureService: MeasureService, private conversionService: ConversionFactorService) {
     this.maxQuantityArray = new Array();
@@ -39,9 +39,8 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
     this.fromDate.setHours(0,0,0,0);
     this.toDate.setHours(23,59,59,999);
 
-    this.sensorOld = this.sensor;
-    this.unitConverterSelected = ''+this.sensor.unitKnowledgeId;
-    this.conversionService.getConversionFactorByFromId(this.unitConverterSelected)
+    //this.unitConverterSelected = this.sensor.unitKnowledgeId;
+    this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
       .subscribe(conversionFactors => this.conversionFactors = conversionFactors);
   }
 
@@ -51,24 +50,46 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
 
 
   onChangeObj(event) {
-    let value = new Number(event.value);
-    console.log(value);
-    if(value >= 0){
-      this.changeMeasue(this.conversionFactors[event.value].conversionFactorMul,
-        this.conversionFactors[event.value].conversionFactorAdd,
-        this.conversionFactors[event.value].toSymbol);
-    }else{
-      console.log(this.sensorOld);
-      this.sensor = this.sensorOld;
-    }
+    this.unitConverterSelected = event.value + 0;
   }
 
-  changeMeasue(mul,add,symbol){
-    this.sensor.measure.quantity = (this.sensor.measure.quantity * mul) + add;
-    this.sensor.minMeasure.quantity = (this.sensor.minMeasure.quantity * mul) + add;
-    this.sensor.maxMeasure.quantity = (this.sensor.maxMeasure.quantity * mul) + add;
+  isConversionfactor(): boolean{
+    if(this.unitConverterSelected > -1){
+      return true;
+    }
 
-    this.sensor.symbol = symbol;
+    return false;
+  }
+
+  getMeasureSymbol(measure: Measure){
+    if(this.isConversionfactor()){
+        return this.conversionFactors[this.unitConverterSelected].toSymbol;
+    }
+
+    return measure.symbol;
+  }
+
+  getMeasureQuantity(measure: Measure) : string{
+    if(this.isConversionfactor()){
+      let mul = this.conversionFactors[this.unitConverterSelected].conversionFactorMul + 0;
+      let add = this.conversionFactors[this.unitConverterSelected].conversionFactorAdd + 0;
+      let qt = ((Number(measure.quantity) * mul) + add);
+      return qt + '';
+    }
+
+    return measure.quantity;
+  }
+
+
+  getMeasureQuantityByStr(measure: string) : string{
+    if(this.isConversionfactor()){
+      let mul = this.conversionFactors[this.unitConverterSelected].conversionFactorMul + 0;
+      let add = this.conversionFactors[this.unitConverterSelected].conversionFactorAdd + 0;
+      let qt = ((Number(measure) * mul) + add);
+      return qt + '';
+    }
+
+    return measure;
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -92,8 +113,8 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.maxQuantityArray.push(m.maxQuantity);
-          this.minQuantityArray.push(m.minQuantity);
+          this.maxQuantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
+          this.minQuantityArray.push(this.getMeasureQuantityByStr(m.minQuantity));
         }
         this.initChart();
       });
@@ -145,10 +166,18 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.maxQuantityArray.push(m.maxQuantity);
-          this.minQuantityArray.push(m.minQuantity);
+          this.maxQuantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
+          this.minQuantityArray.push(this.getMeasureQuantityByStr(m.minQuantity));
         }
         this.initChart();
       });
   }
+
+
+    checkConversionFactor(conversionFactors: ConversionFactor[]): boolean{
+      if(conversionFactors != null && conversionFactors.length > 0)
+        return true;
+
+      return false;
+    }
 }

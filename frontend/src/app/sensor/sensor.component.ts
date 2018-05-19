@@ -46,7 +46,7 @@ export class SensorComponent {
         sensorAsync.push(this._sensor.getSensor(''+id));
     }
     forkJoin(sensorAsync).subscribe(results => {
-      console.log(results);
+    //  console.log(results);
       for (const i of results) {
         if(i != null)
           this.sensors.push(<Sensor> i);

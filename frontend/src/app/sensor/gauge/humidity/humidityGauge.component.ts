@@ -1,5 +1,8 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Sensor } from '../../sensor';
+import { ConversionFactor } from '../../../conversion/conversionFactor';
+import { ConversionFactorService } from '../../../conversion/ConversionFactor.service';
+import { Measure } from '../../../measure/measure';
 import { MeasureChart } from '../../../measure/measureChart';
 import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
@@ -10,7 +13,7 @@ import { MeasureService } from '../../../measure/measure.service';
   selector: 'app-humidity-gauge',
   templateUrl: './humidityGauge.html',
   styleUrls: ['./humidityGauge.css'],
-  providers: [MeasureService]
+  providers: [MeasureService,ConversionFactorService]
 })
 export class HumidityGaugeComponent implements OnInit, OnChanges {
   @Input() sensor: Sensor;
@@ -20,8 +23,10 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
   maxQuantityArray: string[];
   minQuantityArray: string[];
   labelArray: string[];
+  conversionFactors: ConversionFactor[];
+  unitConverterSelected = -1;
 
-  constructor(private meausureService: MeasureService) {
+  constructor(private meausureService: MeasureService,private conversionService: ConversionFactorService) {
       this.maxQuantityArray = new Array();
       this.minQuantityArray = new Array();
       this.labelArray = new Array();
@@ -33,10 +38,56 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
 
     this.fromDate.setHours(0,0,0,0);
     this.toDate.setHours(23,59,59,999);
+
+    this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
+        .subscribe(conversionFactors => this.conversionFactors = conversionFactors);
   }
 
   ngOnChanges(changes: SimpleChanges) {
 
+  }
+
+  onChangeObj(event) {
+    this.unitConverterSelected = event.value + 0;
+  }
+
+  isConversionfactor(): boolean{
+    if(this.unitConverterSelected > -1){
+      return true;
+    }
+
+    return false;
+  }
+
+  getMeasureSymbol(measure: Measure){
+    if(this.isConversionfactor()){
+        return this.conversionFactors[this.unitConverterSelected].toSymbol;
+    }
+
+    return measure.symbol;
+  }
+
+  getMeasureQuantity(measure: Measure) : string{
+    if(this.isConversionfactor()){
+      let mul = this.conversionFactors[this.unitConverterSelected].conversionFactorMul + 0;
+      let add = this.conversionFactors[this.unitConverterSelected].conversionFactorAdd + 0;
+      let qt = ((Number(measure.quantity) * mul) + add);
+      return qt + '';
+    }
+
+    return measure.quantity;
+  }
+
+
+  getMeasureQuantityByStr(measure: string) : string{
+    if(this.isConversionfactor()){
+      let mul = this.conversionFactors[this.unitConverterSelected].conversionFactorMul + 0;
+      let add = this.conversionFactors[this.unitConverterSelected].conversionFactorAdd + 0;
+      let qt = ((Number(measure) * mul) + add);
+      return qt + '';
+    }
+
+    return measure;
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
@@ -60,8 +111,8 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.maxQuantityArray.push(m.maxQuantity);
-          this.minQuantityArray.push(m.minQuantity);
+          this.maxQuantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
+          this.minQuantityArray.push(this.getMeasureQuantityByStr(m.minQuantity));
         }
         this.initChart();
       });
@@ -113,10 +164,18 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.maxQuantityArray.push(m.maxQuantity);
-          this.minQuantityArray.push(m.minQuantity);
+          this.maxQuantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
+          this.minQuantityArray.push(this.getMeasureQuantityByStr(m.minQuantity));
         }
         this.initChart();
       });
+  }
+
+
+  checkConversionFactor(conversionFactors: ConversionFactor[]): boolean{
+    if(conversionFactors != null && conversionFactors.length > 0)
+      return true;
+
+    return false;
   }
 }

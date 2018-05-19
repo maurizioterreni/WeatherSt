@@ -8,10 +8,18 @@
   				<mat-grid-tile [colspan]="2" [rowspan]="1">
 						<div *ngIf="sensor.measure"  class="windsdirection-sensor-value">
 							<mat-list>
+								<mat-form-field *ngIf="checkConversionFactor(conversionFactors)">
+								  <mat-select placeholder="Conversion" (change)="onChangeObj($event)">
+								    <mat-option *ngFor="let factor of conversionFactors; let i = index" [value]="i">
+								      {{ factor.fromSymbol }} => {{factor.toSymbol}}
+								    </mat-option>
+								    <mat-option [value]="-1">Restore Value</mat-option>
+								  </mat-select>
+								</mat-form-field>
   							<mat-list-item class="actual-windsdirection" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{getAngle(sensor.measure.quantity)}}</mat-list-item>
   							<mat-divider></mat-divider>
   							<mat-list-item>
-									<p *ngIf="sensor.maxMeasure else nan_max_mex" matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-windsdirection">{{sensor.measure.quantity | number:'.0'}}{{sensor.measure.symbol}}</p><ng-template #nan_max_mex ><p class="max-windsdirection" matTooltip="no data">NaN</p></ng-template>
+									<p *ngIf="sensor.maxMeasure else nan_max_mex" matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-windsdirection">{{getMeasureQuantity(sensor.maxMeasure) | number:'.1'}}{{getMeasureSymbol(sensor.maxMeasure)}}</p><ng-template #nan_max_mex ><p class="max-windsdirection" matTooltip="no data">NaN</p></ng-template>
 								</mat-list-item>
 							</mat-list>
 						</div>

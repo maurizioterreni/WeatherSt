@@ -8,12 +8,20 @@
   				<mat-grid-tile [colspan]="2" [rowspan]="1">
 						<div *ngIf="sensor.measure"  class="windspeed-sensor-value">
 							<mat-list>
-  							<mat-list-item class="actual-windspeed" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.measure.quantity | number:'.1'}}{{sensor.measure.symbol}}</mat-list-item>
+								<mat-form-field *ngIf="checkConversionFactor(conversionFactors)">
+								  <mat-select placeholder="Conversion" (change)="onChangeObj($event)">
+								    <mat-option *ngFor="let factor of conversionFactors; let i = index" [value]="i">
+								      {{ factor.fromSymbol }} => {{factor.toSymbol}}
+								    </mat-option>
+								    <mat-option [value]="-1">Restore Value</mat-option>
+								  </mat-select>
+								</mat-form-field>
+  							<mat-list-item class="actual-windspeed" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{getMeasureQuantity(sensor.measure) | number:'.1'}}{{getMeasureSymbol(sensor.measure)}}</mat-list-item>
   							<mat-divider></mat-divider>
   							<mat-list-item>
-									<p *ngIf="sensor.maxMeasure else nan_max_mex" matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-windspeed">{{sensor.maxMeasure.quantity | number:'.1'}}{{sensor.maxMeasure.symbol}}</p><ng-template #nan_max_mex><p class="max-windspeed" matTooltip="no data">NaN</p></ng-template>
+									<p *ngIf="sensor.maxMeasure else nan_max_mex" matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="max-windspeed">{{getMeasureQuantity(sensor.maxMeasure) | number:'.1'}}{{getMeasureSymbol(sensor.maxMeasure)}}</p><ng-template #nan_max_mex><p class="max-windspeed" matTooltip="no data">NaN</p></ng-template>
 														&nbsp;&nbsp;|&nbsp;&nbsp;
-									<p *ngIf="sensor.minMeasure else nan_min_mex" matTooltip="{{sensor.minMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="min-windspeed">{{sensor.minMeasure.quantity | number:'.1'}}{{sensor.minMeasure.symbol}}</p><ng-template #nan_min_mex><p class="min-windspeed" matTooltip="no data">NaN</p></ng-template>
+									<p *ngIf="sensor.minMeasure else nan_min_mex" matTooltip="{{sensor.minMeasure.dateTime | date: 'd/M/yy, H:mm'}}" class="min-windspeed">{{getMeasureQuantity(sensor.minMeasure) | number:'.1'}}{{getMeasureSymbol(sensor.minMeasure)}}</p><ng-template #nan_min_mex><p class="min-windspeed" matTooltip="no data">NaN</p></ng-template>
 								</mat-list-item>
 							</mat-list>
 						</div>
