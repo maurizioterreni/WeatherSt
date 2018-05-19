@@ -20,8 +20,8 @@ import { AuthenticationService } from '../dialog/login/authentication.service';
 })
 export class HeaderComponent  implements OnInit {
   // -----------------------------------------------------------------------//
-  private title = 'Weather Station';
-  private user : User;
+  public title = 'Weather Station';
+  public user : User;
   // -----------------------------------------------------------------------//
   constructor(public dialog: MatDialog,private authenticationService: AuthenticationService,) {
     if(sessionStorage.getItem("currentUser"))

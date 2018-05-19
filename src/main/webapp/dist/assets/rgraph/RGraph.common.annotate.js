@@ -8,7 +8,7 @@ RG.Registry.Set('annotate.actions',[obj.Get('chart.annotate.color')]);obj.contex
 return false;};RG.annotating_window_onmouseup=function(e)
 {var obj=RG.Registry.Get('chart.annotating');var win=window;if(e.button!=0||!obj){return;}
 var tags=doc.getElementsByTagName('canvas');for(var i=0;i<tags.length;++i){if(tags[i].__object__){tags[i].__object__.Set('chart.mousedown',false);}}
-if(RG.Registry.Get('annotate.actions')&&RG.Registry.Get('annotate.actions').length>0&&win.localStorage){var id='__rgraph_annotations_'+e.target.id+'__';var annotations=win.localStorage[id]?win.localStorage[id]+'|':'';annotations+=RG.Registry.Get('annotate.actions');win.localStorage[id]=annotations;}
+if(RG.Registry.Get('annotate.actions')&&RG.Registry.Get('annotate.actions').length>0&&win.sessionStorage){var id='__rgraph_annotations_'+e.target.id+'__';var annotations=win.sessionStorage[id]?win.sessionStorage[id]+'|':'';annotations+=RG.Registry.Get('annotate.actions');win.sessionStorage[id]=annotations;}
 RG.Registry.Set('annotate.actions',[]);RG.FireCustomEvent(obj,'onannotateend');};RGraph.annotating_canvas_onmousemove=function(e)
 {var obj=e.target.__object__;var prop=obj.properties;var mouseXY=RG.getMouseXY(e);var mouseX=mouseXY[0];var mouseY=mouseXY[1];var lastXY=RG.Registry.Get('annotate.last.coordinates');if(obj.Get('chart.mousedown')){if(obj.type==='bar'&&prop['chart.variant']==='3d'){var adjustment=prop['chart.variant.threed.angle']*mouseXY[0];mouseY-=adjustment;}
 obj.context.beginPath();if(!lastXY){obj.context.moveTo(mouseX,mouseY)}else{obj.context.strokeStyle=obj.properties['chart.annotate.color'];obj.context.moveTo(lastXY[0],lastXY[1]);obj.context.lineTo(mouseX,mouseY);}
@@ -26,9 +26,9 @@ RGraph.Registry.Set('chart.palette',div);setTimeout(function(){div.style.opacity
 {RG.hidePalette();}
 e.stopPropagation();return false;};RG.clearAnnotations=RG.ClearAnnotations=function(canvas)
 {if(typeof canvas==='string'){var id=canvas;canvas=doc.getElementById(id);}else{var id=canvas.id}
-var obj=canvas.__object__;if(win.localStorage&&win.localStorage['__rgraph_annotations_'+id+'__']&&win.localStorage['__rgraph_annotations_'+id+'__'].length){win.localStorage['__rgraph_annotations_'+id+'__']=[];RGraph.FireCustomEvent(obj,'onannotateclear');}};RG.replayAnnotations=RG.ReplayAnnotations=function(obj)
-{if(!win.localStorage){return;}
-var context=obj.context;var annotations=win.localStorage['__rgraph_annotations_'+obj.id+'__'];var i,len,move,coords;context.beginPath();context.lineWidth=obj.Get('annotate.linewidth');if(annotations&&annotations.length){annotations=annotations.split('|');}else{return;}
+var obj=canvas.__object__;if(win.sessionStorage&&win.sessionStorage['__rgraph_annotations_'+id+'__']&&win.sessionStorage['__rgraph_annotations_'+id+'__'].length){win.sessionStorage['__rgraph_annotations_'+id+'__']=[];RGraph.FireCustomEvent(obj,'onannotateclear');}};RG.replayAnnotations=RG.ReplayAnnotations=function(obj)
+{if(!win.sessionStorage){return;}
+var context=obj.context;var annotations=win.sessionStorage['__rgraph_annotations_'+obj.id+'__'];var i,len,move,coords;context.beginPath();context.lineWidth=obj.Get('annotate.linewidth');if(annotations&&annotations.length){annotations=annotations.split('|');}else{return;}
 for(i=0,len=annotations.length;i<len;++i){if(annotations[i].match(/[a-z]+/)){context.stroke();context.beginPath();context.strokeStyle=annotations[i];move=true;continue;}
 coords=annotations[i].split(',');coords[0]=Number(coords[0]);coords[1]=Number(coords[1]);if(move){context.moveTo(coords[0],coords[1]);move=false;}else{context.lineTo(coords[0],coords[1]);}}
 context.stroke();};window.addEventListener('load',function(e)
