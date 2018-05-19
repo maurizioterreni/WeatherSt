@@ -40,6 +40,8 @@ export class HeaderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(this.user == null)
         this.user = JSON.parse(sessionStorage.getItem("currentUser"));
+
+      this.router.navigate(['/','']);
     });
   //   this.dialog.open(LoginComponent, {});
   }
@@ -68,5 +70,7 @@ export class HeaderComponent implements OnInit {
   logOut(){
     this.authenticationService.logout();
     this.user = null;
+
+    this.router.navigate(['/','']);
   }
 }

@@ -4,7 +4,7 @@
 import { WeatherStationService } from './weather-station.service';
 import { WeatherStation } from './weatherstation';
 import { Component, Inject } from '@angular/core';
-
+import { User } from '../user/user';
 import { Http , Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -21,10 +21,15 @@ import {DialogMaps} from '../dialog/maps/dialog.maps.component';
 })
 export class WeatherStationComponent {
     status = true;
+    public user : User;
 
     weatherStations: WeatherStation[];
-    constructor(private _weatherStation: WeatherStationService, public dialog: MatDialog, private router: Router) {}
+    constructor(private _weatherStation: WeatherStationService, public dialog: MatDialog, private router: Router) {
+      if(sessionStorage.getItem("currentUser"))
+        this.user = JSON.parse(sessionStorage.getItem("currentUser"));
+    }
     ngOnInit(): void {
+
       this._weatherStation.getAllWeathrStation()
         .subscribe(weatherStations => this.weatherStations = weatherStations);
     }

@@ -64,7 +64,7 @@ public class WeatherStationEndPoint {
 		
 		
 	
-		return Response.status(200).entity(weatherStationDto).build();
+		return Response.status(200).entity(weatherStationToDto(weatherStation)).build();
 		
 
 	}
