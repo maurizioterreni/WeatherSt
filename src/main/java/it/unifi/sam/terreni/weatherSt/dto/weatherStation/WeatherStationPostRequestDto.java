@@ -9,6 +9,7 @@ public class WeatherStationPostRequestDto extends BaseDto{
 	private String longitude;
 	private String latitude;
 	private String description;
+	private String image;
 
 	public WeatherStationPostRequestDto() {}
 
@@ -35,11 +36,22 @@ public class WeatherStationPostRequestDto extends BaseDto{
 		this.description = description;
 	}
 	
-	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+
+
+
 	public static class WeatherStationPostRequestDtoBuilder{
 		private String longitude;
 		private String latitude;
 		private String description;
+		private String image;
 		
 		public WeatherStationPostRequestDtoBuilder longitude(String longitude) {
 			this.longitude = longitude;
@@ -50,7 +62,11 @@ public class WeatherStationPostRequestDto extends BaseDto{
 			return this;
 		}
 		public WeatherStationPostRequestDtoBuilder description(String description) {
-			this.longitude = description;
+			this.description = description;
+			return this;
+		}
+		public WeatherStationPostRequestDtoBuilder image(String image) {
+			this.image = image;
 			return this;
 		}
 		
@@ -60,6 +76,7 @@ public class WeatherStationPostRequestDto extends BaseDto{
 			weatherStation.setDescription(description);
 			weatherStation.setLatitude(latitude);
 			weatherStation.setLongitude(longitude);
+			weatherStation.setImage(image);
 			
 			return weatherStation;
 		}

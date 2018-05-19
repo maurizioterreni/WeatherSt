@@ -21,7 +21,7 @@
 
 
 	 <mat-card *ngFor="let weatherStation of weatherStations; let i = index" style="margin:10px; text-align:center;">
-	  <img mat-card-image src="https://www.weather2umbrella.com/wp-content/themes/w2u/image/svg/weather-icons/d01.svg" style="width:200px;">
+	  <img mat-card-image src="{{weatherStation.image}}" style="width:200px;">
       <mat-card-content>
         <p>{{weatherStation.description}}</p>
       </mat-card-content>

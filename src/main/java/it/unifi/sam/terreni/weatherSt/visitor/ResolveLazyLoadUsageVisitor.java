@@ -33,6 +33,9 @@ public class ResolveLazyLoadUsageVisitor implements UsageVisitor {
 		unitMeasureKnowledge.getName();
 	}
 
-	
+	@Override
+	public void visitUserProperties(UserPropertie userPropertie) {
+		userPropertie.getId();
+	}	
 }
 

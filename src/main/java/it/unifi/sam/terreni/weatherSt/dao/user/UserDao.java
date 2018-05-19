@@ -20,10 +20,33 @@ public class UserDao {
 	public User findById(Long userId){
 		return entityManager.find(User.class, userId);
 	}
+	public User fetchById(Long userId){
+		entityManager
+		.createQuery("select u "
+				+ "from User u "
+				+ "where u.id = :id", User.class)
+		.setParameter("id", userId)
+		.getResultList();
+
+		User result = entityManager.find(User.class, userId);
+
+		ResolveLazyLoadUsageVisitor visitor = new ResolveLazyLoadUsageVisitor();
+		result.getPropertie().accept(visitor);
+
+		return result;
+	}
 
 
 	public void delete(User user) {
 		entityManager.remove(user);
+		entityManager.flush();
+	}
+	public void update(User user) {
+		User persisted = findById(user.getId());
+		persisted.setPropertie(user.getPropertie());
+		persisted.setEmail(user.getEmail());
+		persisted.setPassword(user.getPassword());
+		persisted.setUsername(user.getUsername());
 		entityManager.flush();
 	}
 

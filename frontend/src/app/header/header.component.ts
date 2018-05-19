@@ -5,9 +5,10 @@ import { User } from '../user/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnInit } from '@angular/core';
 import { AppMaterialModules } from '../material.module';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { LoginComponent } from '../dialog/login/login.component';
 import { CreateSensorComponent } from '../sensor/createSensor/createSensor.component';
+import { CreateWeatherStationComponent } from '../weatherStation/createWeatherStation/createWeatherStation.component';
 import { AuthenticationService } from '../dialog/login/authentication.service';
 
 
@@ -18,7 +19,7 @@ import { AuthenticationService } from '../dialog/login/authentication.service';
   styleUrls: ['header.component.css'],
   providers: [AuthenticationService]
 })
-export class HeaderComponent  implements OnInit {
+export class HeaderComponent implements OnInit {
   // -----------------------------------------------------------------------//
   public title = 'Weather Station';
   public user : User;
@@ -51,6 +52,16 @@ export class HeaderComponent  implements OnInit {
      dialogRef.afterClosed().subscribe(result => {
        if(this.user == null)
          this.user = JSON.parse(sessionStorage.getItem("currentUser"));
+     });
+  }
+
+  createWeatherStation() {
+     let dialogRef = this.dialog.open(CreateWeatherStationComponent, {
+       data: { }
+     });
+
+     dialogRef.afterClosed().subscribe(result => {
+
      });
   }
 

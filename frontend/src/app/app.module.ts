@@ -26,7 +26,8 @@ import { HumidityGaugeComponent } from './sensor/gauge/humidity/humidityGauge.co
 import { LoginComponent } from './dialog/login/login.component';
 import { RegisterComponent } from './dialog/register/register.component';
 import { CreateSensorComponent } from './sensor/createSensor/createSensor.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { CreateWeatherStationComponent } from './weatherStation/createWeatherStation/createWeatherStation.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 const appRoute: Routes = [
@@ -34,14 +35,17 @@ const appRoute: Routes = [
       {path: '', component: WeatherStationComponent},
       { path: 'login', component: LoginComponent },
       { path: 'createSensor', component: CreateSensorComponent },
+      { path: 'createWeatherStation', component: CreateWeatherStationComponent },
       { path: 'register', component: RegisterComponent },
       // otherwise redirect to home
       { path: '**', redirectTo: '' }];
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps,DialogDeleteSensor,DialogEditSensor ,SensorComponent, WeatherStationComponent,
-        TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent, RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
-        RegisterComponent],
+  declarations: [AppComponent, HeaderComponent, CreateSensorComponent, FooterComponent, DialogMaps,DialogDeleteSensor,
+        DialogEditSensor ,SensorComponent, WeatherStationComponent,
+        TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent,
+        RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
+        RegisterComponent, CreateWeatherStationComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({

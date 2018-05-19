@@ -13,6 +13,7 @@ public class WeatherStationResponseDto extends BaseDto{
 	private String description;
 	private String longitude;
 	private String latitude;
+	private String image;
 	private List<Long> sensors;
 
 	public WeatherStationResponseDto() {
@@ -61,6 +62,14 @@ public class WeatherStationResponseDto extends BaseDto{
 		this.sensors = sensors;
 	}
 	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	public void addSensorId(Long sensorId) {
 		this.sensors.add(sensorId);
 	}

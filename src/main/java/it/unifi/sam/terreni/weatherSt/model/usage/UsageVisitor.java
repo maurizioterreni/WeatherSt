@@ -10,4 +10,5 @@ public interface UsageVisitor {
 	void visitMeasure(Measure measure);
 	void visitUserPropertie(UserPropertie userPropertie);
 	void visitUnitMeasureKnowledge(UnitMeasureKnowledge unitMeasureKnowledge);
+	void visitUserProperties(UserPropertie userPropertie);
 }

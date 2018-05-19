@@ -14,10 +14,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
+import it.unifi.sam.terreni.weatherSt.dao.user.UserDao;
 import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationResponseDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
+import it.unifi.sam.terreni.weatherSt.model.user.User;
 import it.unifi.sam.terreni.weatherSt.security.Authentication;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
@@ -26,6 +28,8 @@ import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 public class WeatherStationEndPoint {
 	@Inject
 	private WeatherStationDao weatherStationDao;
+	@Inject
+	private UserDao userDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -38,11 +42,27 @@ public class WeatherStationEndPoint {
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
 		
-		weatherStationDao.save(WeatherStation.builder()
+		
+		Long userId = Authentication.getUserIdFormToken(token);
+		
+		User user = userDao.fetchById(userId);
+		
+		if(user == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - user").build();
+		
+		WeatherStation weatherStation = WeatherStation.builder()
 				.description(weatherStationDto.getDescription())
 				.latitude(weatherStationDto.getLatitude())
 				.longitude(weatherStationDto.getLongitude())
-				.build());
+				.images(weatherStationDto.getImage())
+				.build();
+		
+		user.getPropertie().setWeatherStation(weatherStation);
+		
+		weatherStationDao.save(weatherStation);
+		userDao.update(user);
+		
+		
 	
 		return Response.status(200).entity(weatherStationDto).build();
 		
@@ -78,6 +98,7 @@ public class WeatherStationEndPoint {
 		dto.setDescription(weatherStation.getDescription());
 		dto.setLatitude(weatherStation.getLatitude());
 		dto.setLongitude(weatherStation.getLongitude());
+		dto.setImage(weatherStation.getImages());
 		
 		for (Sensor sensor : weatherStation.getSensors()) {
 			dto.addSensorId(sensor.getId());

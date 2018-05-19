@@ -3,5 +3,6 @@ export interface WeatherStation {
     longitude: string;
     latitude: string;
     description: string;
+    image: string;
     sensors: number[];
 }

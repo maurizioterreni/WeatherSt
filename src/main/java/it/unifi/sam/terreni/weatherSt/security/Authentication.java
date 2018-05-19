@@ -92,4 +92,20 @@ public class Authentication {
 
 		return user;
 	}
+	
+	public static Long getUserIdFormToken(String token) {
+		if(StringUtils.isEmpty(token))
+			return null;
+		
+		String subject = "";
+		try {
+			subject = getSubjectFromToken(token);
+		}catch (Exception e) {
+			return null;
+		}
+		
+		String []sbj = subject.split("#");
+		
+		return new Long(sbj[0]);
+	}
 }

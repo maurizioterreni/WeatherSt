@@ -72,7 +72,7 @@ public class UserPropertie extends BaseEntity implements Usage{
 	public void setWeatherStation(WeatherStation weatherStation) {
 		this.weatherStation = weatherStation;
 	}
-
+	
 	public static class UserPropertieBuilder{
 		private UserRole userRole;
 		private WeatherStation weatherStation;

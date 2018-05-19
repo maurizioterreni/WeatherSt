@@ -19,11 +19,11 @@
         <span>Log Out</span>
       </button>
       <button *ngIf="user && user.weatherId" mat-menu-item (click)="createSensor()">
-        <mat-icon>fingerprint</mat-icon>
+        <mat-icon>plus</mat-icon>
         <span>Add Sensor</span>
       </button>
-      <button *ngIf="user && !user.weatherId" mat-menu-item (click)="createWeather()">
-        <mat-icon>fingerprint</mat-icon>
+      <button *ngIf="user && !user.weatherId" mat-menu-item (click)="createWeatherStation()">
+        <mat-icon>plus</mat-icon>
         <span>Add WeatherStation</span>
       </button>
     </mat-menu>
