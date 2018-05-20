@@ -10,6 +10,7 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+      <div class="menu-width">
       <button *ngIf="user == null" mat-menu-item (click)="openLogin()">
         <mat-icon>fingerprint</mat-icon>
         <span>Sign in</span>
@@ -26,6 +27,18 @@
         <mat-icon>library_add</mat-icon>
         <span>Add WeatherStation</span>
       </button>
-      
+      <button *ngIf="user && user.userRole == 'administrator'" mat-menu-item (click)="createSensorTypeKnowledge()">
+        <mat-icon>library_add</mat-icon>
+        <span>Add Sensor Type Knowledge</span>
+      </button>
+      <button *ngIf="user && user.userRole == 'administrator'" mat-menu-item (click)="createUnitMeasureKnowledge()">
+        <mat-icon>library_add</mat-icon>
+        <span>Add Unit Measure Knowledge</span>
+      </button>
+      <button *ngIf="user && user.userRole == 'administrator'" mat-menu-item (click)="createUnitMeasureKnowledge()">
+        <mat-icon>library_add</mat-icon>
+        <span>Add Conversion Factor</span>
+      </button>
+</div>
     </mat-menu>
 </mat-toolbar>

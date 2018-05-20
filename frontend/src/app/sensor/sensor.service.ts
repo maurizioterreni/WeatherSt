@@ -65,4 +65,15 @@ export class SensorService {
       return this.http.get('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/sensorType' , {headers})
         .map((response) => <SensorKnowledge[]> response);
    }
+
+
+
+   createSensorKnowledge(user:User, description:string, unitMeasureId: string) {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('token', '' + user.token)
+
+      return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/sensorKnowledge',
+            JSON.stringify({ description: description, unitMeasureId: unitMeasureId }), {headers});
+   }
 }

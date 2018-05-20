@@ -1,0 +1,11 @@
+<mat-dialog-content class="accent-color">
+  <h1>Create new Sensor Type knowledge</h1>
+  <form class="create-sensor-knowledge-form" (submit)="createSensor($event)">
+    <mat-form-field  class="create-sensor-knowledge-form-width">
+      <input matInput #desc placeholder="Description of Sensor knowledge" (keyup.enter)="addDescription(desc.value)" (blur)="addDescription(desc.value)" maxlength="50">
+    </mat-form-field>
+    <div class="create-sensor-knowledge-form-width">
+      <button mat-button>Create</button>
+    </div>
+  </form>
+</mat-dialog-content>

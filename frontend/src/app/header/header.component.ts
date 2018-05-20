@@ -8,6 +8,7 @@ import { AppMaterialModules } from '../material.module';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { LoginComponent } from '../dialog/login/login.component';
 import { CreateSensorComponent } from '../sensor/createSensor/createSensor.component';
+import { CreateSensorKnowledgeComponent } from '../sensor/createSensorKnowledge/createSensorKnowledge.component';
 import { CreateWeatherStationComponent } from '../weatherStation/createWeatherStation/createWeatherStation.component';
 import { AuthenticationService } from '../dialog/login/authentication.service';
 
@@ -74,5 +75,23 @@ export class HeaderComponent implements OnInit {
     this.user = null;
 
     window.location.reload();
+  }
+
+  createSensorTypeKnowledge(){
+    let dialogRef = this.dialog.open(CreateSensorKnowledgeComponent, {
+      data: { }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  createUnitMeasureKnowledge(){
+    let dialogRef = this.dialog.open(CreateWeatherStationComponent, {
+      data: { }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 }
