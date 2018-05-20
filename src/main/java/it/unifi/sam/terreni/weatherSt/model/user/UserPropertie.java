@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,15 +32,19 @@ public class UserPropertie extends BaseEntity implements Usage{
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
 	@OneToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.REMOVE )
+	@JoinColumn(name = "weather_id")
 	private Set<UnitMeasureKnowledge> unitMeasure;
 	@OneToOne
 	@JoinColumn(name = "weather_id")
 	private WeatherStation weatherStation;
 
+	@ManyToMany(cascade = CascadeType.REMOVE)
+	private Set<WeatherStation> weatherStationLikes;
+
 	public static UserPropertieBuilder builder() {
 		return new UserPropertieBuilder();
 	}
-	
+
 	UserPropertie() {
 		super();
 		unitMeasure = new HashSet<>();
@@ -66,24 +71,48 @@ public class UserPropertie extends BaseEntity implements Usage{
 	public void setUnitMeasure(Set<UnitMeasureKnowledge> unitMeasure) {
 		this.unitMeasure = unitMeasure;
 	}
+	public void addUnitMeasure(UnitMeasureKnowledge unitMeasureKnowledge) {
+		if(!this.unitMeasure.contains(unitMeasureKnowledge))
+			this.unitMeasure.add(unitMeasureKnowledge);
+	}
+	public void removeUnitMeasure(UnitMeasureKnowledge unitMeasureKnowledge) {
+		this.unitMeasure.remove(unitMeasureKnowledge);
+	}
+
 	public WeatherStation getWeatherStation() {
 		return weatherStation;
 	}
 	public void setWeatherStation(WeatherStation weatherStation) {
 		this.weatherStation = weatherStation;
 	}
-	
+	public Set<WeatherStation> getWeatherStationLikes() {
+		return weatherStationLikes;
+	}
+	public void addWeatherStationLikes(WeatherStation weatherStation) {
+		if(!this.weatherStationLikes.contains(weatherStation))
+			this.weatherStationLikes.add(weatherStation);
+	}
+	public void removeWeatherStationLikes(WeatherStation weatherStation) {
+		this.weatherStationLikes.remove(weatherStation);
+	}
+
+	public void setWeatherStationLikes(Set<WeatherStation> weatherStationLikes) {
+		this.weatherStationLikes = weatherStationLikes;
+	}
+
+
 	public static class UserPropertieBuilder{
 		private UserRole userRole;
 		private WeatherStation weatherStation;
 		private Set<UnitMeasureKnowledge> unitMeasure;
 		private User user;
-		
+		private Set<WeatherStation> weatherStationLikes;
+
 		public UserPropertieBuilder userRole(UserRole userRole){
 			this.userRole = userRole;
 			return this;
 		}
-		
+
 		public UserPropertieBuilder weatherStation(WeatherStation weatherStation){
 			this.weatherStation = weatherStation;
 			return this;
@@ -96,19 +125,25 @@ public class UserPropertie extends BaseEntity implements Usage{
 			this.user = user;
 			return this;
 		}
-		
+		public UserPropertieBuilder weatherStationLikes(Set<WeatherStation> weatherStationLikes){
+			this.weatherStationLikes = weatherStationLikes;
+			return this;
+		}
+
+
 		public UserPropertie build() {
 			UserPropertie obj = ModelFactory.userPropertie();
-			
+
 			obj.setUnitMeasure(unitMeasure);
 			obj.setUser(user);
 			obj.setUserRole(userRole);
 			obj.setWeatherStation(weatherStation);
-			
+			obj.setWeatherStationLikes(weatherStationLikes);
+
 			return obj;
 		}
-		
-		
+
+
 	}
 
 	@Override

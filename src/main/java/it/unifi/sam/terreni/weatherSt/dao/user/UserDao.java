@@ -43,8 +43,8 @@ public class UserDao {
 	}
 	public void update(User user) {
 		User persisted = findById(user.getId());
-		persisted.setPropertie(user.getPropertie());
 		persisted.setEmail(user.getEmail());
+		persisted.setPropertie(user.getPropertie());
 		persisted.setPassword(user.getPassword());
 		persisted.setUsername(user.getUsername());
 		entityManager.flush();

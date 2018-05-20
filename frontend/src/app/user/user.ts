@@ -7,4 +7,5 @@ export interface User {
     token: string;
     userRole: string;
     unitMeasure: number[];
+    weatherLikes: number[];
 }

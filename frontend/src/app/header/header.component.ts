@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
   public title = 'Weather Station';
   public user : User;
   // -----------------------------------------------------------------------//
-  constructor(public dialog: MatDialog,private authenticationService: AuthenticationService,) {
+  constructor(public dialog: MatDialog,private authenticationService: AuthenticationService,private router: Router) {
     if(sessionStorage.getItem("currentUser"))
       this.user = JSON.parse(sessionStorage.getItem("currentUser"));
   }
@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
       if(this.user == null)
         this.user = JSON.parse(sessionStorage.getItem("currentUser"));
 
-      this.router.navigate(['/','']);
+      window.location.reload();
     });
   //   this.dialog.open(LoginComponent, {});
   }
@@ -54,6 +54,8 @@ export class HeaderComponent implements OnInit {
      dialogRef.afterClosed().subscribe(result => {
        if(this.user == null)
          this.user = JSON.parse(sessionStorage.getItem("currentUser"));
+
+        window.location.reload();
      });
   }
 
@@ -63,7 +65,7 @@ export class HeaderComponent implements OnInit {
      });
 
      dialogRef.afterClosed().subscribe(result => {
-
+       window.location.reload();
      });
   }
 
@@ -71,6 +73,6 @@ export class HeaderComponent implements OnInit {
     this.authenticationService.logout();
     this.user = null;
 
-    this.router.navigate(['/','']);
+    window.location.reload();
   }
 }

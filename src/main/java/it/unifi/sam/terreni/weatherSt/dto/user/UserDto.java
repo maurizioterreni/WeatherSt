@@ -3,7 +3,6 @@ package it.unifi.sam.terreni.weatherSt.dto.user;
 import java.util.Set;
 
 import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
-import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 
 public class UserDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
@@ -12,7 +11,9 @@ public class UserDto extends BaseDto{
 	private Long weatherId;
 	private String token;
 	private String userRole;
-	private Set<UnitMeasureKnowledge> unitMeasure;
+	private Set<Long> unitMeasure;
+	private Set<Long> weatherLikes;
+	
 	
 	public UserDto() {}
 
@@ -56,12 +57,20 @@ public class UserDto extends BaseDto{
 		this.userRole = userRole;
 	}
 
-	public Set<UnitMeasureKnowledge> getUnitMeasure() {
+	public Set<Long> getUnitMeasure() {
 		return unitMeasure;
 	}
 
-	public void setUnitMeasure(Set<UnitMeasureKnowledge> unitMeasure) {
+	public void setUnitMeasure(Set<Long> unitMeasure) {
 		this.unitMeasure = unitMeasure;
+	}
+
+	public Set<Long> getWeatherLikes() {
+		return weatherLikes;
+	}
+
+	public void setWeatherLikes(Set<Long> weatherLikes) {
+		this.weatherLikes = weatherLikes;
 	}
 	
 	

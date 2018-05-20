@@ -66,7 +66,7 @@ export class CreateWeatherStationComponent  implements OnInit {
 
     console.log(this.titleName + '  ' + this.urlImage);
 
-    this.weatherStationService.createWeathrStation(this.user, this.titleName, this.urlImage, this.lat, this.lng)
+    this.weatherStationService.createWeathrStation(this.user, this.titleName, this.urlImage, ''+this.lat, ''+this.lng)
       .subscribe(
         res => {
           console.log(res);
