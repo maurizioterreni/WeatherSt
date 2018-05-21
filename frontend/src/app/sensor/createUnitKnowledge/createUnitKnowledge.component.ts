@@ -28,7 +28,7 @@ export class CreateUnitKnowledgeComponent  implements OnInit {
 
   ngOnInit() { }
 
-  createSensor(e){
+  createUnit(e){
     this._sensorService.createUnitKnowledge(this.user, this.symbol, this.name)
     .subscribe(
       res => {

@@ -20,15 +20,20 @@ import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.dao.measure.MeasureDao;
+import it.unifi.sam.terreni.weatherSt.dao.measure.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorTypeKnowledgeDao;
+import it.unifi.sam.terreni.weatherSt.dto.measure.CreateUnitKnowledgeDto;
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
+import it.unifi.sam.terreni.weatherSt.dto.measure.UnitMeasureDto;
+import it.unifi.sam.terreni.weatherSt.dto.sensor.CreateSensorKnowledgeDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetResponsDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorTypeKnowledgeDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
+import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 import it.unifi.sam.terreni.weatherSt.security.Authentication;
@@ -45,6 +50,8 @@ public class SensorEndPoint {
 	private SensorTypeKnowledgeDao sensorTypeKnowledgeDao;
 	@Inject
 	private MeasureDao measureDao;
+	@Inject
+	private UnitMeasureKnowledgeDao unitMeasureKnowledgeDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -201,6 +208,83 @@ public class SensorEndPoint {
 		return Response.status(200).entity(null).build();
 	}
 	
+	@GET
+	@Path("/unitKnowledge")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getAllUnitKnowledge() {
+		List<UnitMeasureKnowledge> list = unitMeasureKnowledgeDao.getAllUnitMeasureKnowledge();
+		
+		if(list == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - list unitKnowledge").build();
+		
+		return Response.status(200).entity(createListUnitKnowledge(list)).build();
+	}
+	
+	@POST
+	@Path("/unitKnowledge")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response createUnitKnowledge(@HeaderParam("token") String token, CreateUnitKnowledgeDto createUnitKnowledgeDto ) {
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		if (createUnitKnowledgeDto == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - createUnitKnowledgeDto").build();
+		
+		if(Authentication.isNotValid(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
+
+		unitMeasureKnowledgeDao.save(UnitMeasureKnowledge.builder()
+				.name(createUnitKnowledgeDto.getName())
+				.symbol(createUnitKnowledgeDto.getSymbol())
+				.build());
+		
+		return Response.status(200).entity(null).build();
+	}
+	
+	
+
+	@POST
+	@Path("/sensorKnowledge")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response sensorKnowledge(@HeaderParam("token") String token, CreateSensorKnowledgeDto createSensorKnowledgeDto) {
+		if (StringUtils.isEmpty(token))
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
+		if (createSensorKnowledgeDto == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - createSensorKnowledgeDto").build();
+		
+		if(Authentication.isNotValid(token))
+			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
+
+		UnitMeasureKnowledge unitMeasureKnowledge = unitMeasureKnowledgeDao.findById(createSensorKnowledgeDto.getSelectedUnitKnowledge());
+		
+		if (unitMeasureKnowledge == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasureKnowledge").build();
+		
+		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
+				.descrition(createSensorKnowledgeDto.getDescription())
+				.unitMeasureKnowledge(unitMeasureKnowledge)
+				.build());
+		
+		return Response.status(200).entity(null).build();
+	}
+	
+	private List<UnitMeasureDto> createListUnitKnowledge(List<UnitMeasureKnowledge> list){
+		List<UnitMeasureDto> obj = new ArrayList<>();
+		for (UnitMeasureKnowledge unitMeasureKnowledge : list) {
+			obj.add(UnitMeasureDto.builder()
+					.id(unitMeasureKnowledge.getId())
+					.name(unitMeasureKnowledge.getName())
+					.symbol(unitMeasureKnowledge.getSymbol())
+					.build());
+		}
+		
+		return obj;
+	}
 	
 	private SensorTypeKnowledgeDto sensorTypeKnowledgeToDto(SensorTypeKnowledge obj) {
 		return SensorTypeKnowledgeDto.builder()
@@ -244,4 +328,6 @@ public class SensorEndPoint {
 				.unitKnowledgeId(sensor.getSensorType().getUnitMeasure().getId())
 				.build();
 	}
+	
+	
 }

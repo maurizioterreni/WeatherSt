@@ -2,11 +2,11 @@
   <h1>Create new Unit Type knowledge</h1>
   <form class="create-unit-knowledge-form" (submit)="createUnit($event)">
     <mat-form-field  class="create-unit-knowledge-form-width">
-      <input matInput #desc placeholder="Name of Unit" (keyup.enter)="addName(desc.value)" (blur)="addName(desc.value)" maxlength="50">
+      <input matInput #name placeholder="Name of Unit" (keyup.enter)="addName(name.value)" (blur)="addName(name.value)" maxlength="50">
     </mat-form-field>
 
     <mat-form-field  class="create-unit-knowledge-form-width">
-      <input matInput #desc placeholder="Symbol of Unit" (keyup.enter)="addSymbol(desc.value)" (blur)="addSymbol(desc.value)" maxlength="50">
+      <input matInput #symbol placeholder="Symbol of Unit" (keyup.enter)="addSymbol(symbol.value)" (blur)="addSymbol(symbol.value)" maxlength="50">
     </mat-form-field>
 
     <div class="create-unit-knowledge-form-width">
