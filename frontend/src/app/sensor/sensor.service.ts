@@ -92,7 +92,16 @@ export class SensorService {
        .set('Content-Type', 'application/json')
        .set('token', '' + user.token)
 
-     return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge',
+     return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/sensorKnowledge',
            JSON.stringify({ description: description, selectedUnitKnowledge: selectedUnitKnowledge }), {headers});
+   }
+
+   createUnitKnowledge(user:User, symbol:string, name:string){
+     const headers = new HttpHeaders()
+       .set('Content-Type', 'application/json')
+       .set('token', '' + user.token)
+
+     return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge',
+           JSON.stringify({ symbol: symbol, name: name }), {headers});
    }
 }

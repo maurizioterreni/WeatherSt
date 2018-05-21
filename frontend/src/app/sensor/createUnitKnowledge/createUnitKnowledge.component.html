@@ -1,0 +1,16 @@
+<mat-dialog-content class="accent-color">
+  <h1>Create new Unit Type knowledge</h1>
+  <form class="create-unit-knowledge-form" (submit)="createUnit($event)">
+    <mat-form-field  class="create-unit-knowledge-form-width">
+      <input matInput #desc placeholder="Name of Unit" (keyup.enter)="addName(desc.value)" (blur)="addName(desc.value)" maxlength="50">
+    </mat-form-field>
+
+    <mat-form-field  class="create-unit-knowledge-form-width">
+      <input matInput #desc placeholder="Symbol of Unit" (keyup.enter)="addSymbol(desc.value)" (blur)="addSymbol(desc.value)" maxlength="50">
+    </mat-form-field>
+
+    <div class="create-unit-knowledge-form-width">
+      <button mat-button>Create unit knowledge</button>
+    </div>
+  </form>
+</mat-dialog-content>

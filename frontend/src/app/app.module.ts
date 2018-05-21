@@ -28,6 +28,7 @@ import { RegisterComponent } from './dialog/register/register.component';
 import { CreateSensorComponent } from './sensor/createSensor/createSensor.component';
 import { CreateWeatherStationComponent } from './weatherStation/createWeatherStation/createWeatherStation.component';
 import { CreateSensorKnowledgeComponent } from './sensor/createSensorKnowledge/createSensorKnowledge.component';
+import { CreateUnitKnowledgeComponent } from './sensor/createUnitKnowledge/createUnitKnowledge.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -38,6 +39,7 @@ const appRoute: Routes = [
       { path: 'createSensor', component: CreateSensorComponent },
       { path: 'createWeatherStation', component: CreateWeatherStationComponent },
       { path: 'createSensorKnowledgeComponent', component: CreateSensorKnowledgeComponent },
+      { path: 'createUnitKnowledgeComponent', component: CreateUnitKnowledgeComponent },
       { path: 'register', component: RegisterComponent },
       // otherwise redirect to home
       { path: '**', redirectTo: '' }];
@@ -47,7 +49,7 @@ const appRoute: Routes = [
         DialogEditSensor ,SensorComponent, WeatherStationComponent,
         TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent,
         RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
-        RegisterComponent, CreateWeatherStationComponent, CreateSensorKnowledgeComponent],
+        RegisterComponent, CreateWeatherStationComponent, CreateSensorKnowledgeComponent, CreateUnitKnowledgeComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
