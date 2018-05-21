@@ -7,6 +7,7 @@ import { HttpParams } from '@angular/common/http';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SensorKnowledge } from './createSensor/sensorKnowledge';
+import { UnitKnowledge } from './createSensorKnowledge/unitKnowledge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
@@ -75,5 +76,23 @@ export class SensorService {
 
       return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/sensorKnowledge',
             JSON.stringify({ description: description, unitMeasureId: unitMeasureId }), {headers});
+   }
+
+   getAllUnitKnowledge(): Observable<UnitKnowledge[]> {
+     const headers = new HttpHeaders()
+       .set('Content-Type', 'application/json')
+
+     return this.http.get('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge', {headers})
+      .map((response) => <UnitKnowledge[]> response);
+   }
+
+
+   createSensorKnowledge(user: User, description: string, selectedUnitKnowledge: string){
+     const headers = new HttpHeaders()
+       .set('Content-Type', 'application/json')
+       .set('token', '' + user.token)
+
+     return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge',
+           JSON.stringify({ description: description, selectedUnitKnowledge: selectedUnitKnowledge }), {headers});
    }
 }

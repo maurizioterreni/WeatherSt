@@ -4,8 +4,15 @@
     <mat-form-field  class="create-sensor-knowledge-form-width">
       <input matInput #desc placeholder="Description of Sensor knowledge" (keyup.enter)="addDescription(desc.value)" (blur)="addDescription(desc.value)" maxlength="50">
     </mat-form-field>
+    <mat-form-field class="create-sensor-knowledge-form-width">
+      <mat-select placeholder="Chose unit knowledge" [(ngModel)]="selectedUnitKnowledge"  name="-1">
+        <mat-option *ngFor="let unitK of unitKnowledges" [value]="unitK.id">
+          {{ unitK.name }} [{{unitK.symbol}}]
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <div class="create-sensor-knowledge-form-width">
-      <button mat-button>Create</button>
+      <button mat-button>Create sensor knowledge</button>
     </div>
   </form>
 </mat-dialog-content>
