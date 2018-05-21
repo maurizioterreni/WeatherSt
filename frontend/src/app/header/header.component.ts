@@ -11,6 +11,7 @@ import { CreateSensorComponent } from '../sensor/createSensor/createSensor.compo
 import { CreateSensorKnowledgeComponent } from '../sensor/createSensorKnowledge/createSensorKnowledge.component';
 import { CreateUnitKnowledgeComponent } from '../sensor/createUnitKnowledge/createUnitKnowledge.component';
 import { CreateWeatherStationComponent } from '../weatherStation/createWeatherStation/createWeatherStation.component';
+import { CreateConversionFactorComponent } from '../conversion/createConversionFactor/createConversionFactor.component';
 import { AuthenticationService } from '../dialog/login/authentication.service';
 
 
@@ -94,5 +95,15 @@ export class HeaderComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
     });
+  }
+
+  createConversionFactor(){
+    let dialogRef = this.dialog.open(CreateConversionFactorComponent, {
+      data: { }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+
   }
 }

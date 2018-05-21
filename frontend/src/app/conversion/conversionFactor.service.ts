@@ -29,16 +29,13 @@ export class ConversionFactorService {
    createConversionFactor(fronUnitId: string, toUnitId: string, conversionMul:string,conversionAdd:string, user: User) {
        const headers = new HttpHeaders()
          .set('Content-Type', 'application/json')
-         .set('token', user.token)
+         .set('token', '' + user.token)
          .set('fronUnitId', fronUnitId)
          .set('toUnitId', toUnitId)
          .set('conversionMul', conversionMul)
          .set('conversionAdd', conversionAdd);
 
-       return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/', {headers})
-         .map(conversionFactor => {
-             return conversionFactor;
-         });
+       return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/', JSON.stringify(null),{headers});
    }
 
    editSensor(sensorId: string,sensorTypeId: string, user: User) {

@@ -29,6 +29,7 @@ import { CreateSensorComponent } from './sensor/createSensor/createSensor.compon
 import { CreateWeatherStationComponent } from './weatherStation/createWeatherStation/createWeatherStation.component';
 import { CreateSensorKnowledgeComponent } from './sensor/createSensorKnowledge/createSensorKnowledge.component';
 import { CreateUnitKnowledgeComponent } from './sensor/createUnitKnowledge/createUnitKnowledge.component';
+import { CreateConversionFactorComponent } from './conversion/createConversionFactor/createConversionFactor.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -40,6 +41,7 @@ const appRoute: Routes = [
       { path: 'createWeatherStation', component: CreateWeatherStationComponent },
       { path: 'createSensorKnowledgeComponent', component: CreateSensorKnowledgeComponent },
       { path: 'createUnitKnowledgeComponent', component: CreateUnitKnowledgeComponent },
+      { path: 'createConversionFactor', component: CreateConversionFactorComponent },
       { path: 'register', component: RegisterComponent },
       // otherwise redirect to home
       { path: '**', redirectTo: '' }];
@@ -49,7 +51,8 @@ const appRoute: Routes = [
         DialogEditSensor ,SensorComponent, WeatherStationComponent,
         TemperatureGaugeComponent, PressureGaugeComponent, UVGaugeComponent, HumidityGaugeComponent,
         RainGaugeComponent, WindspeedGaugeComponent, WindDirectionGaugeComponent, LoginComponent,
-        RegisterComponent, CreateWeatherStationComponent, CreateSensorKnowledgeComponent, CreateUnitKnowledgeComponent],
+        RegisterComponent, CreateWeatherStationComponent, CreateSensorKnowledgeComponent, CreateUnitKnowledgeComponent,
+        CreateConversionFactorComponent],
   imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, AppMaterialModules, FlexLayoutModule,FormsModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
