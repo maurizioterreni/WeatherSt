@@ -40,7 +40,9 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
     this.toDate.setHours(23,59,59,999);
 
     this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
-        .subscribe(conversionFactors => this.conversionFactors = conversionFactors);
+        .subscribe(conversionFactors => {
+          this.conversionFactors = conversionFactors;
+        });
   }
 
   ngOnChanges(changes: SimpleChanges) {

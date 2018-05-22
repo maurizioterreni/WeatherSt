@@ -35,8 +35,6 @@ export class CreateConversionFactorComponent  implements OnInit {
   }
 
   ngOnInit() {
-    //this.selectedToUnitKnowledge = '0';
-    //this.selectedFromUnitKnowledge = '0';
     this._sensorService.getAllUnitKnowledge()
       .subscribe(unitKnowledges => this.unitKnowledges = unitKnowledges);
   }
@@ -45,7 +43,6 @@ export class CreateConversionFactorComponent  implements OnInit {
     this.conversionFactorService.createConversionFactor(
             this.selectedFromUnitKnowledge, this.selectedToUnitKnowledge, this.mul, this.add, this.user)
               .subscribe(() => {
-                debugger
                       this.dialogRef.close();
                   },
                   err => {

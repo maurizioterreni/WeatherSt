@@ -2,7 +2,7 @@
   <h1>Create conversion factor</h1>
   <form class="create-conversion-factor-form" (submit)="createConversionFactor($event)">
     <mat-form-field class="create-conversion-factor-form-width">
-      <mat-select placeholder="Chose from UnitKnowledge" [(ngModel)]="selectedFromUnitKnowledge"  name="-1">
+      <mat-select placeholder="Chose UnitKnowledge" [(ngModel)]="selectedToUnitKnowledge"  name="-1">
         <mat-option *ngFor="let unit of unitKnowledges" [value]="unit.id">
           {{ unit.name }} [{{unit.symbol}}]
         </mat-option>
@@ -10,7 +10,7 @@
     </mat-form-field>
 
     <mat-form-field class="create-conversion-factor-form-width">
-      <mat-select placeholder="Chose to UnitKnowledge" [(ngModel)]="selectedToUnitKnowledge"  name="-1">
+      <mat-select placeholder="Chose UnitKnowledge" [(ngModel)]="selectedFromUnitKnowledge"  name="-1">
         <mat-option *ngFor="let unit of unitKnowledges" [value]="unit.id">
           {{ unit.name }} [{{unit.symbol}}]
         </mat-option>
@@ -19,11 +19,11 @@
     <div *ngIf="selectedToUnitKnowledge && selectedFromUnitKnowledge"  class="create-formula">
       <span>{{getSymbol(selectedToUnitKnowledge)}} = ( {{getSymbol(selectedFromUnitKnowledge)}} * </span>
       <mat-form-field >
-        <input matInput #Mul placeholder="Mul" (keyup.enter)="writeMul(Mul.value)" (blur)="writeMul(Mul.value)" maxlength="50">
+        <input matInput #Mul placeholder="1" (keyup.enter)="writeMul(Mul.value)" (blur)="writeMul(Mul.value)" maxlength="50">
       </mat-form-field>
       <span>) + </span>
       <mat-form-field>
-        <input matInput #Add placeholder="Add" (keyup.enter)="writeAdd(Add.value)" (blur)="writeAdd(Add.value)" maxlength="50">
+        <input matInput #Add placeholder="0" (keyup.enter)="writeAdd(Add.value)" (blur)="writeAdd(Add.value)" maxlength="50">
       </mat-form-field>
       <span>; </span>
     </div>

@@ -8,12 +8,14 @@ import { MatTabChangeEvent } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MeasureService } from '../../../measure/measure.service';
 import { Measure } from '../../../measure/measure';
+import { UserService } from '../../../user/user.service';
+import { User } from '../../../user/user';
 
 @Component({
   selector: 'app-temperature-gauge',
   templateUrl: './temperatureGauge.html',
   styleUrls: ['./temperatureGauge.css'],
-  providers: [MeasureService, ConversionFactorService]
+  providers: [MeasureService, ConversionFactorService, UserService]
 })
 export class TemperatureGaugeComponent implements OnInit, OnChanges {
   @Input() sensor: Sensor;
@@ -24,12 +26,14 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
   maxQuantityArray: string[];
   minQuantityArray: string[];
   labelArray: string[];
+  user: User;
   unitConverterSelected = -1;
 
-  constructor(private meausureService: MeasureService, private conversionService: ConversionFactorService) {
+  constructor(private meausureService: MeasureService, private userService: UserService,private conversionService: ConversionFactorService) {
     this.maxQuantityArray = new Array();
     this.minQuantityArray = new Array();
     this.labelArray = new Array();
+    this.user = JSON.parse(sessionStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
@@ -41,8 +45,12 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
 
     //this.unitConverterSelected = this.sensor.unitKnowledgeId;
     this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
-      .subscribe(conversionFactors => this.conversionFactors = conversionFactors);
+      .subscribe(conversionFactors => {
+        this.conversionFactors = conversionFactors;
+      });
   }
+
+
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -51,6 +59,12 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
 
   onChangeObj(event) {
     this.unitConverterSelected = event.value + 0;
+    this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
+      .subscribe(user => {
+        if (user){
+          sessionStorage.setItem('currentUser', JSON.stringify(user));
+        }
+      });
   }
 
   isConversionfactor(): boolean{

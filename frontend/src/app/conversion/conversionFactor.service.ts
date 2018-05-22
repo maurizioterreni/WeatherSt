@@ -30,10 +30,11 @@ export class ConversionFactorService {
        const headers = new HttpHeaders()
          .set('Content-Type', 'application/json')
          .set('token', '' + user.token)
-         .set('fronUnitId', fronUnitId)
-         .set('toUnitId', toUnitId)
-         .set('conversionMul', conversionMul)
-         .set('conversionAdd', conversionAdd);
+         .set('fronUnitId', '' + fronUnitId)
+         .set('toUnitId', '' + toUnitId)
+         .set('conversionMul', '' + conversionMul)
+         .set('conversionAdd', '' + conversionAdd);
+
 
        return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/', JSON.stringify(null),{headers});
    }
@@ -44,8 +45,6 @@ export class ConversionFactorService {
         .set('token', '' + user.token)
         .set('sensorId', '' + sensorId)
         .set('sensorKnowledgeId', '' + sensorTypeId);
-
-        console.log(headers);
 
       return this.http.put("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/",  {headers} );
 
