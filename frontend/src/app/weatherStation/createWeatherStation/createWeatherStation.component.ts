@@ -24,6 +24,7 @@ export class CreateWeatherStationComponent  implements OnInit {
   lng: number = 10.95459;
   titleName = '';
   urlImage = '';
+  you = 'You';
 
   constructor(private weatherStationService: WeatherStationService, public dialogRef: MatDialogRef<CreateWeatherStationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
