@@ -27,6 +27,7 @@ export class PressureGaugeComponent implements OnInit, OnChanges {
   labelArray: string[];
   conversionFactors: ConversionFactor[];
   unitConverterSelected = -1;
+  user: User;
 
   constructor(private meausureService: MeasureService,private userService: UserService, private conversionService: ConversionFactorService) {
     this.maxQuantityArray = new Array();

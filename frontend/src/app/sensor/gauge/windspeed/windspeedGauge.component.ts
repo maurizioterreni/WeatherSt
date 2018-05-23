@@ -29,7 +29,7 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
   unitConverterSelected = -1;
   user: User;
 
-  constructor(private meausureService: MeasureService,private conversionService: ConversionFactorService) {
+  constructor(private meausureService: MeasureService,private userService: UserService,private conversionService: ConversionFactorService) {
     this.maxQuantityArray = new Array();
     this.minQuantityArray = new Array();
     this.labelArray = new Array();
@@ -45,6 +45,7 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
 
     this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
       .subscribe(conversionFactors => {
+        this.unitConverterSelected = 0;
         this.conversionFactors = conversionFactors;
         if(this.user){
           let i = 0;
@@ -66,15 +67,21 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
 
 
     onChangeObj(event) {
-      const oldUnitConverterSelected = this.unitConverterSelected;
+
+      if(this.isConversionfactor()){
+        this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
+          .subscribe(user => {
+            if (user){
+              sessionStorage.setItem('currentUser', JSON.stringify(user));
+            }
+          });
+      }
+
+
+
       this.unitConverterSelected = event.value + 0;
 
-      this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[oldUnitConverterSelected].id)
-        .subscribe(user => {
-          if (user){
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-          }
-        });
+            console.log(this.conversionFactors[this.unitConverterSelected].id);
 
       this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
         .subscribe(user => {

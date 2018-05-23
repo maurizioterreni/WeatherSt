@@ -71,7 +71,7 @@ export class UserService {
           .set('token', '' + user.token)
           .set('unitId', '' + unitId);
 
-        return this.http.delete('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/user/addUnitMeasure/', {headers})
+        return this.http.delete('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/user/removeUnitMeasure/', {headers})
             .map(user => {
                 // login successful if there's a jwt token in the response
               if (user){
