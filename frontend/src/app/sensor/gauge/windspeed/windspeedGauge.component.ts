@@ -8,12 +8,14 @@ import { Chart } from 'chart.js';
 import { MatTabChangeEvent } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MeasureService } from '../../../measure/measure.service';
+import { UserService } from '../../../user/user.service';
+import { User } from '../../../user/user';
 
 @Component({
   selector: 'app-windspeed-gauge',
   templateUrl: './windspeedGauge.html',
   styleUrls: ['./windspeedGauge.css'],
-  providers: [MeasureService,ConversionFactorService]
+  providers: [MeasureService, ConversionFactorService, UserService]
 })
 export class WindspeedGaugeComponent implements OnInit, OnChanges {
   @Input() sensor: Sensor;
@@ -25,11 +27,13 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
   labelArray: string[];
   conversionFactors: ConversionFactor[];
   unitConverterSelected = -1;
+  user: User;
 
   constructor(private meausureService: MeasureService,private conversionService: ConversionFactorService) {
     this.maxQuantityArray = new Array();
     this.minQuantityArray = new Array();
     this.labelArray = new Array();
+    this.user = JSON.parse(sessionStorage.getItem("currentUser"));
   }
 
   ngOnInit() {
@@ -40,9 +44,20 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
     this.toDate.setHours(23,59,59,999);
 
     this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
-        .subscribe(conversionFactors => {
-          this.conversionFactors = conversionFactors;
-        });
+      .subscribe(conversionFactors => {
+        this.conversionFactors = conversionFactors;
+        if(this.user){
+          let i = 0;
+          for(const unit of this.user.unitMeasure){
+            for(const conversion of this.conversionFactors){
+              if(Number(unit) == Number(conversion.id)){
+                this.unitConverterSelected = i;
+              }
+              i = i + 1;
+            }
+          }
+        }
+      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,9 +65,24 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
   }
 
 
-  onChangeObj(event) {
-    this.unitConverterSelected = event.value + 0;
-  }
+    onChangeObj(event) {
+      const oldUnitConverterSelected = this.unitConverterSelected;
+      this.unitConverterSelected = event.value + 0;
+
+      this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[oldUnitConverterSelected].id)
+        .subscribe(user => {
+          if (user){
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+          }
+        });
+
+      this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
+        .subscribe(user => {
+          if (user){
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+          }
+        });
+    }
 
   isConversionfactor(): boolean{
     if(this.unitConverterSelected > -1){

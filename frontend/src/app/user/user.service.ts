@@ -49,10 +49,29 @@ export class UserService {
         const headers = new HttpHeaders()
           .set('Content-Type', 'application/json')
           .set('Accept', 'application/json')
-          .set('token', user.token)
-          .set('unitId', unitId);
+          .set('token',  '' + user.token)
+          .set('unitId',  '' + unitId);
 
         return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/user/addUnitMeasure/',  JSON.stringify(null), {headers})
+            .map(user => {
+                // login successful if there's a jwt token in the response
+              if (user){
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+              }
+
+              return user;
+            });
+    }
+
+
+    removeUnitKnowledgeUser(user:User, unitId:string) {//se id non presente nella lista dell'utente il servizio restituisce un 200 ok senza fare nulla
+        const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json')
+          .set('Accept', 'application/json')
+          .set('token', '' + user.token)
+          .set('unitId', '' + unitId);
+
+        return this.http.delete('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/user/addUnitMeasure/', {headers})
             .map(user => {
                 // login successful if there's a jwt token in the response
               if (user){

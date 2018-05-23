@@ -45,32 +45,32 @@ public class UserEndPoin {
 
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
-		
+
+
 		User user = userDao.fetchById(Authentication.getUserIdFormToken(token));
 		if(user == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - user or password wrong").build();
 
 		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
-		
+
 		if(weatherStation == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - weatherStation").build();
-		
+
 		user.getPropertie().addWeatherStationLikes(weatherStation);
-		
+
 		userDao.update(user);
-		
+
 		UserDto dto = userToDto(user);
-		
+
 		dto.setToken(token);
 
 		return Response.status(200).entity(dto).build();
 	}
-	
-	
+
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -82,32 +82,32 @@ public class UserEndPoin {
 
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
-		
+
+
 		User user = userDao.fetchById(Authentication.getUserIdFormToken(token));
 		if(user == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - user or password wrong").build();
 
 		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
-		
+
 		if(weatherStation == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - weatherStation").build();
-		
+
 		user.getPropertie().removeWeatherStationLikes(weatherStation);
-		
+
 		userDao.update(user);
-		
+
 		UserDto dto = userToDto(user);
-		
+
 		dto.setToken(token);
 
 		return Response.status(200).entity(dto).build();
 	}
-	
-	
+
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -119,26 +119,26 @@ public class UserEndPoin {
 
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
-		
+
+
 		User user = userDao.fetchById(Authentication.getUserIdFormToken(token));
 		if(user == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - user or password wrong").build();
 
 		UnitMeasureKnowledge unitMeasureKnowledge = unitMeasureKnowledgeDao.findById(unitId);
-		
+
 		if(unitMeasureKnowledge == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - unitMeasureKnowledge").build();
-		
+
 		user.getPropertie().addUnitMeasure(unitMeasureKnowledge);
-		
+
 		userDao.update(user);
-		
+
 		UserDto dto = userToDto(user);
-		
+
 		dto.setToken(token);
 
 		return Response.status(200).entity(dto).build();
@@ -155,64 +155,64 @@ public class UserEndPoin {
 
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
-		
+
+
 		User user = userDao.fetchById(Authentication.getUserIdFormToken(token));
 		if(user == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - user or password wrong").build();
 
 		UnitMeasureKnowledge unitMeasureKnowledge = unitMeasureKnowledgeDao.findById(unitId);
-		
+
 		if(unitMeasureKnowledge == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - unitMeasureKnowledge").build();
-		
+		//TODO controlare se schianta quando va a eliminare una unit che non c'è
 		user.getPropertie().removeUnitMeasure(unitMeasureKnowledge);
-		
+
 		userDao.update(user);
-		
+
 		UserDto dto = userToDto(user);
-		
+
 		dto.setToken(token);
 
 		return Response.status(200).entity(dto).build();
 	}
-	
+
 	private UserDto userToDto(User user) {
 		UserDto dto = new UserDto();
-		
+
 		dto.setEmail(user.getEmail());
 		dto.setUnitMeasure(getIdFormUnitMeasure(user.getPropertie().getUnitMeasure()));
 		dto.setUsername(user.getUsername());
 		dto.setUserRole(user.getPropertie().getUserRole().getName());
 		dto.setWeatherId(user.getPropertie().getWeatherStation() != null ? user.getPropertie().getWeatherStation().getId() : null);
 		dto.setWeatherLikes(getIdFormWeatherLikes(user.getPropertie().getWeatherStationLikes()));
-		
+
 		return dto;
 	}
-	
+
 	private Set<Long> getIdFormUnitMeasure(Set<UnitMeasureKnowledge> list){
 		Set<Long> ids = new HashSet<>();
 		if(list == null)
 			return ids;
-		
+
 		for (UnitMeasureKnowledge unitMeasureKnowledge : list) {
 			ids.add(unitMeasureKnowledge.getId());
 		}
-		
+
 		return ids;
 	}
 	private Set<Long> getIdFormWeatherLikes(Set<WeatherStation> list){
 		Set<Long> ids = new HashSet<>();
 		if(list == null)
 			return ids;
-		
+
 		for (WeatherStation wt : list) {
 			ids.add(wt.getId());
 		}
-		
+
 		return ids;
 	}
 }

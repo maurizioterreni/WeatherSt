@@ -47,10 +47,19 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
     this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
       .subscribe(conversionFactors => {
         this.conversionFactors = conversionFactors;
+        if(this.user){
+          let i = 0;
+          for(const unit of this.user.unitMeasure){
+            for(const conversion of this.conversionFactors){
+              if(Number(unit) == Number(conversion.id)){
+                this.unitConverterSelected = i;
+              }
+              i = i + 1;
+            }
+          }
+        }
       });
   }
-
-
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -58,7 +67,16 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
 
 
   onChangeObj(event) {
+    const oldUnitConverterSelected = this.unitConverterSelected;
     this.unitConverterSelected = event.value + 0;
+
+    this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[oldUnitConverterSelected].id)
+      .subscribe(user => {
+        if (user){
+          sessionStorage.setItem('currentUser', JSON.stringify(user));
+        }
+      });
+
     this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
       .subscribe(user => {
         if (user){
