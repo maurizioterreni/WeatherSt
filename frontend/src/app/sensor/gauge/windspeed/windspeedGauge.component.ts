@@ -81,14 +81,14 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
 
       this.unitConverterSelected = event.value + 0;
 
-            console.log(this.conversionFactors[this.unitConverterSelected].id);
-
-      this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
-        .subscribe(user => {
-          if (user){
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-          }
-        });
+      if(this.isConversionfactor()){
+        this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
+          .subscribe(user => {
+            if (user){
+              sessionStorage.setItem('currentUser', JSON.stringify(user));
+            }
+          });
+      }
     }
 
   isConversionfactor(): boolean{

@@ -64,22 +64,22 @@ export class UVGaugeComponent implements OnInit, OnChanges {
   }
 
 
-    onChangeObj(event) {
-      if(this.isConversionfactor()){
-        this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
-          .subscribe(user => {
-            if (user){
-              sessionStorage.setItem('currentUser', JSON.stringify(user));
-            }
-          });
-      }
+  onChangeObj(event) {
+
+    if(this.isConversionfactor()){
+      this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
+        .subscribe(user => {
+          if (user){
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+          }
+        });
+    }
 
 
 
-      this.unitConverterSelected = event.value + 0;
+    this.unitConverterSelected = event.value + 0;
 
-            console.log(this.conversionFactors[this.unitConverterSelected].id);
-
+    if(this.isConversionfactor()){
       this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
         .subscribe(user => {
           if (user){
@@ -87,6 +87,7 @@ export class UVGaugeComponent implements OnInit, OnChanges {
           }
         });
     }
+  }
 
 
   isConversionfactor(): boolean{
