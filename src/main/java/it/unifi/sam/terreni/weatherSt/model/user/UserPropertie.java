@@ -31,8 +31,7 @@ public class UserPropertie extends BaseEntity implements Usage{
 	private User user;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
-	@OneToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.REMOVE )
-	@JoinColumn(name = "weather_id")
+	@ManyToMany(cascade = CascadeType.REMOVE)
 	private Set<UnitMeasureKnowledge> unitMeasure;
 	@OneToOne
 	@JoinColumn(name = "weather_id")

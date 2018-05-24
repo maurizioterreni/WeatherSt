@@ -65,15 +65,20 @@ export class HumidityGaugeComponent implements OnInit, OnChanges {
   }
 
   onChangeObj(event) {
-    const oldUnitConverterSelected = this.unitConverterSelected;
+    if(this.isConversionfactor()){
+      this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
+        .subscribe(user => {
+          if (user){
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+          }
+        });
+    }
+
+
+
     this.unitConverterSelected = event.value + 0;
 
-    this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[oldUnitConverterSelected].id)
-      .subscribe(user => {
-        if (user){
-          sessionStorage.setItem('currentUser', JSON.stringify(user));
-        }
-      });
+          console.log(this.conversionFactors[this.unitConverterSelected].id);
 
     this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
       .subscribe(user => {
