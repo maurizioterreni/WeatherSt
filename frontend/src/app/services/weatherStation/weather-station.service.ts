@@ -1,6 +1,7 @@
 import { WeatherStation } from '../../models/weatherStation/weatherstation';
 import { Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BaseUrl } from '../../baseUrl';
 
 @Injectable()
 export class WeatherStationService {
@@ -9,7 +10,7 @@ export class WeatherStationService {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
 
-      return this._http.get('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/weatherstation/getAll' , {headers});
+      return this._http.get(BaseUrl.API_ENDPOINT + 'weatherstation/getAll' , {headers});
    }
 
   /* createWeathrStation(user:User, titleName:string, urlImage:string, lat: string, lng:string) {
