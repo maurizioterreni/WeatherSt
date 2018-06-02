@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -33,7 +32,6 @@ public class WeatherStationEndPoint {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional
 	public Response add(@HeaderParam("token") String token, WeatherStationPostRequestDto weatherStationDto) {
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
@@ -73,7 +71,6 @@ public class WeatherStationEndPoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	@Transactional
 	public Response getAll() {
 		
 		List<WeatherStation> weatherStations = weatherStationDao.getAll();

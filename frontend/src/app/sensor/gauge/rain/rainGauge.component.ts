@@ -65,7 +65,7 @@ export class RainGaugeComponent implements OnInit, OnChanges {
 
   onChangeObj(event) {
 
-    if(this.isConversionfactor()){
+    if(this.isConversionfactor() && this.user != null){
       this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
         .subscribe(user => {
           if (user){
@@ -78,7 +78,7 @@ export class RainGaugeComponent implements OnInit, OnChanges {
 
     this.unitConverterSelected = event.value + 0;
 
-    if(this.isConversionfactor()){
+    if(this.isConversionfactor() && this.user != null){
       this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
         .subscribe(user => {
           if (user){

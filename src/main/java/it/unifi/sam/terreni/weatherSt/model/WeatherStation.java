@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,7 +23,7 @@ public class WeatherStation extends BaseEntity {
 	private String latitude;
 	private String description;
 	private String images;
-	@OneToMany( targetEntity=Sensor.class , cascade = CascadeType.REMOVE )
+	@OneToMany(fetch = FetchType.EAGER, targetEntity=Sensor.class , cascade = CascadeType.ALL )
 	private Set<Sensor> sensors;
 
 	WeatherStation() {

@@ -45,7 +45,6 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
 
     this.conversionService.getConversionFactorByFromId(''+this.sensor.unitKnowledgeId)
       .subscribe(conversionFactors => {
-        this.unitConverterSelected = 0;
         this.conversionFactors = conversionFactors;
         if(this.user){
           let i = 0;
@@ -68,7 +67,7 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
 
     onChangeObj(event) {
 
-      if(this.isConversionfactor()){
+      if(this.isConversionfactor() && this.user != null){
         this.userService.removeUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
           .subscribe(user => {
             if (user){
@@ -81,7 +80,7 @@ export class WindspeedGaugeComponent implements OnInit, OnChanges {
 
       this.unitConverterSelected = event.value + 0;
 
-      if(this.isConversionfactor()){
+      if(this.isConversionfactor() && this.user != null){
         this.userService.addUnitKnowledgeUser(this.user, this.conversionFactors[this.unitConverterSelected].id)
           .subscribe(user => {
             if (user){
