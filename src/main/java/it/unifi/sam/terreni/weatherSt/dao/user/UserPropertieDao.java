@@ -6,7 +6,7 @@ import javax.persistence.PersistenceContext;
 import it.unifi.sam.terreni.weatherSt.model.user.UserPropertie;
 
 public class UserPropertieDao {
-	@PersistenceContext
+	@PersistenceContext(unitName="production")
 	private EntityManager entityManager;
 
 

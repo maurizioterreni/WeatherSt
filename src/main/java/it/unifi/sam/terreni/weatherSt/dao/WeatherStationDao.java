@@ -10,7 +10,7 @@ import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.visitor.ResolveLazyLoadUsageVisitor;
 
 public class WeatherStationDao {
-	@PersistenceContext
+	@PersistenceContext(unitName="production")
 	private EntityManager entityManager;
 
 

@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 
 public class SensorTypeKnowledgeDao {
-	@PersistenceContext
+	@PersistenceContext(unitName="production")
 	private EntityManager entityManager;
 
 	public void save(SensorTypeKnowledge sensorTypeKnowledge) { 

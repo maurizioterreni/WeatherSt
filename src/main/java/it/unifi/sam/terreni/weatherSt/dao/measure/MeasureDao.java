@@ -17,7 +17,7 @@ import it.unifi.sam.terreni.weatherSt.utils.GroupByClass;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 public class MeasureDao {
-	@PersistenceContext
+	@PersistenceContext(unitName="production")
 	private EntityManager entityManager;
 
 	public void save(Measure measure) { 

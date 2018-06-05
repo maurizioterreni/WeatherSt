@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 
 public class UnitMeasureKnowledgeDao {
-	@PersistenceContext
+	@PersistenceContext(unitName="production")
 	private EntityManager entityManager;
 
 	public void save(UnitMeasureKnowledge unitMeasure) { 

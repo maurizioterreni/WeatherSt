@@ -9,7 +9,7 @@ import it.unifi.sam.terreni.weatherSt.model.user.User;
 import it.unifi.sam.terreni.weatherSt.visitor.ResolveLazyLoadUsageVisitor;
 
 public class UserDao {
-	@PersistenceContext
+	@PersistenceContext(unitName="production")
 	private EntityManager entityManager;
 
 
