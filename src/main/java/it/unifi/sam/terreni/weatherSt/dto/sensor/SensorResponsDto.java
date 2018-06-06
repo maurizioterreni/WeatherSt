@@ -7,6 +7,7 @@ public class SensorResponsDto extends BaseDto{
 
 	private Long weatherId;
 	private String description;
+	private String title;
 	
 	public SensorResponsDto() {
 		
@@ -33,9 +34,18 @@ public class SensorResponsDto extends BaseDto{
 
 //	public 
 	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String titlte) {
+		this.title = titlte;
+	}
+
 	public static class SensorResponseDtoBuilder{
 		private Long weatherId;
 		private String description;
+		private String title;
 		
 		public SensorResponseDtoBuilder weatherId(Long weatherId) {
 			this.weatherId = weatherId;
@@ -45,12 +55,17 @@ public class SensorResponsDto extends BaseDto{
 			this.description = description;
 			return this;
 		}
+		public SensorResponseDtoBuilder title(String title) {
+			this.title = title;
+			return this;
+		}
 		
 		public SensorResponsDto build() {
 			SensorResponsDto dto = new SensorResponsDto();
 			
 			dto.setDescription(description);
 			dto.setWeatherId(weatherId);
+			dto.setTitle(title);
 			
 			return dto;
 		}

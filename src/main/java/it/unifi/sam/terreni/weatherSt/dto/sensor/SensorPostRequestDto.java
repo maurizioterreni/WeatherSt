@@ -6,6 +6,7 @@ public class SensorPostRequestDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	private Long weatherId;
 	private Long sensorTypeId;
+	private String title;
 	
 	public SensorPostRequestDto() {
 	}
@@ -30,9 +31,18 @@ public class SensorPostRequestDto extends BaseDto{
 		this.sensorTypeId = sensorTypeId;
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public static class SensorPostRequestDtoBuilder{
 		private Long weatherId;
 		private Long sensorTypeId;
+		private String title;
 		
 		public SensorPostRequestDtoBuilder weatherId(Long weatherId) {
 			this.weatherId = weatherId;
@@ -43,6 +53,10 @@ public class SensorPostRequestDto extends BaseDto{
 			this.sensorTypeId = sensorTypeId;
 			return this;
 		}
+		public SensorPostRequestDtoBuilder title(String title) {
+			this.title = title;
+			return this;
+		}
 		
 		
 		public SensorPostRequestDto build() {
@@ -50,6 +64,7 @@ public class SensorPostRequestDto extends BaseDto{
 			
 			addDto.setSensorTypeId(sensorTypeId);
 			addDto.setWeatherId(weatherId);
+			addDto.setTitle(title);
 			
 			return addDto;
 		}

@@ -79,6 +79,7 @@ public class SensorEndPoint {
 
 		Sensor sensor = Sensor.builder()
 				.sensorType(sensorType)
+				.title(sensorDto.getTitle())
 				.build();
 
 		weatherStation.addSensor(sensor);
@@ -312,6 +313,7 @@ public class SensorEndPoint {
 		return SensorResponsDto.builder()
 				.description(sensor.getSensorType().getDescription())
 				.weatherId(weatherId)
+				.title(sensor.getTitle())
 				.build();
 	}
 	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure) {
