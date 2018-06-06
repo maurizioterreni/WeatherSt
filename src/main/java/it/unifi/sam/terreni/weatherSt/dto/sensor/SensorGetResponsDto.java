@@ -8,6 +8,7 @@ public class SensorGetResponsDto extends BaseDto{
 
 	private Long id;
 	private String description;
+	private String title;
 	private MeasureDto maxMeasure;
 	private MeasureDto measure;
 	private MeasureDto minMeasure;
@@ -36,6 +37,7 @@ public class SensorGetResponsDto extends BaseDto{
 	public Long getId() {
 		return id;
 	}
+	
 	
 	
 //	public 
@@ -75,9 +77,21 @@ public class SensorGetResponsDto extends BaseDto{
 
 
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
+
+
 	public static class SensorGetResponsDtoBuilder{
 		private Long id;
 		private String description;
+		private String title;
 		private MeasureDto maxMeasure;
 		private MeasureDto measure;
 		private Long unitKnowledgeId;
@@ -107,6 +121,10 @@ public class SensorGetResponsDto extends BaseDto{
 			this.unitKnowledgeId = unitKnowledgeId;
 			return this;
 		}
+		public SensorGetResponsDtoBuilder title(String title) {
+			this.title = title;
+			return this;
+		}
 		
 		
 		
@@ -118,6 +136,7 @@ public class SensorGetResponsDto extends BaseDto{
 			dto.setMaxMeasure(maxMeasure);
 			dto.setMeasure(measure);
 			dto.setMinMeasure(minMeasure);
+			dto.setTitle(title);
 			dto.setUnitKnowledgeId(unitKnowledgeId);
 					
 			return dto;
