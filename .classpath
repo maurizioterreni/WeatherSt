@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="/Users/maurizio/Documents/UNIFI/Magistrale/Software Architectures and Methodologies/project/WeatherSt/frontend/**" kind="src" output="target/classes" path="src/main/java">
+	<classpathentry excluding="C:/Users/87002715/Documents/GitHub/WeatherSt/frontend/**" kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.poMaterived" value="true"/>
@@ -33,11 +33,6 @@
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
 		<attributes>
 			<attribute name="maven.poMaterived" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
-		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>

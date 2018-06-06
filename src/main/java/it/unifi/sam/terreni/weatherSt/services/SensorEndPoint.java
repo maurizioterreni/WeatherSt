@@ -260,14 +260,15 @@ public class SensorEndPoint {
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
 
-		UnitMeasureKnowledge unitMeasureKnowledge = unitMeasureKnowledgeDao.findById(createSensorKnowledgeDto.getSelectedUnitKnowledge());
+		List<UnitMeasureKnowledge> unitMeasureKnowledges = new ArrayList<>();
 		
-		if (unitMeasureKnowledge == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - unitMeasureKnowledge").build();
+		for (Long unitMeasureId : createSensorKnowledgeDto.getSelectedUnitKnowledges()) {
+			unitMeasureKnowledges.add(unitMeasureKnowledgeDao.findById(unitMeasureId));
+		}
 		
 		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
 				.descrition(createSensorKnowledgeDto.getDescription())
-				.unitMeasureKnowledge(unitMeasureKnowledge)
+				.unitMeasureKnowledges(unitMeasureKnowledges)
 				.build());
 		
 		return Response.status(200).entity(null).build();
@@ -290,8 +291,7 @@ public class SensorEndPoint {
 		return SensorTypeKnowledgeDto.builder()
 				.withDescription(obj.getDescription())
 				.withId(obj.getId())
-				.withName(obj.getUnitMeasure().getName())
-				.withSymbol(obj.getUnitMeasure().getSymbol())
+				.unitMeasureDtos(createListUnitKnowledge(obj.getUnitMeasures()))
 				.build();
 	}
 
@@ -311,8 +311,6 @@ public class SensorEndPoint {
 	private SensorResponsDto sensorToSensorResponsDto(Long weatherId, Sensor sensor) {
 		return SensorResponsDto.builder()
 				.description(sensor.getSensorType().getDescription())
-				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
-				.name(sensor.getSensorType().getUnitMeasure().getName())
 				.weatherId(weatherId)
 				.build();
 	}
@@ -320,12 +318,9 @@ public class SensorEndPoint {
 		return SensorGetResponsDto.builder()
 				.id(sensor.getId())
 				.description(sensor.getSensorType().getDescription())
-				.symbol(sensor.getSensorType().getUnitMeasure().getSymbol())
-				.name(sensor.getSensorType().getUnitMeasure().getName())
 				.measure(measureToMeasureDto(measure))
 				.maxMeasure(measureToMeasureDto(maxMeasure))
 				.minMeasure(measureToMeasureDto(minMeasure))
-				.unitKnowledgeId(sensor.getSensorType().getUnitMeasure().getId())
 				.build();
 	}
 	

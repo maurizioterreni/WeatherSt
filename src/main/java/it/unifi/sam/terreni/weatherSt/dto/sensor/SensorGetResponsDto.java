@@ -8,8 +8,6 @@ public class SensorGetResponsDto extends BaseDto{
 
 	private Long id;
 	private String description;
-	private String symbol;
-	private String name;
 	private MeasureDto maxMeasure;
 	private MeasureDto measure;
 	private MeasureDto minMeasure;
@@ -31,22 +29,6 @@ public class SensorGetResponsDto extends BaseDto{
 		this.description = description;
 	}
 
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -96,8 +78,6 @@ public class SensorGetResponsDto extends BaseDto{
 	public static class SensorGetResponsDtoBuilder{
 		private Long id;
 		private String description;
-		private String symbol;
-		private String name;
 		private MeasureDto maxMeasure;
 		private MeasureDto measure;
 		private Long unitKnowledgeId;
@@ -109,14 +89,6 @@ public class SensorGetResponsDto extends BaseDto{
 		}
 		public SensorGetResponsDtoBuilder description(String description) {
 			this.description = description;
-			return this;
-		}
-		public SensorGetResponsDtoBuilder symbol(String symbol) {
-			this.symbol = symbol;
-			return this;
-		}
-		public SensorGetResponsDtoBuilder name(String name) {
-			this.name = name;
 			return this;
 		}
 		public SensorGetResponsDtoBuilder maxMeasure(MeasureDto maxMeasure) {
@@ -143,8 +115,6 @@ public class SensorGetResponsDto extends BaseDto{
 			
 			dto.setId(id);
 			dto.setDescription(description);
-			dto.setSymbol(symbol);
-			dto.setName(name);
 			dto.setMaxMeasure(maxMeasure);
 			dto.setMeasure(measure);
 			dto.setMinMeasure(minMeasure);

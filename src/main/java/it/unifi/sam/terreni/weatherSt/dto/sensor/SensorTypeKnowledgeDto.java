@@ -1,22 +1,24 @@
 package it.unifi.sam.terreni.weatherSt.dto.sensor;
 
-import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
+import java.util.List;
+
 import javax.annotation.Generated;
+
+import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
+import it.unifi.sam.terreni.weatherSt.dto.measure.UnitMeasureDto;
 
 public class SensorTypeKnowledgeDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	
 	private String description;
 	private Long id;
-	private String symbol;
-	private String name;
+	private List<UnitMeasureDto> unitMeasureDtos;
 
 	@Generated("SparkTools")
 	private SensorTypeKnowledgeDto(Builder builder) {
 		this.description = builder.description;
 		this.id = builder.id;
-		this.symbol = builder.symbol;
-		this.name = builder.name;
+		this.unitMeasureDtos = builder.unitMeasureDtos;
 	}
 	
 	public SensorTypeKnowledgeDto() {}
@@ -37,22 +39,6 @@ public class SensorTypeKnowledgeDto extends BaseDto{
 		this.id = id;
 	}
 
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	/**
 	 * Creates builder to build {@link SensorTypeKnowledgeDto}.
 	 * @return created builder
@@ -62,6 +48,14 @@ public class SensorTypeKnowledgeDto extends BaseDto{
 		return new Builder();
 	}
 
+	public List<UnitMeasureDto> getUnitMeasureDtos() {
+		return unitMeasureDtos;
+	}
+
+	public void setUnitMeasureDtos(List<UnitMeasureDto> unitMeasureDtos) {
+		this.unitMeasureDtos = unitMeasureDtos;
+	}
+
 	/**
 	 * Builder to build {@link SensorTypeKnowledgeDto}.
 	 */
@@ -69,8 +63,7 @@ public class SensorTypeKnowledgeDto extends BaseDto{
 	public static final class Builder {
 		private String description;
 		private Long id;
-		private String symbol;
-		private String name;
+		private List<UnitMeasureDto> unitMeasureDtos;
 
 		private Builder() {
 		}
@@ -84,14 +77,8 @@ public class SensorTypeKnowledgeDto extends BaseDto{
 			this.id = id;
 			return this;
 		}
-
-		public Builder withSymbol(String symbol) {
-			this.symbol = symbol;
-			return this;
-		}
-
-		public Builder withName(String name) {
-			this.name = name;
+		public Builder unitMeasureDtos(List<UnitMeasureDto> unitMeasureDtos) {
+			this.unitMeasureDtos = unitMeasureDtos;
 			return this;
 		}
 

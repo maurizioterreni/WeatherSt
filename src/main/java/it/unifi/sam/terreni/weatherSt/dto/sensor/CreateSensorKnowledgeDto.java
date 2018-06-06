@@ -1,12 +1,14 @@
 package it.unifi.sam.terreni.weatherSt.dto.sensor;
 
+import java.util.List;
+
 import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
 public class CreateSensorKnowledgeDto extends BaseDto {
 	private static final long serialVersionUID = 1L;
 
 	private String description;
-	private Long selectedUnitKnowledge;
+	private List<Long> selectedUnitKnowledges;
 	
 	public CreateSensorKnowledgeDto() {}
 
@@ -18,12 +20,12 @@ public class CreateSensorKnowledgeDto extends BaseDto {
 		this.description = description;
 	}
 
-	public Long getSelectedUnitKnowledge() {
-		return selectedUnitKnowledge;
+	public List<Long> getSelectedUnitKnowledges() {
+		return selectedUnitKnowledges;
 	}
 
-	public void setSelectedUnitKnowledge(Long selectedUnitKnowledge) {
-		this.selectedUnitKnowledge = selectedUnitKnowledge;
+	public void setSelectedUnitKnowledges(List<Long> selectedUnitKnowledges) {
+		this.selectedUnitKnowledges = selectedUnitKnowledges;
 	}
 	
 	

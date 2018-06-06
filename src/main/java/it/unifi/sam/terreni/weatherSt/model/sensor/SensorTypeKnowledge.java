@@ -1,7 +1,11 @@
 package it.unifi.sam.terreni.weatherSt.model.sensor;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
@@ -16,17 +20,17 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	private static final long serialVersionUID = -89078019304345613L;
 
 	private String description;
-	@OneToOne()
-	private UnitMeasureKnowledge unitMeasure;
+	@OneToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.ALL )
+	private List<UnitMeasureKnowledge> unitMeasures;
 
 	SensorTypeKnowledge() {
 		super();
 	}
-	
+
 	public SensorTypeKnowledge(String uuid) {
 		super(uuid);
 	}
-	
+
 	public static SensorTypeBuilder builder() {
 		return new SensorTypeBuilder();
 	}
@@ -38,13 +42,13 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public UnitMeasureKnowledge getUnitMeasure() {
-		return unitMeasure;
+
+	public List<UnitMeasureKnowledge> getUnitMeasures() {
+		return unitMeasures;
 	}
 
-	public void setUnitMeasure(UnitMeasureKnowledge unitMeasure) {
-		this.unitMeasure = unitMeasure;
+	public void setUnitMeasures(List<UnitMeasureKnowledge> unitMeasures) {
+		this.unitMeasures = unitMeasures;
 	}
 
 	@Override
@@ -54,23 +58,23 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	}
 	public static class SensorTypeBuilder{
 		private String description;
-		private UnitMeasureKnowledge unitMeasure;
-		
-		public SensorTypeBuilder unitMeasureKnowledge(UnitMeasureKnowledge unitMeasure) {
-			this.unitMeasure = unitMeasure;
+		private List<UnitMeasureKnowledge> unitMeasures;
+
+		public SensorTypeBuilder unitMeasureKnowledges(List<UnitMeasureKnowledge> unitMeasures) {
+			this.unitMeasures = unitMeasures;
 			return this;
 		}
-		
+
 		public SensorTypeBuilder descrition(String description) {
 			this.description = description;
 			return this;
 		}
-		
+
 		public SensorTypeKnowledge build() {
 			SensorTypeKnowledge sensorType = ModelFactory.sensorType();
 
 			sensorType.description = this.description;
-			sensorType.setUnitMeasure(unitMeasure);
+			sensorType.setUnitMeasures(unitMeasures);
 
 			return sensorType;
 		}

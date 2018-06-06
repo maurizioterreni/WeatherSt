@@ -7,8 +7,6 @@ public class SensorResponsDto extends BaseDto{
 
 	private Long weatherId;
 	private String description;
-	private String symbol;
-	private String name;
 	
 	public SensorResponsDto() {
 		
@@ -33,30 +31,11 @@ public class SensorResponsDto extends BaseDto{
 		this.description = description;
 	}
 
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
 //	public 
 	
 	public static class SensorResponseDtoBuilder{
 		private Long weatherId;
 		private String description;
-		private String symbol;
-		private String name;
 		
 		public SensorResponseDtoBuilder weatherId(Long weatherId) {
 			this.weatherId = weatherId;
@@ -66,21 +45,11 @@ public class SensorResponsDto extends BaseDto{
 			this.description = description;
 			return this;
 		}
-		public SensorResponseDtoBuilder symbol(String symbol) {
-			this.symbol = symbol;
-			return this;
-		}
-		public SensorResponseDtoBuilder name(String name) {
-			this.name = name;
-			return this;
-		}
 		
 		public SensorResponsDto build() {
 			SensorResponsDto dto = new SensorResponsDto();
 			
 			dto.setDescription(description);
-			dto.setSymbol(symbol);
-			dto.setName(name);
 			dto.setWeatherId(weatherId);
 			
 			return dto;

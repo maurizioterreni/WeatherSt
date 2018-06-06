@@ -30,17 +30,19 @@ public class Sensor extends BaseEntity implements Usage{
 
 	@OneToMany( mappedBy = "sensor" , cascade = CascadeType.REMOVE )
 	private List<Measure> measures;
-	
+
+	private String title;
+
 	Sensor() {
 		super();
 		measures = new ArrayList<>();
 	}
-	
+
 	public Sensor(String uuid) {
 		super(uuid);
 		measures = new LinkedList<>();
 	}
-	
+
 	public static SensorBuilder builder() {
 		return new SensorBuilder();
 	}
@@ -57,35 +59,51 @@ public class Sensor extends BaseEntity implements Usage{
 	public List<Measure> getMeasures() {
 		return measures;
 	}
-	
+
 	public void setMeasures(List<Measure> measures) {
 		this.measures = measures;
 	}
-	
+
 	public void addMeasuer(Measure measure) {
 		this.measures.add(measure);
+	}
+	
+	
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	@Override
 	public void accept(UsageVisitor visitor) {
 		visitor.visitSensor(this);
 	}
-	
+
 	public static class SensorBuilder{
 		private SensorTypeKnowledge sensorType;
+		private String title;
 
 		public SensorBuilder sensorType(SensorTypeKnowledge sensorType) {
 			this.sensorType = sensorType;
 			return this;
 		}
-		
+		public SensorBuilder title(String title) {
+			this.title = title;
+			return this;
+		}
+
 		public Sensor build() {
 			Sensor sensor = ModelFactory.sensor();
-			
+
 			sensor.sensorType = this.sensorType;
-			
+			sensor.title = this.title;
+
 			return sensor;
 		}
 	}
-	
+
 }
