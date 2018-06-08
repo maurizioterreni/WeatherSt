@@ -16,7 +16,7 @@ export class ConversionFactorService {
 
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
-        .set('fronUnitId', unitId);
+        .set('fromUnitId', unitId);
 
       return this.http.get("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/conversion/getAllFromUnit",  {headers} )
         .map((response) => {

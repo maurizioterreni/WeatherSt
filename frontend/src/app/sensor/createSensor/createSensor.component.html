@@ -1,13 +1,27 @@
 <mat-dialog-content class="accent-color">
   <h1>Create new Sensor</h1>
   <form class="create-sensor-form" (submit)="createSensor($event)">
+
     <mat-form-field class="create-sensor-form-width">
-      <mat-select placeholder="Chose sensor type" [(ngModel)]="selectedSensorKnowledge"  name="-1">
+      <input matInput #title placeholder="The Title of your Sensor" (keyup.enter)="addTitle(title.value)" (blur)="addTitle(title.value)" maxlength="50">
+    </mat-form-field>
+
+    <mat-form-field class="create-sensor-form-width">
+      <mat-select placeholder="Chose sensor type" [(ngModel)]="selectedSensorKnowledge" (selectionChange)="selectedSensorKnowledgeChange($event)"  name="-1">
         <mat-option *ngFor="let sensorK of sensorKnowledges" [value]="sensorK.id">
-          {{ sensorK.description }} [{{sensorK.symbol}}]
+          {{ sensorK.description }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div *ngIf="selectedSensorKnowledge && unitKnowledges"  class="create-formula">
+      <mat-form-field class="create-sensor-form-width">
+        <mat-select placeholder="Chose unit type" [(ngModel)]="selectedUnitKnowledge"  name="-1">
+          <mat-option *ngFor="let unitK of unitKnowledges" [value]="unitK.id">
+            {{ unitK.name }} [{{unitK.symbol}}]
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="create-sensor-form-width">
       <button mat-button>Create</button>
     </div>

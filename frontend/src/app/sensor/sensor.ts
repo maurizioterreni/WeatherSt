@@ -3,6 +3,7 @@ import { Measure } from '../measure/measure';
 export interface Sensor {
   id: number;
   description: string;
+  title: string;
   symbol: string;
   name: string;
   maxMeasure: Measure;

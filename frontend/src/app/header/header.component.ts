@@ -58,7 +58,8 @@ export class HeaderComponent implements OnInit {
        if(this.user == null)
          this.user = JSON.parse(sessionStorage.getItem("currentUser"));
 
-        window.location.reload();
+        if(result == true)
+          window.location.reload();
      });
   }
 

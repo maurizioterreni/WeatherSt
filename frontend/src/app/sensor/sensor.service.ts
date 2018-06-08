@@ -70,11 +70,22 @@ export class SensorService {
 
    getAllUnitKnowledge(): Observable<UnitKnowledge[]> {
      const headers = new HttpHeaders()
-       .set('Content-Type', 'application/json')
+       .set('Content-Type', 'application/json');
 
      return this.http.get('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge', {headers})
       .map((response) => <UnitKnowledge[]> response);
    }
+
+   getAllUnitKnowledgeBySensorKnowledge(sensorKnowledge: string): Observable<UnitKnowledge[]> {
+     const headers = new HttpHeaders()
+       .set('Content-Type', 'application/json')
+       .set('sensorKnowledgeId', sensorKnowledge);
+
+     return this.http.get('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge/fromSensorKnowledge', {headers})
+      .map((response) => <UnitKnowledge[]> response);
+   }
+
+
 
 
    createSensorKnowledge(user: User, description: string, selectedUnitKnowledge: string){
@@ -90,7 +101,7 @@ export class SensorService {
      const headers = new HttpHeaders()
        .set('Content-Type', 'application/json')
        .set('token', '' + user.token)
-       
+
      return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/unitKnowledge',
          JSON.stringify({ symbol: symbol, name: name }), {headers});
    }

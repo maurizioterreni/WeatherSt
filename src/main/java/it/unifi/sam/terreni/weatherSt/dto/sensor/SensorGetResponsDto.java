@@ -126,16 +126,20 @@ public class SensorGetResponsDto extends BaseDto{
 			return this;
 		}
 		
-		
+		private void setMeasure(SensorGetResponsDto dto) {
+			if(maxMeasure != null && minMeasure != null && measure != null) {
+				dto.setMaxMeasure(maxMeasure);
+				dto.setMeasure(measure);
+				dto.setMinMeasure(minMeasure);
+			}
+		}
 		
 		public SensorGetResponsDto build() {
 			SensorGetResponsDto dto = new SensorGetResponsDto();
 			
 			dto.setId(id);
 			dto.setDescription(description);
-			dto.setMaxMeasure(maxMeasure);
-			dto.setMeasure(measure);
-			dto.setMinMeasure(minMeasure);
+			setMeasure(dto);
 			dto.setTitle(title);
 			dto.setUnitKnowledgeId(unitKnowledgeId);
 					

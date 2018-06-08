@@ -223,6 +223,25 @@ public class SensorEndPoint {
 		return Response.status(200).entity(createListUnitKnowledge(list)).build();
 	}
 	
+	@GET
+	@Path("/unitKnowledge/fromSensorKnowledge")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getUnitKnowledgeBySensorKnowledge(@HeaderParam("sensorKnowledgeId") Long sensorKnowledgeId) {
+		if(sensorKnowledgeId == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorKnowledgeId").build();
+		
+		SensorTypeKnowledge sensorTypeKnowledge = sensorTypeKnowledgeDao.findById(sensorKnowledgeId);
+		
+		List<UnitMeasureKnowledge> list = sensorTypeKnowledge.getUnitMeasures();
+		
+		if(list == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - list unitKnowledge").build();
+		
+		return Response.status(200).entity(createListUnitKnowledge(list)).build();
+	}
+	
 	@POST
 	@Path("/unitKnowledge")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -323,6 +342,7 @@ public class SensorEndPoint {
 				.measure(measureToMeasureDto(measure))
 				.maxMeasure(measureToMeasureDto(maxMeasure))
 				.minMeasure(measureToMeasureDto(minMeasure))
+				.unitKnowledgeId(measure.getUnitMeasure().getId())
 				.build();
 	}
 	
