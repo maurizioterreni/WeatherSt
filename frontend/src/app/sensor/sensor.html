@@ -1,7 +1,7 @@
 <div class="sensorItems">
 	<!--------------------------------------------------------------------------------------->
 	<mat-card *ngFor="let sensor of sensors let i = index" class="sensorCard">
-		<mat-card-title>{{sensor.description}}</mat-card-title>
+		<mat-card-title matTooltip="Sensor Type: {{sensor.description}}">{{sensor.title}}</mat-card-title>
 					<mat-card-content class="sensorContent">
 						<app-temperature-gauge *ngIf="sensor.description=='Temperature'" [sensor]="sensor"></app-temperature-gauge>
 						<app-windspeed-gauge *ngIf="sensor.description=='Wind speed'" [sensor]="sensor"></app-windspeed-gauge>

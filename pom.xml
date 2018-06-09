@@ -205,7 +205,7 @@
 						<id>exec-npm-install</id>
 						<phase>generate-sources</phase>
 						<configuration>
-							<workingDirectory>${project.basedir}/frontend</workingDirectory>
+							<workingDirectory>${project.basedir}/frontend/</workingDirectory>
 							<executable>npm</executable>
 							<arguments>
 								<argument>install</argument>
@@ -219,7 +219,7 @@
 						<id>exec-npm-ng-build</id>
 						<phase>generate-sources</phase>
 						<configuration>
-							<workingDirectory>${project.basedir}/frontend</workingDirectory>
+							<workingDirectory>${project.basedir}/frontend/</workingDirectory>
 							<executable>ng</executable>
 							<arguments>
 								<argument>build</argument>
