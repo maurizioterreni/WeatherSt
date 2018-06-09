@@ -1,7 +1,6 @@
 import { Serializable } from '../interface/serializzable';
 export interface MeasureChart {
-    minQuantity: string;
-    maxQuantity: string;
+    quantity: string;
     dateTime: string;
     unitId: string;
 }

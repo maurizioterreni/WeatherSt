@@ -155,7 +155,7 @@ export class RainGaugeComponent implements OnInit, OnChanges {
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
+          this.quantityArray.push(this.getMeasureQuantityByStr(m.quantity));
         }
         this.initChart();
       });
@@ -201,7 +201,7 @@ export class RainGaugeComponent implements OnInit, OnChanges {
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.quantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
+          this.quantityArray.push(this.getMeasureQuantityByStr(m.quantity));
         }
         this.initChart();
       });

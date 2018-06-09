@@ -22,16 +22,14 @@ export class PressureGaugeComponent implements OnInit, OnChanges {
   chart: Chart;
   fromDate: Date;
   toDate: Date;
-  maxQuantityArray: string[];
-  minQuantityArray: string[];
+  quantityArray: string[];
   labelArray: string[];
   conversionFactors: ConversionFactor[];
   unitConverterSelected = -1;
   user: User;
 
   constructor(private meausureService: MeasureService,private userService: UserService, private conversionService: ConversionFactorService) {
-    this.maxQuantityArray = new Array();
-    this.minQuantityArray = new Array();
+    this.quantityArray = new Array();
     this.labelArray = new Array();
     this.user = JSON.parse(sessionStorage.getItem("currentUser"));
   }
@@ -153,13 +151,11 @@ export class PressureGaugeComponent implements OnInit, OnChanges {
     this.meausureService.getMeasureBetweenDate(this.sensor.id,this.fromDate.getTime(),this.toDate.getTime())
       .subscribe(results => {
         this.labelArray.length = 0;
-        this.maxQuantityArray.length = 0;
-        this.minQuantityArray.length = 0;
+        this.quantityArray.length = 0;
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.maxQuantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
-          this.minQuantityArray.push(this.getMeasureQuantityByStr(m.minQuantity));
+          this.quantityArray.push(this.getMeasureQuantityByStr(m.quantity));
         }
         this.initChart();
       });
@@ -173,13 +169,8 @@ export class PressureGaugeComponent implements OnInit, OnChanges {
         labels: this.labelArray,
         datasets: [
           {
-            data: this.maxQuantityArray,
+            data: this.quantityArray,
             borderColor: "#790000",
-            fill: false
-          },
-          {
-            data: this.minQuantityArray,
-            borderColor: "#055782",
             fill: false
           }
             ]
@@ -206,13 +197,11 @@ export class PressureGaugeComponent implements OnInit, OnChanges {
     this.meausureService.getMeasureBetweenDate(this.sensor.id,this.fromDate.getTime(),this.toDate.getTime())
       .subscribe(results => {
         this.labelArray.length = 0;
-        this.maxQuantityArray.length = 0;
-        this.minQuantityArray.length = 0;
+        this.quantityArray.length = 0;
         for (const i of results) {
           let m = <MeasureChart> i;
           this.labelArray.push(m.dateTime);
-          this.maxQuantityArray.push(this.getMeasureQuantityByStr(m.maxQuantity));
-          this.minQuantityArray.push(this.getMeasureQuantityByStr(m.minQuantity));
+          this.quantityArray.push(this.getMeasureQuantityByStr(m.quantity));
         }
         this.initChart();
       });

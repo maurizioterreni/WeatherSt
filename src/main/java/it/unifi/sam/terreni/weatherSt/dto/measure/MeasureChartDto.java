@@ -6,15 +6,13 @@ import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
 public class MeasureChartDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
-	private String minQuantity;
-	private String maxQuantity;
+	private String quantity;
 	private String dateTime;
 	private Long unitId;
 
 	@Generated("SparkTools")
 	private MeasureChartDto(Builder builder) {
-		this.minQuantity = builder.minQuantity;
-		this.maxQuantity = builder.maxQuantity;
+		this.quantity = builder.quantity;
 		this.dateTime = builder.dateTime;
 		this.unitId = builder.unitId;
 	}
@@ -23,20 +21,12 @@ public class MeasureChartDto extends BaseDto{
 		
 	}
 
-	public String getMinQuantity() {
-		return minQuantity;
+	public String getQuantity() {
+		return quantity;
 	}
 
-	public void setMinQuantity(String minQuantity) {
-		this.minQuantity = minQuantity;
-	}
-
-	public String getMaxQuantity() {
-		return maxQuantity;
-	}
-
-	public void setMaxQuantity(String maxQuantity) {
-		this.maxQuantity = maxQuantity;
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
 	}
 
 	public String getDateTime() {
@@ -62,21 +52,15 @@ public class MeasureChartDto extends BaseDto{
 
 
 	public static final class Builder {
-		private String minQuantity;
-		private String maxQuantity;
+		private String quantity;
 		private String dateTime;
 		private Long unitId;
 
 		private Builder() {
 		}
 
-		public Builder withMinQuantity(String minQuantity) {
-			this.minQuantity = minQuantity;
-			return this;
-		}
-
-		public Builder withMaxQuantity(String maxQuantity) {
-			this.maxQuantity = maxQuantity;
+		public Builder withQuantity(String quantity) {
+			this.quantity = quantity;
 			return this;
 		}
 
