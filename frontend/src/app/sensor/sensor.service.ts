@@ -34,13 +34,13 @@ export class SensorService {
       return this.http.delete("http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/",  {headers} );
    }
 
-   createSensor(sensorTypeId: string, user: User) {
+   createSensor(sensorTypeId: string, title: string, user: User) {
        const headers = new HttpHeaders()
          .set('Content-Type', 'application/json')
          .set('token', user.token)
 
        return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor',
-           JSON.stringify({ weatherId: user.weatherId, sensorTypeId: sensorTypeId }), {headers})
+           JSON.stringify({ weatherId: user.weatherId, sensorTypeId: sensorTypeId, title: title }), {headers})
          .map(sensor => {
              return sensor;
          });

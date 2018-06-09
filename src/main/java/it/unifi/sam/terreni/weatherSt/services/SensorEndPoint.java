@@ -338,6 +338,7 @@ public class SensorEndPoint {
 	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure) {
 		return SensorGetResponsDto.builder()
 				.id(sensor.getId())
+				.title(sensor.getTitle())
 				.description(sensor.getSensorType().getDescription())
 				.measure(measureToMeasureDto(measure))
 				.maxMeasure(measureToMeasureDto(maxMeasure))

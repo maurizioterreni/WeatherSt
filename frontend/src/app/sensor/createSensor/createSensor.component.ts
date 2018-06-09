@@ -38,7 +38,7 @@ export class CreateSensorComponent  implements OnInit {
 
   createSensor(e){
 
-    this._sensorService.createSensor(this.selectedSensorKnowledge, this.user)
+    this._sensorService.createSensor(this.selectedSensorKnowledge, this.title , this.user)
     .subscribe(
       res => {
           this.dialogRef.close(true);
