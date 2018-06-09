@@ -151,11 +151,7 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
       .subscribe(results => {
         this.labelArray.length = 0;
         this.quantityArray.length = 0;
-        for (const i of results) {
-          let m = <MeasureChart> i;
-          this.labelArray.push(m.dateTime);
-          this.quantityArray.push(this.getMeasureQuantityByStr(m.quantity));
-        }
+        this.getCountDirection(results);
         this.initChart();
       });
   }
@@ -163,7 +159,7 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
   initChart(){
     if (this.chart) this.chart.destroy();
     this.chart = new Chart('canvas-WindDirectionGaugeComponent',{
-      type: 'polarArea',
+      type: 'bar',
       data: {
         labels: this.labelArray,
         datasets: [
@@ -202,7 +198,7 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
     else if(angle >= 112 && angle < 135) return "ESE";
     else if(angle >= 135 && angle < 157) return "SE";
     else if(angle >= 157 && angle < 180) return "SSE";
-    else if(angle >= 180 && angle < 202) return "SSE";
+    else if(angle >= 180 && angle < 202) return "S";
     else if(angle >= 202 && angle < 225) return "SSW";
     else if(angle >= 225 && angle < 247) return "SW";
     else if(angle >= 247 && angle < 270) return "WSW";
@@ -213,16 +209,100 @@ export class WindDirectionGaugeComponent implements OnInit, OnChanges {
     else return "NaN";
   }
 
+  getCountDirection(results: any) : void{
+    let N = 0;
+    let NNE = 0;
+    let NE = 0;
+    let ENE = 0;
+    let E = 0;
+    let ESE = 0;
+    let SE = 0;
+    let SSE = 0;
+    let S = 0;
+    let SSW = 0;
+    let SW = 0;
+    let WSW = 0;
+    let W = 0;
+    let WNW = 0;
+    let NW = 0;
+    let NNW = 0;
+    for (const i of results) {
+      let m = <MeasureChart> i;
+      let angle = Number(this.getMeasureQuantityByStr(m.quantity));
+      if(angle >= 0 && angle < 22) {
+        N = N + 1;
+      }else if(angle >= 22 && angle < 45){
+        NNE = NNE + 1;
+      }else if(angle >= 45 && angle < 67){
+        NE = NE + 1;
+      }else if(angle >= 67 && angle < 90){
+        ENE = ENE + 1;
+      }else if(angle >= 90 && angle < 112){
+        E = E + 1;
+      }else if(angle >= 112 && angle < 135){
+        ESE = ESE + 1;
+      }else if(angle >= 135 && angle < 157){
+        SE = SE + 1;
+      }else if(angle >= 157 && angle < 180){
+        SSE = SSE + 1;
+      }else if(angle >= 180 && angle < 202){
+        S = S + 1;
+      }else if(angle >= 202 && angle < 225){
+        SSW = SSW + 1;
+      }else if(angle >= 225 && angle < 247){
+        SW = SW + 1;
+      }else if(angle >= 247 && angle < 270){
+        WSW = WSW + 1;
+      }else if(angle >= 270 && angle < 292){
+        W = W + 1;
+      }else if(angle >= 292 && angle < 315){
+        WNW = WNW + 1;
+      }else if(angle >= 315 && angle < 337){
+        NW = NW + 1;
+      }else if(angle >= 337 && angle < 360){
+        NNW = NNW + 1;
+      }
+    }
+    this.quantityArray.push(String(N));
+    this.labelArray.push("N");
+    this.quantityArray.push(String(NNE));
+    this.labelArray.push("NNE");
+    this.quantityArray.push(String(NE));
+    this.labelArray.push("NE");
+    this.quantityArray.push(String(ENE));
+    this.labelArray.push("ENE");
+    this.quantityArray.push(String(E));
+    this.labelArray.push("E");
+    this.quantityArray.push(String(ESE));
+    this.labelArray.push("ESE");
+    this.quantityArray.push(String(SE));
+    this.labelArray.push("SE");
+    this.quantityArray.push(String(SSE));
+    this.labelArray.push("SSE");
+    this.quantityArray.push(String(S));
+    this.labelArray.push("S");
+    this.quantityArray.push(String(SSW));
+    this.labelArray.push("SSW");
+    this.quantityArray.push(String(SW));
+    this.labelArray.push("SW");
+    this.quantityArray.push(String(WSW));
+    this.labelArray.push("WSW");
+    this.quantityArray.push(String(W));
+    this.labelArray.push("W");
+    this.quantityArray.push(String(WNW));
+    this.labelArray.push("WNW");
+    this.quantityArray.push(String(NW));
+    this.labelArray.push("Nw");
+    this.quantityArray.push(String(NNW));
+    this.labelArray.push("NNW");
+  }
+
   onTabChange(event: MatTabChangeEvent) {
     this.meausureService.getMeasureBetweenDate(this.sensor.id,this.fromDate.getTime(),this.toDate.getTime())
       .subscribe(results => {
         this.labelArray.length = 0;
         this.quantityArray.length = 0;
-        for (const i of results) {
-          let m = <MeasureChart> i;
-          this.labelArray.push(m.dateTime);
-          this.quantityArray.push(this.getMeasureQuantityByStr(m.quantity));
-        }
+        this.getCountDirection(results);
         this.initChart();
       });
   }
