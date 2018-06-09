@@ -342,7 +342,7 @@ public class SensorEndPoint {
 				.measure(measureToMeasureDto(measure))
 				.maxMeasure(measureToMeasureDto(maxMeasure))
 				.minMeasure(measureToMeasureDto(minMeasure))
-				.unitKnowledgeId(measure.getUnitMeasure().getId())
+				.unitKnowledgeId(measure != null ? measure.getUnitMeasure().getId() : null)
 				.build();
 	}
 	

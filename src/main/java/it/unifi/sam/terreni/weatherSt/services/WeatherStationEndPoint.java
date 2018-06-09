@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -31,6 +32,7 @@ public class WeatherStationEndPoint {
 	private UserDao userDao;
 
 	@POST
+	@Transactional
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response add(@HeaderParam("token") String token, WeatherStationPostRequestDto weatherStationDto) {
 		if (StringUtils.isEmpty(token))
@@ -69,13 +71,14 @@ public class WeatherStationEndPoint {
 	
 	
 	@GET
+	@Transactional
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
 	public Response getAll() {
 		
 		List<WeatherStation> weatherStations = weatherStationDao.getAll();
 		
-		if(weatherStations == null || weatherStations.size() == 0)
+		if(weatherStations == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 		
 		List<WeatherStationResponseDto> listWeatherStationDto = new ArrayList<>();

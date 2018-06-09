@@ -22,8 +22,6 @@ export class CreateSensorComponent  implements OnInit {
   // -----------------------------------------------------------------------//
   sensorKnowledges: SensorKnowledge[];
   selectedSensorKnowledge: string;
-  unitKnowledges: UnitKnowledge[];
-  selectedUnitKnowledge: string;
   title: string;
 
   // -----------------------------------------------------------------------//
@@ -34,7 +32,6 @@ export class CreateSensorComponent  implements OnInit {
 
   ngOnInit() {
     this.selectedSensorKnowledge = '0';
-    this.selectedUnitKnowledge = '0';
     this._sensorService.getAllSensorKnowledge()
         .subscribe(sensorKnowledges => this.sensorKnowledges = sensorKnowledges);
   }
@@ -47,18 +44,10 @@ export class CreateSensorComponent  implements OnInit {
           this.dialogRef.close(true);
         },
         err => {
-          this.closeDialog(false);
+          this.dialogRef.close(false);
           //openSnackBar("User or Password wrong", "undo");
 
       });
-  }
-
-  selectedSensorKnowledgeChange(e): void{
-     this.selectedSensorKnowledge = e.value + '';
-      this._sensorService.getAllUnitKnowledgeBySensorKnowledge(e.value + '')
-        .subscribe(unitKnowledges => {
-          this.unitKnowledges = unitKnowledges;
-        });
   }
 
   addTitle(title: string): void{

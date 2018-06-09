@@ -88,13 +88,19 @@ export class SensorService {
 
 
 
-   createSensorKnowledge(user: User, description: string, selectedUnitKnowledge: string){
+   createSensorKnowledge(user: User, description: string, selectedUnitKnowledges: string[]){
      const headers = new HttpHeaders()
        .set('Content-Type', 'application/json')
-       .set('token', '' + user.token)
+       .set('token', '' + user.token);
+
+       const obj = {
+         description: description,
+         selectedUnitKnowledges: selectedUnitKnowledges
+       };
+
 
      return this.http.post<any>('http://localhost:8080/WeatherSt-0.0.1-SNAPSHOT/rest/1.0/sensor/sensorKnowledge',
-           JSON.stringify({ description: description, selectedUnitKnowledge: selectedUnitKnowledge }), {headers});
+           JSON.stringify(obj), {headers});
    }
 
    createUnitKnowledge(user:User, symbol:string, name:string){

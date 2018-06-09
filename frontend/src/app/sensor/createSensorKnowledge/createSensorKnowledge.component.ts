@@ -21,7 +21,7 @@ export class CreateSensorKnowledgeComponent  implements OnInit {
   public description: string;
   unitKnowledges: UnitKnowledge[];
   // -----------------------------------------------------------------------//
-  selectedUnitKnowledge: string;
+  units = new FormControl();
   // -----------------------------------------------------------------------//
   constructor(private _sensorService: SensorService, public dialogRef: MatDialogRef<CreateSensorKnowledgeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -29,19 +29,19 @@ export class CreateSensorKnowledgeComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedUnitKnowledge = '0';
     this._sensorService.getAllUnitKnowledge()
       .subscribe(unitKnowledges => this.unitKnowledges = unitKnowledges);
   }
 
   createSensor(e){
-    this._sensorService.createSensorKnowledge(this.user, this.description, this.selectedUnitKnowledge)
+    this._sensorService.createSensorKnowledge(this.user, this.description, this.units.value)
     .subscribe(
       res => {
           this.dialogRef.close();
         },
         err => {
           console.log('ERROR');
+          this.dialogRef.close();
           //openSnackBar("User or Password wrong", "undo");
 
       });

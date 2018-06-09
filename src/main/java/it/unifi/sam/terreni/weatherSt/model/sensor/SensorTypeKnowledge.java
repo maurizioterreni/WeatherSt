@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
@@ -20,7 +20,7 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	private static final long serialVersionUID = -89078019304345613L;
 
 	private String description;
-	@OneToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.ALL )
+	@ManyToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.ALL )
 	private List<UnitMeasureKnowledge> unitMeasures;
 
 	SensorTypeKnowledge() {
