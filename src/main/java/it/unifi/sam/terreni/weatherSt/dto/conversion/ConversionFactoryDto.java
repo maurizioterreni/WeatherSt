@@ -10,6 +10,7 @@ public class ConversionFactoryDto extends BaseDto{
 	private String toSymbol;
 	private Float conversionFactorMul;
 	private Float conversionFactorAdd;
+	private Float conversionFactorDiv;
 	
 	public static ConversionFactoryDtoBuilder builder() {
 		return new ConversionFactoryDtoBuilder();
@@ -61,12 +62,23 @@ public class ConversionFactoryDto extends BaseDto{
 
 
 
+	public Float getConversionFactorDiv() {
+		return conversionFactorDiv;
+	}
+
+	public void setConversionFactorDiv(Float conversionFactorDiv) {
+		this.conversionFactorDiv = conversionFactorDiv;
+	}
+
+
+
 	public static class ConversionFactoryDtoBuilder{
 		private Long id;
 		private String fromSymbol;
 		private String toSymbol;
 		private Float conversionFactorMul;
 		private Float conversionFactorAdd;
+		private Float conversionFactorDiv;
 		
 		
 		public ConversionFactoryDtoBuilder id(Long id) {
@@ -89,12 +101,17 @@ public class ConversionFactoryDto extends BaseDto{
 			this.conversionFactorAdd = conversionFactorAdd;
 			return this;
 		}
+		public ConversionFactoryDtoBuilder conversionFactorDiv(Float conversionFactorDiv) {
+			this.conversionFactorDiv = conversionFactorDiv;
+			return this;
+		}
 		
 		public ConversionFactoryDto build(){
 			ConversionFactoryDto dto = new ConversionFactoryDto();
 			
 			dto.setConversionFactorMul(conversionFactorMul);
 			dto.setConversionFactorAdd(conversionFactorAdd);
+			dto.setConversionFactorDiv(conversionFactorDiv);
 			dto.setFromSymbol(fromSymbol);
 			dto.setId(id);
 			dto.setToSymbol(toSymbol);

@@ -27,6 +27,7 @@ export class CreateConversionFactorComponent  implements OnInit {
 
   add: string;
   mul: string;
+  div: string;
 
   constructor(private _sensorService: SensorService, private conversionFactorService: ConversionFactorService,
     public dialogRef: MatDialogRef<CreateConversionFactorComponent>,
@@ -41,7 +42,7 @@ export class CreateConversionFactorComponent  implements OnInit {
 
   createConversionFactor(e){
     this.conversionFactorService.createConversionFactor(
-            this.selectedFromUnitKnowledge, this.selectedToUnitKnowledge, this.mul, this.add, this.user)
+            this.selectedFromUnitKnowledge, this.selectedToUnitKnowledge, this.mul, this.add,this.div, this.user)
               .subscribe(() => {
                       this.dialogRef.close();
                   },
@@ -55,6 +56,10 @@ export class CreateConversionFactorComponent  implements OnInit {
 
   writeAdd(str:string){
     this.add = str;
+  }
+
+  writeDiv(str:string){
+    this.div = str;
   }
 
   writeMul(str:string){

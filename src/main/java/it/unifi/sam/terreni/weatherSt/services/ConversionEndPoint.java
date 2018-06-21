@@ -34,7 +34,7 @@ public class ConversionEndPoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response add(@HeaderParam("token") String token, @HeaderParam("fronUnitId") Long fromUnitId, @HeaderParam("toUnitId") Long toUnitId, 
-			@HeaderParam("conversionMul") Float conversionMul,@HeaderParam("conversionAdd") Float conversionAdd) {
+			@HeaderParam("conversionMul") Float conversionMul,@HeaderParam("conversionAdd") Float conversionAdd, @HeaderParam("conversionDiv") Float conversionDiv) {
 		if (fromUnitId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromUnitId").build();
 		if (toUnitId == null)
@@ -43,6 +43,8 @@ public class ConversionEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - conversionMul").build();
 		if (conversionAdd == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - conversionAdd").build();
+		if (conversionDiv == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - conversionDiv").build();
 	
 		
 		if(Authentication.isNotValid(token))
@@ -55,6 +57,7 @@ public class ConversionEndPoint {
 		ConversionFactor conversionFactor = ConversionFactor.builder()
 				.conversionFactorMul(conversionMul)
 				.conversionFactorAdd(conversionAdd)
+				.conversionFactorDiv(conversionDiv)
 				.fromUnitMeasure(fromUnit)
 				.toUnitMeasure(toUnit)
 				.build();
@@ -121,6 +124,7 @@ public class ConversionEndPoint {
 		return ConversionFactoryDto.builder()
 				.conversionFactorMul(conversionFactor.getConversionFactorMul())
 				.conversionFactorAdd(conversionFactor.getConversionFactorAdd())
+				.conversionFactorDiv(conversionFactor.getConversionFactorDiv())
 				.fromSymbol(conversionFactor.getFromUnitMeasure().getSymbol())
 				.toSymbol(conversionFactor.getToUnitMeasure().getSymbol())
 				.id(conversionFactor.getId())

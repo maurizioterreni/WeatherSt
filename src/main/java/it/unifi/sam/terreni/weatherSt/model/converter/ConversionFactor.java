@@ -22,6 +22,7 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 	
 	private Float conversionFactorMul;
 	private Float conversionFactorAdd;
+	private Float conversionFactorDiv;
 
 	ConversionFactor(){
 		super();
@@ -76,6 +77,17 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 		this.conversionFactorAdd = conversionFactorAdd;
 	}
 
+	
+
+	public Float getConversionFactorDiv() {
+		return conversionFactorDiv;
+	}
+
+
+	public void setConversionFactorDiv(Float conversionFactorDiv) {
+		this.conversionFactorDiv = conversionFactorDiv;
+	}
+
 
 	@Override
 	public void accept(UsageVisitor visitor) {
@@ -90,6 +102,7 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 		private UnitMeasureKnowledge toUnitMeasure;
 		private Float conversionFactorMul;
 		private Float conversionFactorAdd;
+		private Float conversionFactorDiv;
 		
 		public ConversionFactorBuilder fromUnitMeasure(UnitMeasureKnowledge fromUnitMeasure) {
 			this.fromUnitMeasure = fromUnitMeasure;
@@ -107,11 +120,16 @@ public class ConversionFactor extends BaseEntity  implements Usage{
 			this.conversionFactorAdd = conversionFactorAdd;
 			return this;
 		}
+		public ConversionFactorBuilder conversionFactorDiv(Float conversionFactorDiv) {
+			this.conversionFactorDiv = conversionFactorDiv;
+			return this;
+		}
 		public ConversionFactor build() {
 			ConversionFactor factor = ModelFactory.conversionFactor();
 			
 			factor.setConversionFactorMul(conversionFactorMul);
 			factor.setConversionFactorAdd(conversionFactorAdd);
+			factor.setConversionFactorDiv(conversionFactorDiv);
 			factor.setFromUnitMeasure(fromUnitMeasure);
 			factor.setToUnitMeasure(toUnitMeasure);
 			

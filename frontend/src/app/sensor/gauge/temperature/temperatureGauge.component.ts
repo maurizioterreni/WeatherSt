@@ -109,7 +109,9 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
     if(this.isConversionfactor()){
       let mul = this.conversionFactors[this.unitConverterSelected].conversionFactorMul + 0;
       let add = this.conversionFactors[this.unitConverterSelected].conversionFactorAdd + 0;
-      let qt = ((Number(measure.quantity) * mul) + add);
+      let div = this.conversionFactors[this.unitConverterSelected].conversionFactorDiv + 0;
+      //console.log("mul = " + mul + " div = " + div + " add = " + add);
+      let qt = (((Number(measure.quantity) * mul) + add))/(div);
       return qt + '';
     }
 
@@ -121,7 +123,9 @@ export class TemperatureGaugeComponent implements OnInit, OnChanges {
     if(this.isConversionfactor()){
       let mul = this.conversionFactors[this.unitConverterSelected].conversionFactorMul + 0;
       let add = this.conversionFactors[this.unitConverterSelected].conversionFactorAdd + 0;
-      let qt = ((Number(measure) * mul) + add);
+      let div = this.conversionFactors[this.unitConverterSelected].conversionFactorDiv + 0;
+      //console.log("mul = " + mul + " div = " + div + " add = " + add);
+      let qt = (((Number(measure) * mul) + add))/(div);
       return qt + '';
     }
 

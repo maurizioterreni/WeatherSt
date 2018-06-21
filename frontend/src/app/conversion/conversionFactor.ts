@@ -5,4 +5,5 @@ export interface ConversionFactor {
     toSymbol: string;
     conversionFactorMul: number;
     conversionFactorAdd: number;
+    conversionFactorDiv: number;
 }
