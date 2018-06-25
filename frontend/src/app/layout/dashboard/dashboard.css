@@ -1,0 +1,15 @@
+.toolbar-icon {
+  padding: 0 14px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar-row {
+  justify-content: space-between;
+}
+
+.sidenav-container{
+    flex: 1;
+}

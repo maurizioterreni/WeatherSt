@@ -1,0 +1,49 @@
+.img {
+  width: 100%;
+  margin-bottom: 18%;
+}
+.container {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.sidenav {
+  display: block;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background: rgba(0, 0, 0, 0);
+}
+.search-form {
+  width: 90%;
+}
+
+.toolbar-icon {
+  padding: 0 14px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar-row {
+  justify-content: space-between;
+}
+
+.is-mobile .sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+
+h1.app-name {
+  margin-left: 8px;
+}
