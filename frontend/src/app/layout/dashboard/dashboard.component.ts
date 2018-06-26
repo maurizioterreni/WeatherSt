@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Environment } from '../../local/environment';
+import { WeatherStationService } from '../../services/weatherstation/weatherstation.service';
+import { WeatherStation } from '../../models/weatherstation/weatherstation';
 
 /**
  * @title Multi-row toolbar
@@ -8,16 +10,24 @@ import { Environment } from '../../local/environment';
   selector: 'dashboard-app',
   templateUrl: 'dashboard.html',
   styleUrls: ['dashboard.css'],
+  providers: [WeatherStationService]
 })
 
 
 export class DashboardComponent implements OnInit {
   private environment: Environment;
 
-  constructor(){
+  weatherstations: WeatherStation[];
+
+  constructor(private weatherStationService: WeatherStationService){
     this.environment = new Environment();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.weatherStationService.getAllWeathrStation()
+      .subscribe((data: WeatherStation[]) => {
+        this.weatherstations = data;
+      });
+  }
 
 }

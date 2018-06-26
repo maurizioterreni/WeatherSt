@@ -2,6 +2,10 @@
   flex: 1 1 auto;
 }
 
+.wrapper{
+  margin-bottom: 100px;
+}
+
 .container {
   position: absolute;
   top: 0;
