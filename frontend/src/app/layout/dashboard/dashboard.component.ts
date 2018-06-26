@@ -16,7 +16,6 @@ import { WeatherStation } from '../../models/weatherstation/weatherstation';
 
 export class DashboardComponent implements OnInit {
   private environment: Environment;
-
   weatherstations: WeatherStation[];
 
   constructor(private weatherStationService: WeatherStationService){
