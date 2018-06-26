@@ -8,13 +8,16 @@ import { MaterialModule } from './material.module';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { DialogMaps } from './dialogs/map/dialogMap.component';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    DialogMaps
   ],
   imports: [
     BrowserModule,
@@ -22,9 +25,11 @@ import { AppComponent } from './app.component';
     FlexLayoutModule,
     AppRoutingModule,
     HttpClientModule,
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyB9t2Ki03ItPGImdj2sro-hMyBcQEsnloc'}),
     MaterialModule
   ],
   providers: [],
+  entryComponents: [DialogMaps],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
