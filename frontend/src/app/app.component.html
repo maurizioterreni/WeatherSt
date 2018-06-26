@@ -1,28 +1,145 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav [(mode)]="over" [(opened)]="opened" class="bottom-to-top">
+    <div class="my-2" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+      <div class="with-bg"></div>
+      <div>
+        <a>
+          <img class="circle" src="../assets/images/profile.jpg" width="100">
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <mat-nav-list>
+        <a mat-list-item class="ml-2" style="font-size:15px;">
+          Homepage
+        </a>
+      </mat-nav-list>
+      <mat-accordion multi="true" [displayMode]="displayMode">
+        <mat-expansion-panel class="no-shadow">
+          <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+            <mat-panel-title>
+              Buy Airtime
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list class="ml-0" dense>
+            <mat-list-item>
+              <a href="#">AirtelTigo Airtime</a>
+              <!-- <button mat-icon-button class="mr-3">
+              <mat-icon>info</mat-icon>
+            </button> -->
+            </mat-list-item>
+            <mat-list-item>
+              <a href="#">Vodafone Airtime</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a href="#">MTN Airtime</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a href="#">GLO Airtime</a>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="no-shadow my-0">
+          <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+            <mat-panel-title>
+              Buy Airtime
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list class="ml-0" dense>
+            <mat-list-item>
+              <a href="#">AirtelTigo Airtime</a>
+              <!-- <button mat-icon-button class="mr-3">
+                <mat-icon>info</mat-icon>
+              </button> -->
+            </mat-list-item>
+            <mat-list-item>
+              <a href="#">Vodafone Airtime</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a href="#">MTN Airtime</a>
+            </mat-list-item>
+            <mat-list-item>
+              <a href="#">GLO Airtime</a>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="header-box-shadow">
+      <button mat-icon-button (click)="sidenav.toggle()" fxShow.sm="true" fxShow.gt-sm="false">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button mat-button>
+        <mat-icon class="mr-1">home</mat-icon>
+        Upcoming
+      </button>
+      <button mat-button>
+        <mat-icon class="mr-1">link</mat-icon>
+        Link</button>
+      <button mat-button>
+        <mat-icon class="mr-1">link</mat-icon>
+        Link</button>
+      <button mat-button [matMenuTriggerFor]="dropDown">
+        DropDown
+        <mat-icon class="ml-1">arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #dropDown="matMenu" overlapTrigger="false">
+        <button mat-menu-item>
+          <mat-icon>dialpad</mat-icon>
+          <span>Dropdown Link 1</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>voicemail</mat-icon>
+          <span>Dropdown Link 2</span>
+        </button>
+      </mat-menu>
+      <span class="spacer"></span>
+      <button mat-button [matMenuTriggerFor]="menu">
+        <mat-icon class="mr-2">account_circle</mat-icon>
+        Account
+      </button>
+      <mat-menu #menu="matMenu" overlapTrigger="false">
+        <button mat-menu-item>
+          <mat-icon>account_circle</mat-icon>
+          <span>My Account</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>money</mat-icon>
+          <span>Billing</span>
+        </button>
+      </mat-menu>
+      <mat-icon class="ml-3" title="Logout">exit_to_app</mat-icon>
+    </mat-toolbar>
 
 
-<div class="container" >
-  <mat-toolbar color="primary">
-    <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+  <div class="wrapper">
 
-    <h1 class="app-name">{{ environment.getTitle() }}</h1>
-  </mat-toolbar>
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" opened="false" class="sidenav"
-                   [fixedInViewport]="fixed" [fixedTopGap]="top"
-                   [fixedBottomGap]="bottom">
-              <mat-nav-list>
-                <a mat-list-item >prova1</a>
-                <a mat-list-item >prova2</a>
-                <a mat-list-item >prova3</a>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
 
-                <a mat-list-item >prova4</a>
-                <a mat-list-item >prova5</a>
-              </mat-nav-list>
-    </mat-sidenav>
 
-      <mat-sidenav-content>
-        <dashboard-app></dashboard-app>
-      </mat-sidenav-content>
-  </mat-sidenav-container>
+    <mat-toolbar class="footer" color='primary'>
+      <span class='spacer'></span>
+      <div class="row">
+        <div class="col-12 signature">
+           <span class="year">&#169; 2018</span><span>
+          <br class="d-block d-sm-none">
+            {{environment.getVersion()}}</span>
+        </div>
+      </div>
+      <span class='spacer'></span>
+    </mat-toolbar>
 
-</div>
+
+  </div>
+</mat-sidenav-content>
+</mat-sidenav-container>

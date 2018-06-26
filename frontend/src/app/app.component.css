@@ -1,12 +1,8 @@
-.img {
-  width: 100%;
-  margin-bottom: 18%;
+.spacer {
+  flex: 1 1 auto;
 }
+
 .container {
-  min-height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -14,36 +10,69 @@
   right: 0;
 }
 
-.sidenav {
-  display: block;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  background: rgba(0, 0, 0, 0);
-}
-.search-form {
-  width: 90%;
+mat-sidenav {
+  width: 250px;;
 }
 
-.toolbar-icon {
-  padding: 0 14px;
+.circle {
+  border-radius: 50%;
 }
 
-.toolbar-spacer {
-  flex: 1 1 auto;
+.with-bg {
+  background-color: #fff;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  max-height: 130px;
 }
 
-mat-toolbar-row {
-  justify-content: space-between;
+.no-shadow {
+  box-shadow: none !important;
 }
 
-.is-mobile .sidenav-container {
-  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-  flex: 1;
+::ng-deep .mat-expansion-panel-body {
+  padding: 0px !important;
+  padding-left: 10px !important;
+}
+
+.header-box-shadow {
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+.bottom-to-top {
+  border: 0px;
+  border-right: 1px;
+  border-style: solid;
+  border-image:
+  linear-gradient(to top, #c1c1c1, rgba(0, 0, 0, 0)) 1 100%
 }
 
 
-h1.app-name {
-  margin-left: 8px;
+.footer{
+  position: fixed;
+  bottom: 0px;
+}
+
+.row {
+  padding: 10px 0;
+}
+
+.row span {
+  display: inline-block;
+  width: 75px;
+  padding: 0 0 0 3px;
+  overflow: hidden;
+  text-align: left;
+  white-space: nowrap;
+  transition: width 0.5s;
+}
+
+.spacer {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Environment } from '../../local/environment';
 
 /**
@@ -9,11 +9,15 @@ import { Environment } from '../../local/environment';
   templateUrl: 'dashboard.html',
   styleUrls: ['dashboard.css'],
 })
-export class Dashboard {
+
+
+export class DashboardComponent implements OnInit {
   private environment: Environment;
 
   constructor(){
     this.environment = new Environment();
   }
+
+  ngOnInit() {}
 
 }
