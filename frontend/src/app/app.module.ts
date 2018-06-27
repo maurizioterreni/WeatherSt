@@ -9,6 +9,7 @@ import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogMaps } from './dialogs/map/dialogMap.component';
+import { WeatherStationMapComponent } from './layout/weatherstationMap/weatherstationMap.component';
 import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { AppComponent } from './app.component';
   declarations: [
     AppComponent,
     DashboardComponent,
+    WeatherStationMapComponent,
     DialogMaps
   ],
   imports: [

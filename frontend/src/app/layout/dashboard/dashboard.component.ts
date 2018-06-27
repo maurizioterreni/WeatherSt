@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { Environment } from '../../local/environment';
 import { WeatherStationService } from '../../services/weatherstation/weatherstation.service';
 import { WeatherStation } from '../../models/weatherstation/weatherstation';
@@ -23,13 +23,11 @@ export class DashboardComponent implements OnInit {
 
   constructor(private weatherStationService: WeatherStationService, public dialog: MatDialog){
     this.environment = new Environment();
+    this.weatherstations = [];
   }
 
   ngOnInit() {
-    this.weatherStationService.getAllWeathrStation()
-      .subscribe((data: WeatherStation[]) => {
-        this.weatherstations = data;
-      });
+    this.weatherstations = this.weatherStationService.getAllWeathrStation();
   }
 
   isLiked(weatherId){
@@ -44,5 +42,4 @@ export class DashboardComponent implements OnInit {
         }
       });
   }
-
 }

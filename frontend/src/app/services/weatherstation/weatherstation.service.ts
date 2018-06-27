@@ -2,7 +2,7 @@ import { WeatherStation } from '../../models/weatherstation/weatherstation';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
-import { Observable } from 'rxjs';
+//import 'rxjs/add/operator/catch';
 
 
 @Injectable()
@@ -10,10 +10,19 @@ export class WeatherStationService {
   constructor(private http: HttpClient) { }
 
   getAllWeathrStation() {
+    if (sessionStorage.getItem("weatherstations")) {
+      return JSON.parse(sessionStorage.getItem("weatherstations"));
+    }else{
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json');
 
-      return this.http.get('http://maurizioterreni.altervista.org/rest/services/weatherstation/read.php' , {headers});
+      return this.http.get('http://maurizioterreni.altervista.org/rest/services/weatherstation/read.php' , {headers})
+        .subscribe((response: WeatherStation[]) => {
+            sessionStorage.setItem("weatherstations",JSON.stringify(response));
+            return response;
+        });
+    }
+
    }
 /*
    createWeathrStation(user:User, titleName:string, urlImage:string, lat: string, lng:string) {
