@@ -1,7 +1,7 @@
 agm-map{
-		height: 100vh; /* For 100% screen height */
+		height: 70vh; /* For 100% screen height */
 }
 
 .container {
-	height: 100vh; /* For 100% screen height */
+	height: 100%; /* For 100% screen height */
 }

@@ -39,7 +39,6 @@ export class WeatherStationMapComponent  implements OnInit {
       });
     }
 
-    console.log(this.markers);
   }
 
 }
