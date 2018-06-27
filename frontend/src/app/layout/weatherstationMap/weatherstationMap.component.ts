@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WeatherStationService } from '../../services/weatherstation/weatherstation.service';
 import { WeatherStation } from '../../models/weatherstation/weatherstation';
 import { Marker } from './marker';
+import { MouseEvent } from '@agm/core';
 
 @Component({
   selector: 'weatherstationMap-map',
@@ -13,8 +14,9 @@ import { Marker } from './marker';
 export class WeatherStationMapComponent  implements OnInit {
   weatherstations: WeatherStation[];
   markers: Marker[];
-  lat = 51.678418;
-  lng = 7.809007;
+  lat = 43.769562;
+  lng = 11.255814;
+  componentDisplay = false;
 
   constructor(private weatherStationService: WeatherStationService) {
     this.weatherstations = [];
@@ -24,17 +26,20 @@ export class WeatherStationMapComponent  implements OnInit {
   ngOnInit() {
     this.weatherstations = this.weatherStationService.getAllWeathrStation();
     this.addMarker();
+    this.componentDisplay = true;
   }
 
   addMarker() {
     for(const wt of this.weatherstations){
       this.markers.push({
-        lat: wt.latitude,
-        lng: wt.longitude,
-        label: wt.description
+        lat: Number(wt.latitude),
+        lng: Number(wt.longitude),
+        label: wt.description,
         draggable: false
       });
     }
+
+    console.log(this.markers);
   }
 
 }

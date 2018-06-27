@@ -1,6 +1,6 @@
 export class Marker {
-	lat: string;
-	lng: string;
+	lat: number;
+	lng: number;
 	label?: string;
 	draggable: boolean;
 }
