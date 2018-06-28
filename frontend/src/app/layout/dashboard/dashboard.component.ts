@@ -28,7 +28,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.weatherstations = this.weatherStationService.getAllWeathrStation();
+    this.weatherStationService.getAllWeathrStation()
+      .subscribe((response: WeatherStation[]) => {
+          this.weatherstations = response;
+      });
     //this.weatherstations = this.weatherStationService.getAllWeathrStation();
   }
 

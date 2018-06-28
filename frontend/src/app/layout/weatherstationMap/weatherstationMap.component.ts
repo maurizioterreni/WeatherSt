@@ -24,7 +24,10 @@ export class WeatherStationMapComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.weatherstations = this.weatherStationService.getAllWeathrStation();
+    this.weatherStationService.getAllWeathrStation()
+      .subscribe((response: WeatherStation[]) => {
+        this.weatherstations = response;
+      });
     this.addMarker();
     this.componentDisplay = true;
   }
