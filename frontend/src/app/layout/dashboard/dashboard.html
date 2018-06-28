@@ -8,7 +8,7 @@
   						<p>{{weatherStation.description}}</p>
   					</mat-card-content>
   					<mat-card-actions>
-  						<button disabled="true" mat-button (click)="openWeatherStation(weatherStation.sensors,weatherStation.id);"> <i class="material-icons">near_me</i> Open</button>
+  						<button mat-button routerLinkActive="active" routerLink="/sensor"> <i class="material-icons">near_me</i> Open</button>
   						<button mat-button (click)="openMap(weatherStation.longitude, weatherStation.latitude)"><i class="material-icons">my_location</i> MAP</button>
   						<span *ngIf="isLiked(weatherStation.id) else no_favorite"><button mat-button *ngIf="user" (click)="weatherLike(weatherStation.id,true)"><i class="material-icons">favorite</i>Favorite</button></span>
   						<ng-template #no_favorite><button mat-button *ngIf="user" (click)="weatherLike(weatherStation.id,false)"><i class="material-icons">favorite_border</i>Favorite</button></ng-template>

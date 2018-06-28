@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material.module';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
+import { SensorComponent } from './layout/sensor/sensor.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogMaps } from './dialogs/map/dialogMap.component';
@@ -19,6 +20,7 @@ import { AppComponent } from './app.component';
     AppComponent,
     DashboardComponent,
     WeatherStationMapComponent,
+    SensorComponent,
     DialogMaps
   ],
   imports: [

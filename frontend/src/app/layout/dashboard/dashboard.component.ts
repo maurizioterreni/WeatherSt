@@ -5,6 +5,7 @@ import { WeatherStationService } from '../../services/weatherstation/weatherstat
 import { WeatherStation } from '../../models/weatherstation/weatherstation';
 import { DialogMaps } from '../../dialogs/map/dialogMap.component';
 
+
 /**
  * @title Multi-row toolbar
  */
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.weatherstations = this.weatherStationService.getAllWeathrStation();
+    //this.weatherstations = this.weatherStationService.getAllWeathrStation();
   }
 
   isLiked(weatherId){
