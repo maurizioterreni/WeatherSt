@@ -13,7 +13,7 @@ export class SensorService {
   getSensor(weatherId) {
     const headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
-        .set('weatherId', String(weatherId));
+        .set('weatherId', ''+weatherId);
 
       return this.http.get('http://maurizioterreni.altervista.org/rest/services/sensor/read.php' , {headers});
     }

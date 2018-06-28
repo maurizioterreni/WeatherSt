@@ -24,8 +24,12 @@ export class SensorComponent implements OnInit {
 
   ngOnInit() {
     this.sensorService.getSensor(1)
-      .subscribe((response: Sensor[]) => {
-          this.sensors = response;
+      .subscribe((results: any[]) => {
+          for (const i of results) {
+            if(i != null){
+              this.sensors.push(<Sensor> i);
+            }
+          }
       });
   }
 }
