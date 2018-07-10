@@ -8,16 +8,15 @@
 }
 
 .container {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
   margin: 0 auto -100px;
+  height: 100vh;
+  overflow: auto;
 }
 
 
 
 mat-sidenav {
-  width: 250px;;
+  width: 250px;
 }
 
 .circle {
@@ -82,4 +81,10 @@ width: 100%;
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
+}
+
+
+
+.sidenav-content{
+  position: static !important;
 }

@@ -16,7 +16,7 @@ const routes: Routes = [
     component: DashboardComponent,
   },
   {
-    path: 'sensor',
+    path: 'sensor/:id',
     component: SensorComponent,
   },
   {
