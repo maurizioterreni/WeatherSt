@@ -1,4 +1,4 @@
-<div class="container" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+<!--<div class="container" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
   <div class="item item-5" fxFlex *ngFor="let sensor of sensors; let i = index">
 			<mat-card class="sensor-card" style="text-align:center;">
         <div class="sensor-card-content">
@@ -21,6 +21,52 @@
       						<div *ngIf="!sensor.measure" style="color: #a90202; font-size: 30px;"><mat-icon>error</mat-icon> Error no data found!</div>
       					</mat-grid-tile>
       				</mat-grid-list>
+
+  					</mat-card-content>
+
+        </div>
+				</mat-card>
+	</div>
+</div>-->
+
+<div class="container" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <div class="item item-5" fxFlex *ngFor="let sensor of sensors; let i = index">
+			<mat-card class="sensor-card" style="text-align:center;">
+        <div class="sensor-card-content">
+  					<mat-card-content>
+
+              <div class="cardElement">
+                <p>{{sensor.title}}</p>
+
+                <div class="temperatureElement">
+
+                  <div class="temperatureValue">
+                    <div class="circleyestemperature">
+                      <div class="temperatureLabel">Actual</div>
+                      <mat-list-item  class="value" matTooltip="{{sensor.measure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.measure.quantity | number:'.1'}}</mat-list-item>
+                    </div>
+                    <div class="temperatureSymbol">{{sensor.measure.symbol}}</div>
+                  </div>
+
+                  <div class="temperatureMaxValue">
+                    <div class="circleyesMaxtemperature">
+                      <div class="temperatureMaxLabel">Max</div>
+                      <mat-list-item  class="valueMax" matTooltip="{{sensor.maxMeasure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.maxMeasure.quantity | number:'.1'}}</mat-list-item>
+                    </div>
+                    <div class="temperatureMaxSymbol">{{sensor.maxMeasure.symbol}}</div>
+                  </div>
+
+
+                  <div class="temperatureMinValue">
+                    <div class="circleyesMintemperature">
+                      <div class="temperatureMinLabel">Min</div>
+                      <mat-list-item  class="valueMin" matTooltip="{{sensor.minMeasure.dateTime | date: 'd/M/yy, H:mm'}}">{{sensor.minMeasure.quantity | number:'.1'}}</mat-list-item>
+                    </div>
+                    <div class="temperatureMinSymbol">{{sensor.minMeasure.symbol}}</div>
+                  </div>
+
+              </div>
+            </div>
 
   					</mat-card-content>
 

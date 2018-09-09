@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent  implements OnInit {
-  private environment: Environment;
+  public environment: Environment;
   opened = true;
   over = 'side';
   expandHeight = '42px';
