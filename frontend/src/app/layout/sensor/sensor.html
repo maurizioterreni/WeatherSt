@@ -39,6 +39,8 @@
                 <p>{{sensor.title}}</p>
 
                 <temperature-card *ngIf="sensor.description=='Temperature'" [sensor]="sensor"></temperature-card>
+                <pressure-card *ngIf="sensor.description=='Pressure'" [sensor]="sensor"></pressure-card>
+
             </div>
 
   					</mat-card-content>

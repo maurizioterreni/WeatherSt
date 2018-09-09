@@ -8,6 +8,7 @@ import { MaterialModule } from './material.module';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { SensorComponent } from './layout/sensor/sensor.component';
 import { TemperatureCardComponent } from './layout/sensor/temperature/temperature.component';
+import { PressureCardComponent } from './layout/sensor/pressure/pressure.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogMaps } from './dialogs/map/dialogMap.component';
@@ -23,6 +24,7 @@ import { AppComponent } from './app.component';
     WeatherStationMapComponent,
     SensorComponent,
     TemperatureCardComponent,
+    PressureCardComponent,
     DialogMaps
   ],
   imports: [
