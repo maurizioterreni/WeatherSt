@@ -21,4 +21,9 @@ export class PressureCardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
 
   }
+
+  getRotation(value) : string{
+    let num = value - 958;
+    return (((num / 100) * 180) - 45);
+  }
 }
