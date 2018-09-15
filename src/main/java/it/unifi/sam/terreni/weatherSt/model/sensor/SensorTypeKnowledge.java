@@ -1,6 +1,7 @@
 package it.unifi.sam.terreni.weatherSt.model.sensor;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,7 +19,9 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	private String description;
 	@OneToOne()
 	private UnitMeasureKnowledge unitMeasure;
-
+	@ManyToOne
+	private SensorTemplate sensorTemplate;
+	
 	SensorTypeKnowledge() {
 		super();
 	}
@@ -47,12 +50,23 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 		this.unitMeasure = unitMeasure;
 	}
 
+	
+	
+	public SensorTemplate getSensorTemplate() {
+		return sensorTemplate;
+	}
+
+	public void setSensorTemplate(SensorTemplate sensorTemplate) {
+		this.sensorTemplate = sensorTemplate;
+	}
+
 	@Override
 	public void accept(UsageVisitor visitor) {
 		// TODO Auto-generated method stub
 
 	}
 	public static class SensorTypeBuilder{
+		private SensorTemplate sensorTemplate;
 		private String description;
 		private UnitMeasureKnowledge unitMeasure;
 		
@@ -65,12 +79,17 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 			this.description = description;
 			return this;
 		}
+		public SensorTypeBuilder sensorTemplate(SensorTemplate sensorTemplate) {
+			this.sensorTemplate = sensorTemplate;
+			return this;
+		}
 		
 		public SensorTypeKnowledge build() {
 			SensorTypeKnowledge sensorType = ModelFactory.sensorType();
 
-			sensorType.description = this.description;
+			sensorType.setDescription(description);
 			sensorType.setUnitMeasure(unitMeasure);
+			sensorType.setSensorTemplate(sensorTemplate);
 
 			return sensorType;
 		}

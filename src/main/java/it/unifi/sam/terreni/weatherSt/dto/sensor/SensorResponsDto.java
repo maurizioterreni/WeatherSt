@@ -9,6 +9,7 @@ public class SensorResponsDto extends BaseDto{
 	private String description;
 	private String symbol;
 	private String name;
+	private Long templateId;
 	
 	public SensorResponsDto() {
 		
@@ -50,13 +51,25 @@ public class SensorResponsDto extends BaseDto{
 	}
 	
 	
+	
 //	public 
 	
+	public Long getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(Long templateId) {
+		this.templateId = templateId;
+	}
+
+
+
 	public static class SensorResponseDtoBuilder{
 		private Long weatherId;
 		private String description;
 		private String symbol;
 		private String name;
+		private Long templateId;
 		
 		public SensorResponseDtoBuilder weatherId(Long weatherId) {
 			this.weatherId = weatherId;
@@ -74,6 +87,10 @@ public class SensorResponsDto extends BaseDto{
 			this.name = name;
 			return this;
 		}
+		public SensorResponseDtoBuilder templateId(Long templateId) {
+			this.templateId = templateId;
+			return this;
+		}
 		
 		public SensorResponsDto build() {
 			SensorResponsDto dto = new SensorResponsDto();
@@ -82,6 +99,7 @@ public class SensorResponsDto extends BaseDto{
 			dto.setSymbol(symbol);
 			dto.setName(name);
 			dto.setWeatherId(weatherId);
+			dto.setTemplateId(templateId);
 			
 			return dto;
 		}

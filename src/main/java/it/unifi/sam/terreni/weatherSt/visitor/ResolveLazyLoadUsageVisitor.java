@@ -11,10 +11,12 @@ public class ResolveLazyLoadUsageVisitor implements UsageVisitor {
 	@Override
 	public void visitSensor(Sensor sensor) {
 		sensor.getSensorType();
-		for(Measure measure : sensor.getMeasures()) {
-			measure.getQuantity();
-			measure.accept(this);
-		}
+		sensor.getSensorType().getSensorTemplate();
+		sensor.getSensorType().getUnitMeasure();
+//		for(Measure measure : sensor.getMeasures()) {
+//			measure.getQuantity();
+//			measure.accept(this);
+//		}
 		
 	}
 	

@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,7 +19,6 @@ import it.unifi.sam.terreni.weatherSt.dao.user.UserDao;
 import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.weatherStation.WeatherStationResponseDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
-import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.user.User;
 import it.unifi.sam.terreni.weatherSt.security.Authentication;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
@@ -72,9 +72,8 @@ public class WeatherStationEndPoint {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/getAll")
 	@Transactional
-	public Response getAll() {
+	public Response get() {
 		
 		List<WeatherStation> weatherStations = weatherStationDao.getAll();
 		
@@ -87,8 +86,21 @@ public class WeatherStationEndPoint {
 			listWeatherStationDto.add(weatherStationToDto(weatherStation));
 		}
 		
-		
 		return Response.status(200).entity(listWeatherStationDto).build();
+	}
+	
+	@GET
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getById(@PathParam("id") Long id) {
+		
+		WeatherStation weatherStation = weatherStationDao.findById(id);
+		
+		if(weatherStation == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
+		
+		return Response.status(200).entity(weatherStationToDto(weatherStation)).build();
 	}
 	
 	private WeatherStationResponseDto weatherStationToDto(WeatherStation weatherStation) {
@@ -99,10 +111,6 @@ public class WeatherStationEndPoint {
 		dto.setLatitude(weatherStation.getLatitude());
 		dto.setLongitude(weatherStation.getLongitude());
 		dto.setImage(weatherStation.getImages());
-		
-		for (Sensor sensor : weatherStation.getSensors()) {
-			dto.addSensorId(sensor.getId());
-		}
 		
 		return dto;
 	}

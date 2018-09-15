@@ -1,8 +1,5 @@
 package it.unifi.sam.terreni.weatherSt.dto.weatherStation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 
 public class WeatherStationResponseDto extends BaseDto{
@@ -14,10 +11,8 @@ public class WeatherStationResponseDto extends BaseDto{
 	private String longitude;
 	private String latitude;
 	private String image;
-	private List<Long> sensors;
 
 	public WeatherStationResponseDto() {
-		sensors = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -37,11 +32,6 @@ public class WeatherStationResponseDto extends BaseDto{
 		this.description = description;
 	}
 
-	public List<Long> getSensors() {
-		return sensors;
-	}
-	
-
 	public String getLongitude() {
 		return longitude;
 	}
@@ -58,20 +48,12 @@ public class WeatherStationResponseDto extends BaseDto{
 		this.latitude = latitude;
 	}
 
-	public void setSensors(List<Long> sensors) {
-		this.sensors = sensors;
-	}
-	
 	public String getImage() {
 		return image;
 	}
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	public void addSensorId(Long sensorId) {
-		this.sensors.add(sensorId);
 	}
 
 }
