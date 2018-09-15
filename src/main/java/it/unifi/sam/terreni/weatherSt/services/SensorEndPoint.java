@@ -1,7 +1,5 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,26 +12,20 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import it.unifi.sam.terreni.weatherSt.dao.WeatherStationDao;
 import it.unifi.sam.terreni.weatherSt.dao.measure.MeasureDao;
-import it.unifi.sam.terreni.weatherSt.dao.measure.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorDao;
 import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorTypeKnowledgeDao;
-import it.unifi.sam.terreni.weatherSt.dto.measure.CreateUnitKnowledgeDto;
-import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
-import it.unifi.sam.terreni.weatherSt.dto.measure.UnitMeasureDto;
-import it.unifi.sam.terreni.weatherSt.dto.sensor.CreateSensorKnowledgeDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorGetResponsDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorPostRequestDto;
 import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorResponsDto;
-import it.unifi.sam.terreni.weatherSt.dto.sensor.SensorTypeKnowledgeDto;
 import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
-import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 import it.unifi.sam.terreni.weatherSt.security.Authentication;
@@ -50,8 +42,6 @@ public class SensorEndPoint {
 	private SensorTypeKnowledgeDao sensorTypeKnowledgeDao;
 	@Inject
 	private MeasureDao measureDao;
-	@Inject
-	private UnitMeasureKnowledgeDao unitMeasureKnowledgeDao;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -62,10 +52,10 @@ public class SensorEndPoint {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorDto").build();
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
+
 
 		WeatherStation weatherStation = weatherStationDao.findById(sensorDto.getWeatherId());
 
@@ -79,7 +69,6 @@ public class SensorEndPoint {
 
 		Sensor sensor = Sensor.builder()
 				.sensorType(sensorType)
-				.title(sensorDto.getTitle())
 				.build();
 
 		weatherStation.addSensor(sensor);
@@ -91,261 +80,129 @@ public class SensorEndPoint {
 
 
 	@GET
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response get(@HeaderParam("sensorId") Long sensorId) {
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-		
+	public Response getBySensorId(@PathParam("id") Long id) {
 
-		Sensor sensor = sensorDao.findById(sensorId);
+		Sensor sensor = sensorDao.findById(id);
 
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
-		LocalDateTime fromDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(0, 0, 1));
-		LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(23, 59, 59));
-
-		Measure maxMeasure = measureDao.getMax(sensor, fromDate, toDate);
-		Measure minMeasure = measureDao.getMin(sensor, fromDate, toDate);
-		Measure measure = measureDao.getLastMeasue(sensor);
-
-
-
-		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor, measure, maxMeasure, minMeasure)).build();
+		return Response.status(200).entity(sensorToSensorGetResponsDto(sensor)).build();
 	}
-	
-	
-	
 	@GET
-	@Path("/sensorType")
+	@Path("/weatherstation/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response get() {
-	
-		List<SensorTypeKnowledgeDto> dtos = new ArrayList<>();
-		
-		for (SensorTypeKnowledge sensorTypeKnowledge : sensorTypeKnowledgeDao.getAllSensorType()) {
-			dtos.add(sensorTypeKnowledgeToDto(sensorTypeKnowledge));
+	public Response getSensorByWeatherStation(@PathParam("id") Long id) {
+
+		WeatherStation weatherStation = weatherStationDao.fetchById(id);
+
+		if(weatherStation == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
+
+		List<SensorGetResponsDto> sensorDtos = new ArrayList<>();
+
+		for (Sensor sensor : weatherStation.getSensors()) {
+			sensorDtos.add(sensorToSensorGetResponsDto(sensor));
 		}
-		
-		return Response.status(200).entity(dtos).build();
+
+		return Response.status(200).entity(sensorDtos).build();
 	}
-	
-	
+
+
 	@PUT
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response updateSensor(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("sensorKnowledgeId") Long sensorKnowledgeId) {
-	
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+	public Response updateSensor(@HeaderParam("token") String token, @PathParam("id") Long id, @HeaderParam("sensorKnowledgeId") Long sensorKnowledgeId) {
+
 		if (sensorKnowledgeId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorKnowledgeId").build();
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
-		Sensor sensor = sensorDao.findById(sensorId);
-		
+
+		Sensor sensor = sensorDao.findById(id);
+
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensor").build();
-		
+
 		SensorTypeKnowledge typeKnowledge = sensorTypeKnowledgeDao.findById(sensorKnowledgeId);
-		
+
 		if(typeKnowledge == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - typeKnowledge").build();
-		
+
 		sensor.setSensorType(typeKnowledge);
 
 		sensorDao.update(sensor);
-		
+
 		return Response.status(200).build();
 	}
-	
-	
+
+
 	@DELETE
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response delete(@HeaderParam("token") String token, @HeaderParam("sensorId") Long sensorId, @HeaderParam("weatherId") Long weatherId) {
-		if (sensorId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+	public Response delete(@HeaderParam("token") String token, @PathParam("sensorId") Long id, @HeaderParam("weatherId") Long weatherId) {
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
 		if (weatherId == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
-		
-		
-		
+
+
+
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-		
 
-		Sensor sensor = sensorDao.fetchById(sensorId);
+
+		Sensor sensor = sensorDao.fetchById(id);
 
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
 		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
-		
+
 		if(!weatherStation.getSensors().contains(sensor))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - weather station not contain sensor").build();
-		
-		
+
+
 		weatherStation.getSensors().remove(sensor);
-		
+
 		for (Measure measure : sensor.getMeasures()) {
 			measureDao.delete(measure);
 		}
-		
+
 		sensorDao.delete(sensor);
 
 		return Response.status(200).entity(null).build();
 	}
-	
-	@GET
-	@Path("/unitKnowledge")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response getAllUnitKnowledge() {
-		List<UnitMeasureKnowledge> list = unitMeasureKnowledgeDao.getAllUnitMeasureKnowledge();
-		
-		if(list == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - list unitKnowledge").build();
-		
-		return Response.status(200).entity(createListUnitKnowledge(list)).build();
-	}
-	
-	@GET
-	@Path("/unitKnowledge/fromSensorKnowledge")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response getUnitKnowledgeBySensorKnowledge(@HeaderParam("sensorKnowledgeId") Long sensorKnowledgeId) {
-		if(sensorKnowledgeId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorKnowledgeId").build();
-		
-		SensorTypeKnowledge sensorTypeKnowledge = sensorTypeKnowledgeDao.findById(sensorKnowledgeId);
-		
-		List<UnitMeasureKnowledge> list = sensorTypeKnowledge.getUnitMeasures();
-		
-		if(list == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - list unitKnowledge").build();
-		
-		return Response.status(200).entity(createListUnitKnowledge(list)).build();
-	}
-	
-	@POST
-	@Path("/unitKnowledge")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response createUnitKnowledge(@HeaderParam("token") String token, CreateUnitKnowledgeDto createUnitKnowledgeDto ) {
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		if (createUnitKnowledgeDto == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - createUnitKnowledgeDto").build();
-		
-		if(Authentication.isNotValid(token))
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
 
-		unitMeasureKnowledgeDao.save(UnitMeasureKnowledge.builder()
-				.name(createUnitKnowledgeDto.getName())
-				.symbol(createUnitKnowledgeDto.getSymbol())
-				.build());
-		
-		return Response.status(200).entity(null).build();
-	}
-	
-	
 
-	@POST
-	@Path("/sensorKnowledge")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public Response sensorKnowledge(@HeaderParam("token") String token, CreateSensorKnowledgeDto createSensorKnowledgeDto) {
-		if (StringUtils.isEmpty(token))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		if (createSensorKnowledgeDto == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - createSensorKnowledgeDto").build();
-		
-		if(Authentication.isNotValid(token))
-			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
-
-		List<UnitMeasureKnowledge> unitMeasureKnowledges = new ArrayList<>();
-		
-		for (Long unitMeasureId : createSensorKnowledgeDto.getSelectedUnitKnowledges()) {
-			unitMeasureKnowledges.add(unitMeasureKnowledgeDao.findById(unitMeasureId));
-		}
-		
-		sensorTypeKnowledgeDao.save(SensorTypeKnowledge.builder()
-				.descrition(createSensorKnowledgeDto.getDescription())
-				.unitMeasureKnowledges(unitMeasureKnowledges)
-				.build());
-		
-		return Response.status(200).entity(null).build();
-	}
-	
-	private List<UnitMeasureDto> createListUnitKnowledge(List<UnitMeasureKnowledge> list){
-		List<UnitMeasureDto> obj = new ArrayList<>();
-		for (UnitMeasureKnowledge unitMeasureKnowledge : list) {
-			obj.add(UnitMeasureDto.builder()
-					.id(unitMeasureKnowledge.getId())
-					.name(unitMeasureKnowledge.getName())
-					.symbol(unitMeasureKnowledge.getSymbol())
-					.build());
-		}
-		
-		return obj;
-	}
-	
-	private SensorTypeKnowledgeDto sensorTypeKnowledgeToDto(SensorTypeKnowledge obj) {
-		return SensorTypeKnowledgeDto.builder()
-				.withDescription(obj.getDescription())
-				.withId(obj.getId())
-				.unitMeasureDtos(createListUnitKnowledge(obj.getUnitMeasures()))
-				.build();
-	}
-
-	
-	private MeasureDto measureToMeasureDto(Measure measure) {
-		if(measure == null)
-			return null;
-		
-		return MeasureDto.builder()
-				.dateTime(measure.getLocalDateTime().toString())
-				.quantity(StringUtils.floatToString(measure.getQuantity()))
-				.name(measure.getUnitMeasure().getName())
-				.symbol(measure.getUnitMeasure().getSymbol())
-				.build();
-	}
-	
 	private SensorResponsDto sensorToSensorResponsDto(Long weatherId, Sensor sensor) {
 		return SensorResponsDto.builder()
 				.description(sensor.getSensorType().getDescription())
+				.templateId(sensor.getSensorType().getSensorTemplate().getId())
 				.weatherId(weatherId)
-				.title(sensor.getTitle())
 				.build();
 	}
-	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor, Measure measure, Measure maxMeasure, Measure minMeasure) {
+
+	private SensorGetResponsDto sensorToSensorGetResponsDto(Sensor sensor) {
 		return SensorGetResponsDto.builder()
 				.id(sensor.getId())
-				.title(sensor.getTitle())
 				.description(sensor.getSensorType().getDescription())
-				.measure(measureToMeasureDto(measure))
-				.maxMeasure(measureToMeasureDto(maxMeasure))
-				.minMeasure(measureToMeasureDto(minMeasure))
-				.unitKnowledgeId(measure != null ? measure.getUnitMeasure().getId() : null)
+				.sensorTemplate(sensor.getSensorType().getSensorTemplate().getId())
 				.build();
 	}
-	
-	
+
+
 }

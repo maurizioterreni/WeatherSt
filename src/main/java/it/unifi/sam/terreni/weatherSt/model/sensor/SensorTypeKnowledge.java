@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import it.unifi.sam.terreni.weatherSt.model.BaseEntity;
@@ -22,6 +23,8 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	private String description;
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.ALL )
 	private List<UnitMeasureKnowledge> unitMeasures;
+	@ManyToOne
+	private SensorTemplate sensorTemplate;
 
 	SensorTypeKnowledge() {
 		super();
@@ -50,6 +53,14 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	public void setUnitMeasures(List<UnitMeasureKnowledge> unitMeasures) {
 		this.unitMeasures = unitMeasures;
 	}
+	public SensorTemplate getSensorTemplate() {
+		return sensorTemplate;
+	}
+
+	public void setSensorTemplate(SensorTemplate sensorTemplate) {
+		this.sensorTemplate = sensorTemplate;
+	}
+
 
 	@Override
 	public void accept(UsageVisitor visitor) {
@@ -59,6 +70,7 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	public static class SensorTypeBuilder{
 		private String description;
 		private List<UnitMeasureKnowledge> unitMeasures;
+		private SensorTemplate sensorTemplate;
 
 		public SensorTypeBuilder unitMeasureKnowledges(List<UnitMeasureKnowledge> unitMeasures) {
 			this.unitMeasures = unitMeasures;
@@ -70,11 +82,17 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 			return this;
 		}
 
+		public SensorTypeBuilder sensorTemplate(SensorTemplate sensorTemplate) {
+			this.sensorTemplate = sensorTemplate;
+			return this;
+		}
+
 		public SensorTypeKnowledge build() {
 			SensorTypeKnowledge sensorType = ModelFactory.sensorType();
 
-			sensorType.description = this.description;
+			sensorType.setDescription(description);
 			sensorType.setUnitMeasures(unitMeasures);
+			sensorType.setSensorTemplate(sensorTemplate);
 
 			return sensorType;
 		}

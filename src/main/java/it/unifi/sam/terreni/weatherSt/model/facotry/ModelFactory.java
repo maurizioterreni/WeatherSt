@@ -7,6 +7,7 @@ import it.unifi.sam.terreni.weatherSt.model.converter.ConversionFactor;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
+import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTemplate;
 import it.unifi.sam.terreni.weatherSt.model.sensor.SensorTypeKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.user.User;
 import it.unifi.sam.terreni.weatherSt.model.user.UserPropertie;
@@ -43,6 +44,9 @@ public final class ModelFactory {
 	}
 	public static UserPropertie userPropertie() {
 		return new UserPropertie(uuid());
+	}
+	public static SensorTemplate sensorTemplate() {
+		return new SensorTemplate(uuid());
 	}
 	
 	
