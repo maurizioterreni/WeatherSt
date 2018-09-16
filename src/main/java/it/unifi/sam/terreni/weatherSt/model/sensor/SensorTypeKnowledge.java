@@ -21,7 +21,7 @@ public class SensorTypeKnowledge  extends BaseEntity implements Usage{
 	private static final long serialVersionUID = -89078019304345613L;
 
 	private String description;
-	@ManyToMany(fetch = FetchType.EAGER, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.ALL )
+	@ManyToMany(fetch = FetchType.LAZY, targetEntity=UnitMeasureKnowledge.class , cascade = CascadeType.ALL )
 	private List<UnitMeasureKnowledge> unitMeasures;
 	@ManyToOne
 	private SensorTemplate sensorTemplate;

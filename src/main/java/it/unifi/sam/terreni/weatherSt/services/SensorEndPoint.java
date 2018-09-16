@@ -100,7 +100,7 @@ public class SensorEndPoint {
 	@Transactional
 	public Response getSensorByWeatherStation(@PathParam("id") Long id) {
 
-		WeatherStation weatherStation = weatherStationDao.fetchById(id);
+		WeatherStation weatherStation = weatherStationDao.findById(id);
 
 		if(weatherStation == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
@@ -201,6 +201,8 @@ public class SensorEndPoint {
 				.id(sensor.getId())
 				.description(sensor.getSensorType().getDescription())
 				.sensorTemplate(sensor.getSensorType().getSensorTemplate().getId())
+				.title(sensor.getTitle())
+				.unitKnowledgeId(null)
 				.build();
 	}
 

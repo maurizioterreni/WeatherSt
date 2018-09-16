@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,7 +29,7 @@ public class Sensor extends BaseEntity implements Usage{
 	@ManyToOne
 	private SensorTypeKnowledge sensorType;
 
-	@OneToMany( mappedBy = "sensor" , cascade = CascadeType.REMOVE )
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sensor" , cascade = CascadeType.REMOVE )
 	private List<Measure> measures;
 
 	private String title;
