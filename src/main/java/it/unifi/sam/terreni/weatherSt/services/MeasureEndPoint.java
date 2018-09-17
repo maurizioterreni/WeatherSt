@@ -67,7 +67,7 @@ public class MeasureEndPoint {
 		
 		Measure measure = Measure
 				.buider()
-				//.localDateTime(LodcalDateTime.now())
+//				.localDateTime(LodcalDateTime.now())
 				.localDateTime(dateTime)
 				.quantity(requestDto.getQuantity())
 				.unitMeasure(unitMeasure)
@@ -83,7 +83,7 @@ public class MeasureEndPoint {
 	
 
 	@GET
-	@Path("/sensor/{id}")
+	@Path("/sensor/{id}/last")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response getBySensorId(@PathParam("id") Long id) {
@@ -97,7 +97,7 @@ public class MeasureEndPoint {
 		if(measure == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measure").build();
 
-		return Response.status(200).entity(measure).build();
+		return Response.status(200).entity(measureToMeasureDto(measure)).build();
 	}
 	
 	@GET
