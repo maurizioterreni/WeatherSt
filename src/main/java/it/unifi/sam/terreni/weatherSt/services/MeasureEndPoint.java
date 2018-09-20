@@ -1,15 +1,11 @@
 package it.unifi.sam.terreni.weatherSt.services;
 
-import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
-import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
-
-
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,12 +59,9 @@ public class MeasureEndPoint {
 		if (unitMeasure == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - unitMeasure").build();
 
-		LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(requestDto.getDateTime()), ZoneId.systemDefault());
-		
 		Measure measure = Measure
 				.buider()
-//				.localDateTime(LodcalDateTime.now())
-				.localDateTime(dateTime)
+				.localDateTime(LocalDateTime.now())
 				.quantity(requestDto.getQuantity())
 				.unitMeasure(unitMeasure)
 				.sensor(sensor)

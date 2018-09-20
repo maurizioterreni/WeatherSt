@@ -7,7 +7,6 @@ public class MeasurePostRequestDto extends BaseDto{
 	private Long sensorId;
 	private Float quantity;
 	private Long unitMeasureId;
-	private Long dateTime;
 	
 	public MeasurePostRequestDto() {
 		
@@ -39,15 +38,6 @@ public class MeasurePostRequestDto extends BaseDto{
 
 	public void setUnitMeasureId(Long unitMeasureId) {
 		this.unitMeasureId = unitMeasureId;
-	}
-	
-	
-	public Long getDateTime() {
-		return dateTime;
-	}
-
-	public void setDateTime(Long dateTime) {
-		this.dateTime = dateTime;
 	}
 
 
