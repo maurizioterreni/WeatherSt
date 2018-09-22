@@ -5,7 +5,9 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,6 +164,29 @@ public class MeasureEndPoint {
 		
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
+	@GET
+	@Path("/sensor/{id}/getValueOfDay")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getValueOfDay(@PathParam("id") Long id) {
+		Sensor sensor = sensorDao.findById(id);
+		
+		if(sensor == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+		
+		
+		LocalDateTime fromDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+		LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+		
+		List<Measure> measures = new ArrayList<>();
+		measures.add(measureDao.getMax(sensor, fromDate, toDate));
+		measures.add(measureDao.getMin(sensor, fromDate, toDate));
+		
+		if(measures.size() != 2)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measures").build();
+		
+		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
+	}
 	
 	
 	
@@ -180,7 +205,9 @@ public class MeasureEndPoint {
 	private List<MeasureDto> measuresToMeasureDtos(List<Measure> measures) {
 		List<MeasureDto> measureDtos = new ArrayList<>();
 		for (Measure measure : measures) {
-			measureDtos.add(measureToMeasureDto(measure));
+			MeasureDto m = measureToMeasureDto(measure);
+			if(m != null)
+				measureDtos.add(measureToMeasureDto(measure));
 		}
 		return measureDtos;
 	}
