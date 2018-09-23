@@ -188,6 +188,24 @@ public class MeasureEndPoint {
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
 	
+	@GET
+	@Path("/sensor/{id}/getMeasure")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getMeasure(@PathParam("id") Long id) {
+		Sensor sensor = sensorDao.findById(id);
+		
+		if(sensor == null)
+			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+		
+		
+		LocalDateTime fromDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+		LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+		
+		List<Measure> measures = measureDao.getMeasureBetweenDate(sensor, fromDate, toDate);
+		
+		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
+	}
 	
 	
 	private MeasureDto measureToMeasureDto(Measure measure) {
