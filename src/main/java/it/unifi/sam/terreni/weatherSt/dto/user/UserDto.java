@@ -7,6 +7,7 @@ import it.unifi.sam.terreni.weatherSt.dto.BaseDto;
 public class UserDto extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	private String username;
+	private String password;
 	private String email;
 	private Long weatherId;
 	private String token;
@@ -16,6 +17,20 @@ public class UserDto extends BaseDto{
 	
 	
 	public UserDto() {}
+	
+	
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
 
 	public String getUsername() {
 		return username;

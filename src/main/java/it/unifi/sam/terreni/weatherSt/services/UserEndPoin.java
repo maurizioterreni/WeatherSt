@@ -184,6 +184,7 @@ public class UserEndPoin {
 		UserDto dto = new UserDto();
 
 		dto.setEmail(user.getEmail());
+		dto.setPassword(user.getPassword());
 		dto.setUnitMeasure(getIdFormUnitMeasure(user.getPropertie().getUnitMeasure()));
 		dto.setUsername(user.getUsername());
 		dto.setUserRole(user.getPropertie().getUserRole().getName());

@@ -61,6 +61,7 @@ public class RegistationEndPoint {
 		UserDto dto = new UserDto();
 		
 		dto.setEmail(user.getEmail());
+		dto.setPassword(user.getPassword());
 		dto.setUnitMeasure(getIdFormUnitMeasure(user.getPropertie().getUnitMeasure()));
 		dto.setWeatherLikes(getIdFormWeatherLikes(user.getPropertie().getWeatherStationLikes()));
 		dto.setUsername(user.getUsername());
