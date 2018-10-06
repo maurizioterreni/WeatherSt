@@ -77,7 +77,7 @@ public class SensorTypeKnowledgeDto extends BaseDto{
 			this.id = id;
 			return this;
 		}
-		public Builder unitMeasureDtos(List<UnitMeasureDto> unitMeasureDtos) {
+		public Builder withUnitMeasureDtos(List<UnitMeasureDto> unitMeasureDtos) {
 			this.unitMeasureDtos = unitMeasureDtos;
 			return this;
 		}

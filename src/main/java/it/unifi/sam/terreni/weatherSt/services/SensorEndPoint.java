@@ -69,6 +69,7 @@ public class SensorEndPoint {
 
 		Sensor sensor = Sensor.builder()
 				.sensorType(sensorType)
+				.title(sensorDto.getTitle())
 				.build();
 
 		weatherStation.addSensor(sensor);
@@ -153,14 +154,10 @@ public class SensorEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response delete(@HeaderParam("token") String token, @PathParam("sensorId") Long id, @HeaderParam("weatherId") Long weatherId) {
+	public Response delete(@HeaderParam("token") String token, @PathParam("sensorId") Long id) {
 		if (StringUtils.isEmpty(token))
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token").build();
-		if (weatherId == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
-
-
-
+		
 		if(Authentication.isNotValid(token))
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.NULL_OBJECT.getMessage() + " - token not valid").build();
 
@@ -170,13 +167,6 @@ public class SensorEndPoint {
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
 
-		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
-
-		if(!weatherStation.getSensors().contains(sensor))
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.GENERIC_ERROR.getMessage() + " - weather station not contain sensor").build();
-
-
-		weatherStation.getSensors().remove(sensor);
 
 		for (Measure measure : sensor.getMeasures()) {
 			measureDao.delete(measure);
