@@ -5,9 +5,11 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +27,14 @@ import javax.ws.rs.core.Response;
 import it.unifi.sam.terreni.weatherSt.dao.measure.MeasureDao;
 import it.unifi.sam.terreni.weatherSt.dao.measure.UnitMeasureKnowledgeDao;
 import it.unifi.sam.terreni.weatherSt.dao.sensor.SensorDao;
+import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureChartDto;
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureDto;
 import it.unifi.sam.terreni.weatherSt.dto.measure.MeasurePostRequestDto;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.utils.ErrorServices;
+import it.unifi.sam.terreni.weatherSt.utils.GroupByClass;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 
@@ -207,6 +211,41 @@ public class MeasureEndPoint {
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
 	
+	@GET
+	@Path("/sensor/{id}/getMeasure/{fromDate}/{toDate}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response getMeasureByDate(@PathParam("id") Long id, @PathParam("fromDate") Long fromDate, @PathParam("toDate") Long toDate) {
+		if (id == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+		if (fromDate == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
+		if (toDate == null) {
+			toDate = LocalDate.now().toEpochDay();
+		}
+		
+		Sensor sensor = sensorDao.findById(id);
+		
+		if(sensor == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensor").build();
+
+		if(fromDate > toDate) {
+			Long temp = fromDate;
+			fromDate = toDate;
+			toDate = temp;
+		}
+		
+		String groupby = getGroupBy(fromDate, toDate);
+		
+		List<MeasureChartDto> measures = measureDao.getLotOfMeasureDtoBetweenDate(sensor, 
+				Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDateTime(), 
+				Instant.ofEpochMilli(toDate).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				groupby);
+		
+		return Response.status(200).entity(measures).build();
+	}
+
+	
 	
 	private MeasureDto measureToMeasureDto(Measure measure) {
 		if(measure == null)
@@ -260,54 +299,20 @@ public class MeasureEndPoint {
 	
 	
 	
-//	@GET
-//	@Path("/getMeasureByDate")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Transactional
-//	public Response getMeasureByDate(@HeaderParam("sensorId") Long sensorId, @HeaderParam("fromDate") Long fromDate, @HeaderParam("toDate") Long toDate) {
-//		if (sensorId == null)
-//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-//		if (fromDate == null)
-//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - fromDate").build();
-//		if (toDate == null)
-//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - toDate").build();
-//		
-//		Sensor sensor = sensorDao.findById(sensorId);
-//		
-//		if(sensor == null)
-//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensor").build();
-//
-//		if(fromDate > toDate) {
-//			Long temp = fromDate;
-//			fromDate = toDate;
-//			toDate = temp;
-//		}
-//		
-//		String groupby = getGroupBy(fromDate, toDate);
-//		
-//		List<MeasureChartDto> measures = measureDao.getLotOfMeasureDtoBetweenDate(sensor, 
-//				Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDateTime(), 
-//				Instant.ofEpochMilli(toDate).atZone(ZoneId.systemDefault()).toLocalDateTime(),
-//				groupby);
-//		
-//		return Response.status(200).entity(measures).build();
-//	}
-//
-//
-//	private String getGroupBy(Long fromDate, Long toDate) {
-//		Long dif = toDate - fromDate;
-//		if(dif > GroupByClass.MAX_DAY)
-//			return GroupByClass.DAY_GROUPBY;
-//		else if(dif > GroupByClass.MAX_WEEK)
-//			return GroupByClass.WEEK_GROUPBY;
-//		else if(dif > GroupByClass.MAX_MONTH)
-//			return GroupByClass.MONTH_GROUPBY;
-//		else if(dif > GroupByClass.MAX_YEAR)
-//			return GroupByClass.YEAR_GROUPBY;
-//		else
-//			return GroupByClass.HOUR_GROUPBY;
-//		
-//	}
+	private String getGroupBy(Long fromDate, Long toDate) {
+		Long dif = toDate - fromDate;
+		if(dif > GroupByClass.MAX_DAY)
+			return GroupByClass.DAY_GROUPBY;
+		else if(dif > GroupByClass.MAX_WEEK)
+			return GroupByClass.WEEK_GROUPBY;
+		else if(dif > GroupByClass.MAX_MONTH)
+			return GroupByClass.MONTH_GROUPBY;
+		else if(dif > GroupByClass.MAX_YEAR)
+			return GroupByClass.YEAR_GROUPBY;
+		else
+			return GroupByClass.HOUR_GROUPBY;
+		
+	}
 
 }
 

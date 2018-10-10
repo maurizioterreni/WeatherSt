@@ -13,7 +13,6 @@ import it.unifi.sam.terreni.weatherSt.dto.measure.MeasureChartDto;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.measure.UnitMeasureKnowledge;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
-import it.unifi.sam.terreni.weatherSt.utils.GroupByClass;
 import it.unifi.sam.terreni.weatherSt.utils.StringUtils;
 
 public class MeasureDao {
@@ -66,24 +65,24 @@ public class MeasureDao {
 					.setParameter("sensor", sensor)
 					.setParameter("fromDate", fromDate)
 					.setParameter("toDate", toDate);
-			String pattern = "";
-			if(groupby.equals(GroupByClass.HOUR_GROUPBY))
-				pattern = "HH:mm";
-			else if(groupby.equals(GroupByClass.WEEK_GROUPBY))
-				pattern = "yy, 'week' w";
-			else if(groupby.equals(GroupByClass.DAY_GROUPBY))
-				pattern = "dd/MM";
-			else if(groupby.equals(GroupByClass.MONTH_GROUPBY))
-				pattern = "MM-yy";
-			else if(groupby.equals(GroupByClass.YEAR_GROUPBY))
-				pattern = "yy";
-			else
-				pattern = "yy-MM-dd";
+//			String pattern = "";
+//			if(groupby.equals(GroupByClass.HOUR_GROUPBY))
+//				pattern = "HH:mm";
+//			else if(groupby.equals(GroupByClass.WEEK_GROUPBY))
+//				pattern = "yy, 'week' w";
+//			else if(groupby.equals(GroupByClass.DAY_GROUPBY))
+//				pattern = "dd/MM";
+//			else if(groupby.equals(GroupByClass.MONTH_GROUPBY))
+//				pattern = "MM-yy";
+//			else if(groupby.equals(GroupByClass.YEAR_GROUPBY))
+//				pattern = "yy";
+//			else
+//				pattern = "yy-MM-dd";
 			
 			List<MeasureChartDto> results = new ArrayList<>();
 			for (Object[] result : query.getResultList()) {
 				results.add(MeasureChartDto.builder()
-						.withDateTime(StringUtils.locatDateTimeToString((LocalDateTime) result[0], pattern))
+						.withDateTime(StringUtils.locatDateTimeToString((LocalDateTime) result[0]))
 						.withQuantity(StringUtils.doubleToString((Double) result[1]))
 						.withUnitId(((UnitMeasureKnowledge) result[2]).getId())
 						.build());
