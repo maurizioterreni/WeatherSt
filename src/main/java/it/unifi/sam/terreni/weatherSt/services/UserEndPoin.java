@@ -10,6 +10,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -37,10 +38,10 @@ public class UserEndPoin {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/addWeatherLike")
+	@Path("/weatherLike/{id}")
 	@Transactional
-	public Response addWeatherLike(@HeaderParam("token") String token, @HeaderParam("weatherId") Long weatherId) {
-		if(weatherId == null)
+	public Response addWeatherLike(@HeaderParam("token") String token, @PathParam("id") Long id) {
+		if(id == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
 
 		if (StringUtils.isEmpty(token))
@@ -54,14 +55,18 @@ public class UserEndPoin {
 		if(user == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - user or password wrong").build();
 
-		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
+		WeatherStation weatherStation = weatherStationDao.findById(id);
 
 		if(weatherStation == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - weatherStation").build();
 
+
 		user.getPropertie().addWeatherStationLikes(weatherStation);
 
 		userDao.update(user);
+
+
+
 
 		UserDto dto = userToDto(user);
 
@@ -74,10 +79,10 @@ public class UserEndPoin {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/removeWeatherLike")
+	@Path("/weatherLike/{id}")
 	@Transactional
-	public Response removeWeatherLike(@HeaderParam("token") String token, @HeaderParam("weatherId") Long weatherId) {
-		if(weatherId == null)
+	public Response removeWeatherLike(@HeaderParam("token") String token, @PathParam("id") Long id) {
+		if(id == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - weatherId").build();
 
 		if (StringUtils.isEmpty(token))
@@ -91,7 +96,7 @@ public class UserEndPoin {
 		if(user == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - user or password wrong").build();
 
-		WeatherStation weatherStation = weatherStationDao.findById(weatherId);
+		WeatherStation weatherStation = weatherStationDao.findById(id);
 
 		if(weatherStation == null)
 			return Response.status(Response.Status.UNAUTHORIZED).entity(ErrorServices.UNAUTHORIZED.getMessage() + " - weatherStation").build();
