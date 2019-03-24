@@ -55,31 +55,30 @@ public class MeasureEndPoint {
 	public Response add(MeasurePostRequestDto requestDto) {
 		if (requestDto == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - requestDto").build();
-		
-		Sensor sensor = sensorDao.findById(requestDto.getSensorId());
-		
-		if (sensor == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		UnitMeasureKnowledge unitMeasure = unitMeasureKnowledgeDao.findById(requestDto.getUnitMeasureId());
-		if (unitMeasure == null)
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - unitMeasure").build();
 
-		Measure measure = Measure
-				.buider()
-				.localDateTime(LocalDateTime.now())
-				.quantity(requestDto.getQuantity())
-				.unitMeasure(unitMeasure)
-				.sensor(sensor)
-				.build();
+		addMeasure(requestDto);
 
-		
-		measureDao.save(measure);
-		
 		return Response.status(200).entity(requestDto).build();
 
 	}
-	
+
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response add(List<MeasurePostRequestDto> requestDtos) {
+		if (requestDtos == null)
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - requestDto").build();
+
+		for (MeasurePostRequestDto measurePostRequestDto : requestDtos) {
+			addMeasure(measurePostRequestDto);
+		}
+
+		return Response.status(200).entity(requestDtos).build();
+
+	}
+
 
 	@GET
 	@Path("/sensor/{id}/last")
@@ -98,28 +97,28 @@ public class MeasureEndPoint {
 
 		return Response.status(200).entity(measureToMeasureDto(measure)).build();
 	}
-	
+
 	@GET
 	@Path("/sensor/{id}/getValueOfYear")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response getValueOfYear(@PathParam("id") Long id) {
 		Sensor sensor = sensorDao.findById(id);
-		
+
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		
+
+
 		LocalDateTime fromDate = LocalDateTime.now().with(firstDayOfYear());
 		LocalDateTime toDate = LocalDateTime.now().with(lastDayOfYear());
-		
+
 		List<Measure> measures = new ArrayList<>();
 		measures.add(measureDao.getMax(sensor, fromDate, toDate));
 		measures.add(measureDao.getMin(sensor, fromDate, toDate));
-		
+
 		if(measures.size() != 2)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measures").build();
-		
+
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
 	@GET
@@ -128,21 +127,21 @@ public class MeasureEndPoint {
 	@Transactional
 	public Response getValueOfAll(@PathParam("id") Long id) {
 		Sensor sensor = sensorDao.findById(id);
-		
+
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		
+
+
 		LocalDateTime fromDate = LocalDateTime.of(1970, 01, 01, 0, 0);
 		LocalDateTime toDate = LocalDateTime.now().with(lastDayOfYear());
-		
+
 		List<Measure> measures = new ArrayList<>();
 		measures.add(measureDao.getMax(sensor, fromDate, toDate));
 		measures.add(measureDao.getMin(sensor, fromDate, toDate));
-		
+
 		if(measures.size() != 2)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measures").build();
-		
+
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
 	@GET
@@ -151,21 +150,21 @@ public class MeasureEndPoint {
 	@Transactional
 	public Response getValueOfMonth(@PathParam("id") Long id) {
 		Sensor sensor = sensorDao.findById(id);
-		
+
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		
+
+
 		LocalDateTime fromDate = LocalDateTime.now().with(firstDayOfMonth());
 		LocalDateTime toDate = LocalDateTime.now().with(lastDayOfMonth());
-		
+
 		List<Measure> measures = new ArrayList<>();
 		measures.add(measureDao.getMax(sensor, fromDate, toDate));
 		measures.add(measureDao.getMin(sensor, fromDate, toDate));
-		
+
 		if(measures.size() != 2)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measures").build();
-		
+
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
 	@GET
@@ -174,43 +173,43 @@ public class MeasureEndPoint {
 	@Transactional
 	public Response getValueOfDay(@PathParam("id") Long id) {
 		Sensor sensor = sensorDao.findById(id);
-		
+
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		
+
+
 		LocalDateTime fromDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
 		LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-		
+
 		List<Measure> measures = new ArrayList<>();
 		measures.add(measureDao.getMax(sensor, fromDate, toDate));
 		measures.add(measureDao.getMin(sensor, fromDate, toDate));
-		
+
 		if(measures.size() != 2)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - measures").build();
-		
+
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
-	
+
 	@GET
 	@Path("/sensor/{id}/getMeasure")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response getMeasure(@PathParam("id") Long id) {
 		Sensor sensor = sensorDao.findById(id);
-		
+
 		if(sensor == null)
 			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-		
-		
+
+
 		LocalDateTime fromDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
 		LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-		
+
 		List<Measure> measures = measureDao.getMeasureBetweenDate(sensor, fromDate, toDate);
-		
+
 		return Response.status(200).entity(measuresToMeasureDtos(measures)).build();
 	}
-	
+
 	@GET
 	@Path("/sensor/{id}/getMeasure/{fromDate}/{toDate}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -223,9 +222,9 @@ public class MeasureEndPoint {
 		if (toDate == null) {
 			toDate = LocalDate.now().toEpochDay();
 		}
-		
+
 		Sensor sensor = sensorDao.findById(id);
-		
+
 		if(sensor == null)
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensor").build();
 
@@ -234,23 +233,23 @@ public class MeasureEndPoint {
 			fromDate = toDate;
 			toDate = temp;
 		}
-		
+
 		String groupby = getGroupBy(fromDate, toDate);
-		
+
 		List<MeasureChartDto> measures = measureDao.getLotOfMeasureDtoBetweenDate(sensor, 
 				Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDateTime(), 
 				Instant.ofEpochMilli(toDate).atZone(ZoneId.systemDefault()).toLocalDateTime(),
 				groupby);
-		
+
 		return Response.status(200).entity(measures).build();
 	}
 
-	
-	
+
+
 	private MeasureDto measureToMeasureDto(Measure measure) {
 		if(measure == null)
 			return null;
-		
+
 		return MeasureDto.builder()
 				.dateTime(measure.getLocalDateTime().toString())
 				.quantity(StringUtils.floatToString(measure.getQuantity()))
@@ -258,7 +257,7 @@ public class MeasureEndPoint {
 				.symbol(measure.getUnitMeasure().getSymbol())
 				.build();
 	}
-	
+
 	private List<MeasureDto> measuresToMeasureDtos(List<Measure> measures) {
 		List<MeasureDto> measureDtos = new ArrayList<>();
 		for (Measure measure : measures) {
@@ -268,37 +267,37 @@ public class MeasureEndPoint {
 		}
 		return measureDtos;
 	}
-	
-//	@GET
-//	@Path("/lastMeasure")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Transactional
-//	public Response getLastOfWeather(@HeaderParam("weatherId") Long weatherId) {
-//		if (weatherId == null)
-//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
-//
-//		WeatherStation weatherStation = weatherStationDao.fetchById(weatherId);
-//
-//		if(weatherStation == null)
-//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
-//		
-//		if(weatherStation.getSensors() == null || weatherStation.getSensors().size() == 0)
-//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
-//
-//		Set<Measure> measures = new HashSet<>();
-//		
-//		for (Sensor sensor : weatherStation.getSensors()) {
-//			measures.add(measureDao.getLastMeasue(sensor));
-//		}
-//	
-//	LocalDateTime fromDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(0, 0, 1));
-//	LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(23, 59, 59));
-//
-//		return Response.status(200).entity(measures).build();
-//	}
-	
-	
-	
+
+	//	@GET
+	//	@Path("/lastMeasure")
+	//	@Produces(MediaType.APPLICATION_JSON)
+	//	@Transactional
+	//	public Response getLastOfWeather(@HeaderParam("weatherId") Long weatherId) {
+	//		if (weatherId == null)
+	//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.NULL_OBJECT.getMessage() + " - sensorId").build();
+	//
+	//		WeatherStation weatherStation = weatherStationDao.fetchById(weatherId);
+	//
+	//		if(weatherStation == null)
+	//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - weatherStation").build();
+	//		
+	//		if(weatherStation.getSensors() == null || weatherStation.getSensors().size() == 0)
+	//			return Response.status(Response.Status.NOT_FOUND).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+	//
+	//		Set<Measure> measures = new HashSet<>();
+	//		
+	//		for (Sensor sensor : weatherStation.getSensors()) {
+	//			measures.add(measureDao.getLastMeasue(sensor));
+	//		}
+	//	
+	//	LocalDateTime fromDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(0, 0, 1));
+	//	LocalDateTime toDate = LocalDateTime.now().toLocalDate().atTime(LocalTime.of(23, 59, 59));
+	//
+	//		return Response.status(200).entity(measures).build();
+	//	}
+
+
+
 	private String getGroupBy(Long fromDate, Long toDate) {
 		Long dif = toDate - fromDate;
 		if(dif > GroupByClass.MAX_DAY)
@@ -311,7 +310,30 @@ public class MeasureEndPoint {
 			return GroupByClass.YEAR_GROUPBY;
 		else
 			return GroupByClass.HOUR_GROUPBY;
-		
+
+	}
+
+
+	private void addMeasure(MeasurePostRequestDto requestDto) {
+		Sensor sensor = sensorDao.findById(requestDto.getSensorId());
+
+//		if (sensor == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - sensor").build();
+//
+		UnitMeasureKnowledge unitMeasure = unitMeasureKnowledgeDao.findById(requestDto.getUnitMeasureId());
+//		if (unitMeasure == null)
+//			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ErrorServices.OBJECT_NOT_FOUND.getMessage() + " - unitMeasure").build();
+
+		Measure measure = Measure
+				.buider()
+				.localDateTime(LocalDateTime.now())
+				.quantity(requestDto.getQuantity())
+				.unitMeasure(unitMeasure)
+				.sensor(sensor)
+				.build();
+
+
+		measureDao.save(measure);
 	}
 
 }

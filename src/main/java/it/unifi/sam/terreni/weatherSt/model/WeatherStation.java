@@ -23,6 +23,7 @@ public class WeatherStation extends BaseEntity {
 	private String latitude;
 	private String description;
 	private String images;
+	private Integer timeZone;
 	@OneToMany(fetch = FetchType.EAGER, targetEntity=Sensor.class , cascade = CascadeType.ALL )
 	private Set<Sensor> sensors;
 
@@ -79,11 +80,21 @@ public class WeatherStation extends BaseEntity {
 	}
 
 
+	public Integer getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(Integer timeZone) {
+		this.timeZone = timeZone;
+	}
+
+
 	public static class WeatherStationBuilder{
 		private String longitude;
 		private String latitude;
 		private String description;
 		private String images;
+		private Integer timeZone;
 		
 		public WeatherStationBuilder longitude(String longitude) {
 			this.longitude = longitude;
@@ -102,6 +113,10 @@ public class WeatherStation extends BaseEntity {
 			this.images = images;
 			return this;
 		}
+		public WeatherStationBuilder timeZone(Integer timeZone) {
+			this.timeZone = timeZone;
+			return this;
+		}
 		
 		public WeatherStation build() {
 			WeatherStation weatherStation = ModelFactory.weatherStation();
@@ -110,6 +125,7 @@ public class WeatherStation extends BaseEntity {
 			weatherStation.setLatitude(latitude);
 			weatherStation.setLongitude(longitude);
 			weatherStation.setImages(images);
+			weatherStation.setTimeZone(timeZone);
 			
 			return weatherStation;
 		}

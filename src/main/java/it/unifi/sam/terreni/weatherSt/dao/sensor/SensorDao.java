@@ -1,8 +1,11 @@
 package it.unifi.sam.terreni.weatherSt.dao.sensor;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import it.unifi.sam.terreni.weatherSt.model.WeatherStation;
 import it.unifi.sam.terreni.weatherSt.model.measure.Measure;
 import it.unifi.sam.terreni.weatherSt.model.sensor.Sensor;
 import it.unifi.sam.terreni.weatherSt.visitor.ResolveLazyLoadUsageVisitor;
@@ -48,5 +51,14 @@ public class SensorDao {
 		}
 
 		return result;
+	}
+	public List<Sensor> getByWeatherStationId(WeatherStation wt) {
+		return entityManager
+		.createQuery("select s "
+				+ "from Sensor s "
+				+ "where s in (:sensors) "
+				+ "order by s.id", Sensor.class)
+		.setParameter("sensors", wt.getSensors())
+		.getResultList();
 	}
 }

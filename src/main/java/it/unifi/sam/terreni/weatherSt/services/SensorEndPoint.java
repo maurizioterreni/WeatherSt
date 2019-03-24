@@ -108,7 +108,7 @@ public class SensorEndPoint {
 
 		List<SensorGetResponsDto> sensorDtos = new ArrayList<>();
 
-		for (Sensor sensor : weatherStation.getSensors()) {
+		for (Sensor sensor : sensorDao.getByWeatherStationId(weatherStation)) {
 			sensorDtos.add(sensorToSensorGetResponsDto(sensor));
 		}
 
