@@ -175,7 +175,11 @@
 			<version>0.6.0</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.jnosql.artemis</groupId>
+			<artifactId>elasticsearch-extension</artifactId>
+			<version>0.0.5</version>
+		</dependency>
 
 	</dependencies>
 
